@@ -7,38 +7,75 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     /* Reset e estilos base */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
     }
     body {
       font-family: 'Roboto', sans-serif;
       background: linear-gradient(135deg, #1e1e2f, #3b3b4f);
       color: #f0f0f0;
-      height: 100vh;
-      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
+      padding: 20px;
     }
-    /* Telas e Containers */
+    /* Classes utilitárias */
     .screen {
-      width: 90%;
+      width: 100%;
       max-width: 800px;
-    }
-    .hidden {
-      display: none;
-    }
-    /* Tela de seleção de sala */
-    #landingPage {
-      text-align: center;
-      padding: 40px 20px;
-      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0,0,0,0.6);
+      padding: 30px;
       border-radius: 8px;
       box-shadow: 0 0 20px rgba(0,0,0,0.7);
     }
-    #landingPage h1 {
+    .hidden { display: none; }
+    /* Tela de Cadastro */
+    #registrationScreen h2 {
+      margin-bottom: 20px;
+      font-size: 28px;
+      text-align: center;
+    }
+    .form-group {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+    }
+    #registerBtn {
+      width: 100%;
+      padding: 12px;
+      background: #ffc107;
+      border: none;
+      border-radius: 4px;
+      font-size: 18px;
+      font-weight: 500;
+      color: #222;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #registerBtn:hover { background: #ffca28; }
+    /* Tela de Seleção de Sala */
+    #roomSelectionScreen {
+      text-align: center;
+    }
+    #roomSelectionScreen h1 {
       margin-bottom: 30px;
       font-size: 32px;
       font-weight: 700;
@@ -54,65 +91,19 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-    .room-btn:hover {
-      background: #ffca28;
-    }
-    /* Formulário de cadastro */
-    #registrationFormContainer {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 30px 25px;
-      border-radius: 8px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.7);
-      margin: 20px auto;
-      max-width: 500px;
-    }
-    #registrationFormContainer h2 {
-      margin-bottom: 20px;
-      text-align: center;
-      font-size: 28px;
-    }
-    .form-group {
-      margin-bottom: 15px;
-      text-align: left;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 500;
-    }
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-    }
-    #registerBtn {
-      width: 100%;
-      padding: 12px;
-      background: #ffc107;
-      border: none;
-      border-radius: 4px;
-      font-size: 18px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      margin-top: 10px;
-    }
-    #registerBtn:hover {
-      background: #ffca28;
-    }
-    /* Chat Container com Sidebar */
+    .room-btn:hover { background: #ffca28; }
+    /* Chat Container com Sidebar – Flex layout */
     #chatWrapper {
       display: flex;
+      flex: 1;
+      width: 100%;
       height: 90vh;
       background: rgba(0, 0, 0, 0.7);
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 0 20px rgba(0,0,0,0.7);
     }
-    /* Sidebar lateral para o perfil */
+    /* Sidebar lateral para o Perfil */
     .sidebar {
       background: #2a2a2a;
       width: 250px;
@@ -130,14 +121,9 @@
       font-size: 15px;
       background: #1e1e1e;
     }
-    .profile-box div {
-      margin-bottom: 10px;
-    }
-    .profile-box span {
-      font-weight: 700;
-      color: #ffc107;
-    }
-    /* Botão para toggle da sidebar */
+    .profile-box div { margin-bottom: 10px; }
+    .profile-box span { font-weight: 700; color: #ffc107; }
+    /* Botão Toggle da Sidebar */
     .toggle-btn {
       position: absolute;
       top: 20px;
@@ -149,14 +135,12 @@
       height: 35px;
       font-size: 20px;
       font-weight: bold;
+      color: #222;
       cursor: pointer;
       transition: background 0.3s ease;
-      color: #222;
     }
-    .toggle-btn:hover {
-      background: #ffca28;
-    }
-    /* Área de Chat Principal */
+    .toggle-btn:hover { background: #ffca28; }
+    /* Área Principal do Chat */
     .chat-main {
       flex: 1;
       display: flex;
@@ -183,9 +167,9 @@
       padding: 12px;
       border-radius: 6px;
       max-width: 70%;
-      word-wrap: break-word;
       font-size: 16px;
       line-height: 1.4;
+      word-wrap: break-word;
     }
     .message.self {
       align-self: flex-end;
@@ -217,27 +201,17 @@
       border-radius: 4px;
       background: #ffc107;
       font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
       font-weight: 500;
       color: #222;
+      cursor: pointer;
+      transition: background 0.3s ease;
     }
-    .chat-input button:hover {
-      background: #ffca28;
-    }
+    .chat-input button:hover { background: #ffca28; }
   </style>
 </head>
 <body>
-  <!-- Tela de seleção de sala -->
-  <div id="landingPage" class="screen">
-    <h1>Bem-vindo ao Chat SJC</h1>
-    <button class="room-btn" onclick="chooseRoom('mista')">Sala Mista</button>
-    <button class="room-btn" onclick="chooseRoom('lgbttqiapn')">Sala LGBTTQIAPN+</button>
-    <button class="room-btn" onclick="chooseRoom('hetero')">Sala Hetero</button>
-  </div>
-
-  <!-- Tela de cadastro -->
-  <div id="registrationFormContainer" class="screen hidden">
+  <!-- Tela de Cadastro (inicial) -->
+  <div id="registrationScreen" class="screen">
     <h2>Cadastro</h2>
     <form id="registrationForm">
       <div class="form-group">
@@ -305,11 +279,19 @@
           <option value="3">Cúmplicidade</option>
         </select>
       </div>
-      <button type="submit" id="registerBtn">Entrar na Sala</button>
+      <button type="submit" id="registerBtn">Continuar</button>
     </form>
   </div>
 
-  <!-- Tela do Chat com Sidebar -->
+  <!-- Tela de Seleção de Sala (após cadastro) -->
+  <div id="roomSelectionScreen" class="screen hidden">
+    <h1>Escolha sua Sala</h1>
+    <button class="room-btn" onclick="chooseRoom('mista')">Sala Mista</button>
+    <button class="room-btn" onclick="chooseRoom('lgbttqiapn')">Sala LGBTTQIAPN+</button>
+    <button class="room-btn" onclick="chooseRoom('hetero')">Sala Hetero</button>
+  </div>
+
+  <!-- Tela do Chat com Sidebar (inicialmente hidden) -->
   <div id="chatWrapper" class="hidden">
     <!-- Sidebar Lateral para o Perfil -->
     <div class="sidebar closed" id="sidebar">
@@ -332,30 +314,21 @@
   </div>
 
   <script>
-    // Variáveis globais
-    let chosenRoom = '';
+    // Variáveis globais para os dados do usuário e controle de sala
     let username = '';
     let birthdate = '';
     let roomKey = ""; // Chave para controle de limite por sala
-
-    // Seleção da sala
-    function chooseRoom(room) {
-      chosenRoom = room;
-      roomKey = "room_" + room;
-      document.getElementById('landingPage').classList.add('hidden');
-      document.getElementById('registrationFormContainer').classList.remove('hidden');
-    }
 
     // Formatação automática do campo de data de nascimento
     const regBirthdateInput = document.getElementById('regBirthdate');
     regBirthdateInput.addEventListener('input', function(e) {
       let value = e.target.value.replace(/\D/g, '');
-      if (value.length > 8) value = value.slice(0,8);
+      if (value.length > 8) value = value.slice(0, 8);
       let formatted = '';
       if (value.length > 0) {
-        formatted = value.substring(0,2);
-        if (value.length >= 3) formatted += '/' + value.substring(2,4);
-        if (value.length >= 5) formatted += '/' + value.substring(4,8);
+        formatted = value.substring(0, 2);
+        if (value.length >= 3) formatted += '/' + value.substring(2, 4);
+        if (value.length >= 5) formatted += '/' + value.substring(4, 8);
       }
       e.target.value = formatted;
     });
@@ -392,16 +365,6 @@
       return age;
     }
 
-    // Controle de limite de usuários por sala via localStorage
-    function canJoinRoom() {
-      const count = parseInt(localStorage.getItem(roomKey)) || 0;
-      return count < 10;
-    }
-    function incrementRoomCount() {
-      const count = parseInt(localStorage.getItem(roomKey)) || 0;
-      localStorage.setItem(roomKey, count + 1);
-    }
-
     // Processamento do formulário de cadastro
     const registrationForm = document.getElementById('registrationForm');
     registrationForm.addEventListener('submit', function(e) {
@@ -414,11 +377,6 @@
       const conexao = document.getElementById('regConexao').value;
       
       if (username && birthdate && identification && estadoCivil && busca && conexao) {
-        if (!canJoinRoom()) {
-          alert("Sala cheia! Por favor, tente outra sala.");
-          return;
-        }
-        incrementRoomCount();
         // Calcula idade e signo
         const parts = birthdate.split('/');
         if (parts.length === 3) {
@@ -426,8 +384,8 @@
           const month = parseInt(parts[1], 10);
           const age = getAge(birthdate);
           const zodiac = getZodiacSign(day, month);
-          // Exibe as informações do perfil na sidebar
-          document.getElementById('profileInfo').innerHTML = `
+          // Cria o perfil para ser exibido na sidebar
+          const userProfile = `
             <div>Nome: <span>${username}</span></div>
             <div>Idade: <span>${age < 10 ? '0' + age : age} anos</span></div>
             <div>Signo: <span>${zodiac}</span></div>
@@ -435,17 +393,42 @@
             <div>Estado Civil: <span>${document.getElementById('regEstadoCivil').selectedOptions[0].text}</span></div>
             <div>Em Busca de: <span>${document.getElementById('regBusca').selectedOptions[0].text}</span></div>
             <div>Conexão: <span>${document.getElementById('regConexao').selectedOptions[0].text}</span></div>
-            <div>Sala: <span>${chosenRoom.toUpperCase()}</span></div>
           `;
+          document.getElementById('profileInfo').innerHTML = userProfile;
         }
-        // Atualiza o cabeçalho do chat com o nome da sala
-        document.getElementById('chatHeader').textContent = "Chat SJC - " + chosenRoom.toUpperCase();
-        // Esconde o formulário de cadastro e exibe o chat com sidebar
-        document.getElementById('registrationFormContainer').classList.add('hidden');
-        document.getElementById('chatWrapper').classList.remove('hidden');
-        addMessage(`Bem-vindo, ${username}!`, 'system');
+        // Após o cadastro, exibe a tela de seleção de sala e oculta o cadastro
+        document.getElementById('registrationScreen').classList.add('hidden');
+        document.getElementById('roomSelectionScreen').classList.remove('hidden');
       }
     });
+
+    // Controle de limite de usuários por sala via localStorage
+    function canJoinRoom(roomKey) {
+      const count = parseInt(localStorage.getItem(roomKey)) || 0;
+      return count < 10;
+    }
+    function incrementRoomCount(roomKey) {
+      const count = parseInt(localStorage.getItem(roomKey)) || 0;
+      localStorage.setItem(roomKey, count + 1);
+    }
+
+    // Seleção da sala (após cadastro)
+    function chooseRoom(room) {
+      const roomKeyLocal = "room_" + room;
+      if (!canJoinRoom(roomKeyLocal)) {
+        alert("Sala cheia! Por favor, tente outra sala.");
+        return;
+      }
+      incrementRoomCount(roomKeyLocal);
+      // Atualiza o cabeçalho do chat com o nome da sala
+      document.getElementById('chatHeader').textContent = "Chat SJC - " + room.toUpperCase();
+      // Adiciona a sala escolhida ao perfil exibido na sidebar
+      document.getElementById('profileInfo').innerHTML += `<div>Sala: <span>${room.toUpperCase()}</span></div>`;
+      // Oculta a tela de seleção de sala e exibe a tela do chat
+      document.getElementById('roomSelectionScreen').classList.add('hidden');
+      document.getElementById('chatWrapper').classList.remove('hidden');
+      addMessage(`Bem-vindo, ${username}!`, 'system');
+    }
 
     // Toggle da Sidebar
     const toggleBtn = document.getElementById('toggleBtn');

@@ -7,319 +7,439 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     /* Reset e estilos base */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body {
-      height: 100%;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #1e1e2f, #3b3b4f);
+  color: #f0f0f0;
+}
+/* Container que empilha as telas */
+#appContainer {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+/* Cada tela ocupa a área total e fica posicionada de forma absoluta */
+.screen, #chatWrapper {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 30px;
+}
+.hidden {
+  display: none;
+}
+/* Cadastro */
+#registrationScreen h2 {
+  margin-bottom: 20px;
+  font-size: 28px;
+  text-align: center;
+}
+.form-group {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 15px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+}
+/* Multi-select de gênero com scroll */
+#regGeneroInteresse1 {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+#regGeneroInteresse1 option {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+#regGeneroInteresse1 option:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+#regGeneroInteresse2 {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+#regGeneroInteresse2 option {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+#regGeneroInteresse2 option:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+#generoInteresseDetails1 {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 10px;
+}
+#generoInteresseDetails1 .detail-group {
+  margin-bottom: 10px;
+}
+#generoInteresseDetails1 label {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+#generoInteresseDetails2 {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 10px;
+}
+#generoInteresseDetails2 .detail-group {
+  margin-bottom: 10px;
+}
+#generoInteresseDetails2 label {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+#registerBtn {
+  width: 100%;
+  max-width: 600px;
+  padding: 12px;
+  background: #ffc107;
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #222;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 10px;
+}
+#registerBtn:hover {
+  background: #ffca28;
+}
+/* Tela de Seleção de Sala */
+#roomSelectionScreen {
+  text-align: center;
+  justify-content: center;
+}
+#roomSelectionScreen h1 {
+  margin-bottom: 30px;
+  font-size: 32px;
+  font-weight: 700;
+}
+.room-btn {
+  padding: 15px 25px;
+  margin: 10px;
+  border: none;
+  border-radius: 4px;
+  background: #ffc107;
+  color: #222;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.room-btn:hover {
+  background: #ffca28;
+}
+/* Chat Container com Sidebar – Flex layout */
+#chatWrapper {
+  background: rgba(0, 0, 0, 0.7);
+  flex-direction: row;
+}
+/* Sidebar para o perfil */
+.sidebar {
+  background: #2a2a2a;
+  width: 250px;
+  padding: 20px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+.sidebar.closed {
+  transform: translateX(-250px);
+}
+.sidebar .profile-box {
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  padding: 15px;
+  font-size: 15px;
+  background: #1e1e1e;
+}
+.profile-box div {
+  margin-bottom: 10px;
+}
+.profile-box span {
+  font-weight: 700;
+  color: #ffc107;
+}
+/* Botão Toggle da Sidebar */
+.toggle-btn {
+  position: absolute;
+  top: 20px;
+  right: -40px;
+  background: #ffc107;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #222;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.toggle-btn:hover {
+  background: #ffca28;
+}
+/* Área de Chat Principal */
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.chat-header {
+  background: #444;
+  padding: 15px;
+  font-size: 24px;
+  text-align: center;
+  font-weight: 700;
+  border-bottom: 1px solid #555;
+}
+.chat-messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.message {
+  padding: 12px;
+  border-radius: 6px;
+  max-width: 70%;
+  font-size: 16px;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+.message.self {
+  align-self: flex-end;
+  background: #007bff;
+  color: #fff;
+}
+.message.other {
+  align-self: flex-start;
+  background: #4caf50;
+  color: #fff;
+}
+.chat-input {
+  display: flex;
+  padding: 15px;
+  background: #444;
+  border-top: 1px solid #555;
+}
+.chat-input input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+}
+.chat-input button {
+  padding: 12px 20px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 4px;
+  background: #ffc107;
+  font-size: 16px;
+  font-weight: 500;
+  color: #222;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.chat-input button:hover {
+  background: #ffca28;
+}
+@media (min-width: 768px) {
+  #registrationScreen {
+    justify-content: center;
+    padding-top: 0;
+  }
+}
+  </style>
+  <style>
+    .hidden {
+      display: none;
     }
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #1e1e2f, #3b3b4f);
-      color: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      padding: 20px;
-    }
-    /* Classes utilitárias */
-    .screen {
-      width: 100%;
-      max-width: 800px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: rgba(0,0,0,0.6);
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.7);
-    }
-    .hidden { display: none; }
-    /* Tela de Cadastro */
-    #registrationScreen h2 {
-      margin-bottom: 20px;
-      font-size: 28px;
-      text-align: center;
-    }
-    .form-group {
-      width: 100%;
-      margin-bottom: 15px;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 500;
-    }
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 4px;
-    }
-    #registerBtn {
-      width: 100%;
-      padding: 12px;
-      background: #ffc107;
-      border: none;
-      border-radius: 4px;
-      font-size: 18px;
-      font-weight: 500;
-      color: #222;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    #registerBtn:hover { background: #ffca28; }
-    /* Tela de Seleção de Sala */
-    #roomSelectionScreen {
-      text-align: center;
-    }
-    #roomSelectionScreen h1 {
-      margin-bottom: 30px;
-      font-size: 32px;
-      font-weight: 700;
-    }
-    .room-btn {
-      padding: 15px 25px;
-      margin: 10px;
-      border: none;
-      border-radius: 4px;
-      background: #ffc107;
-      color: #222;
-      font-size: 18px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .room-btn:hover { background: #ffca28; }
-    /* Chat Container com Sidebar – Flex layout */
-    #chatWrapper {
-      display: flex;
-      flex: 1;
-      width: 100%;
-      height: 90vh;
-      background: rgba(0, 0, 0, 0.7);
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 0 20px rgba(0,0,0,0.7);
-    }
-    /* Sidebar lateral para o Perfil */
-    .sidebar {
-      background: #2a2a2a;
-      width: 250px;
-      padding: 20px;
-      position: relative;
-      transition: transform 0.3s ease;
-    }
-    .sidebar.closed {
-      transform: translateX(-250px);
-    }
-    .sidebar .profile-box {
-      border: 2px solid #ffc107;
-      border-radius: 8px;
-      padding: 15px;
-      font-size: 15px;
-      background: #1e1e1e;
-    }
-    .profile-box div { margin-bottom: 10px; }
-    .profile-box span { font-weight: 700; color: #ffc107; }
-    /* Botão Toggle da Sidebar */
-    .toggle-btn {
-      position: absolute;
-      top: 20px;
-      right: -40px;
-      background: #ffc107;
-      border: none;
-      border-radius: 50%;
-      width: 35px;
-      height: 35px;
-      font-size: 20px;
-      font-weight: bold;
-      color: #222;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .toggle-btn:hover { background: #ffca28; }
-    /* Área Principal do Chat */
-    .chat-main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    .chat-header {
-      background: #444;
-      padding: 15px;
-      font-size: 24px;
-      text-align: center;
-      font-weight: 700;
-      border-bottom: 1px solid #555;
-    }
-    .chat-messages {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-      background: #333;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .message {
-      padding: 12px;
-      border-radius: 6px;
-      max-width: 70%;
-      font-size: 16px;
-      line-height: 1.4;
-      word-wrap: break-word;
-    }
-    .message.self {
-      align-self: flex-end;
-      background: #007bff;
-      color: #fff;
-    }
-    .message.other {
-      align-self: flex-start;
-      background: #4caf50;
-      color: #fff;
-    }
-    .chat-input {
-      display: flex;
-      padding: 15px;
-      background: #444;
-      border-top: 1px solid #555;
-    }
-    .chat-input input {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-    }
-    .chat-input button {
-      padding: 12px 20px;
-      margin-left: 10px;
-      border: none;
-      border-radius: 4px;
-      background: #ffc107;
-      font-size: 16px;
-      font-weight: 500;
-      color: #222;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .chat-input button:hover { background: #ffca28; }
   </style>
 </head>
 <body>
-  <!-- Tela de Cadastro (inicial) -->
-  <div id="registrationScreen" class="screen">
-    <h2>Cadastro</h2>
-    <form id="registrationForm">
-      <div class="form-group">
-        <label for="regName">Nome ou Apelido:</label>
-        <input type="text" id="regName" placeholder="Digite seu nome" required>
-      </div>
-      <div class="form-group">
-        <label for="regBirthdate">Data de Nascimento (dd/mm/aaaa):</label>
-        <input type="text" id="regBirthdate" placeholder="dd/mm/aaaa" required>
-      </div>
-      <!-- Seleção de Identificação -->
-      <div class="form-group">
-        <label for="regId">Identificação:</label>
-        <select id="regId" required>
-          <option value="">Selecione</option>
-          <option value="1">Homem</option>
-          <option value="2">Mulher</option>
-          <option value="3">Trans operada</option>
-          <option value="4">Trans não operada, com silicone</option>
-          <option value="5">Trans</option>
-          <option value="6">Travesti siliconada</option>
-          <option value="7">Travesti</option>
-          <option value="8">Tranny</option>
-          <option value="9">Drag queen</option>
-          <option value="10">Crossdresser</option>
-          <option value="11">Homem de calcinha</option>
-          <option value="12">Femboy</option>
-          <option value="13">Ladyboy</option>
-          <option value="14">Homem trans, mastectomia</option>
-          <option value="15">Homem trans</option>
-        </select>
-      </div>
-      <!-- Seleção de Estado Civil -->
-      <div class="form-group">
-        <label for="regEstadoCivil">Estado Civil:</label>
-        <select id="regEstadoCivil" required>
-          <option value="">Selecione</option>
-          <option value="1">Casados e cúmplices</option>
-          <option value="2">Casados ele/ela libera</option>
-          <option value="3">Casados ele/ela não sabe</option>
-          <option value="4">Cúmplices</option>
-          <option value="5">Single</option>
-        </select>
-      </div>
-      <!-- Seleção de Em Busca de -->
-      <div class="form-group">
-        <label for="regBusca">Em Busca de:</label>
-        <select id="regBusca" required>
-          <option value="">Selecione</option>
-          <option value="1">Amizade pra negócios</option>
-          <option value="2">Amizade pra eventos</option>
-          <option value="3">Casual</option>
-          <option value="4">Buscando cúmplice</option>
-          <option value="5">Buscando cúmplices</option>
-          <option value="6">Massagens e serviços</option>
-        </select>
-      </div>
-      <!-- Seleção de Conexão -->
-      <div class="form-group">
-        <label for="regConexao">Conexão:</label>
-        <select id="regConexao" required>
-          <option value="">Selecione</option>
-          <option value="1">Romântico</option>
-          <option value="2">Arromântico</option>
-          <option value="3">Cúmplicidade</option>
-        </select>
-      </div>
-      <button type="submit" id="registerBtn">Continuar</button>
-    </form>
-  </div>
+  <div id="appContainer">
+    <!-- Tela de Cadastro -->
+    <div id="registrationScreen" class="screen">
+      <h2>Cadastro</h2>
+      <form id="registrationForm">
+        <div class="form-group">
+          <label for="regName">Nome ou Apelido:</label>
+          <input type="text" id="regName" placeholder="Digite seu nome" required>
+        </div>
+        <div class="form-group">
+          <label for="regBirthdate">Data de Nascimento (dd/mm/aaaa):</label>
+          <input type="text" id="regBirthdate" placeholder="dd/mm/aaaa" required>
+        </div>
+        <!-- Seleção de Identificação -->
+        <div class="form-group">
+          <label for="regId">Identificação:</label>
+          <select id="regId" required>
+            <option value="">Selecione</option>
+            <option value="1">Homem</option>
+            <option value="2">Mulher</option>
+            <option value="3">Trans operada</option>
+            <option value="4">Trans não operada, com silicone</option>
+            <option value="5">Trans</option>
+            <option value="6">Travesti siliconada</option>
+            <option value="7">Travesti</option>
+            <option value="8">Tranny</option>
+            <option value="9">Drag queen</option>
+            <option value="10">Crossdresser</option>
+            <option value="11">Homem de calcinha</option>
+            <option value="12">Femboy</option>
+            <option value="13">Ladyboy</option>
+            <option value="14">Homem trans, mastectomia</option>
+            <option value="15">Homem trans</option>
+          </select>
+        </div>
+        <!-- Seleção de Estado Civil -->
+        <div class="form-group">
+          <label for="regEstadoCivil">Estado Civil:</label>
+          <select id="regEstadoCivil" required>
+            <option value="">Selecione</option>
+            <option value="1">Casados e cúmplices</option>
+            <option value="2">Casados ele/ela libera</option>
+            <option value="3">Casados ele/ela não sabe</option>
+            <option value="4">Cúmplices</option>
+            <option value="5">Single</option>
+          </select>
+        </div><!-- Gênero de interesse (multi-select) 1 -->
+<div class="form-group">
+  <label for="regGeneroInteresse1">Gênero de interesse 1:</label>
+  <select id="regGeneroInteresse1" multiple required>
+    <option value="1">Homem</option>
+    <option value="2">Mulher</option>
+    <option value="3">Trans operada</option>
+    <option value="4">Trans não operada, com silicone</option>
+    <option value="5">Trans</option>
+    <option value="6">Travesti siliconada</option>
+    <option value="7">Travesti</option>
+    <option value="8">Tranny</option>
+    <option value="9">Drag queen</option>
+    <option value="10">Crossdresser</option>
+    <option value="11">Homem de calcinha</option>
+    <option value="12">Femboy</option>
+    <option value="13">Ladyboy</option>
+    <option value="14">Homem trans, mastectomia</option>
+    <option value="15">Homem trans</option>
+  </select>
+</div>
+<!-- Container para detalhes de cada gênero selecionado (Gênero 1) -->
+<div id="generoInteresseDetails1"></div>
 
-  <!-- Tela de Seleção de Sala (após cadastro) -->
-  <div id="roomSelectionScreen" class="screen hidden">
-    <h1>Escolha sua Sala</h1>
-    <button class="room-btn" onclick="chooseRoom('mista')">Sala Mista</button>
-    <button class="room-btn" onclick="chooseRoom('lgbttqiapn')">Sala LGBTTQIAPN+</button>
-    <button class="room-btn" onclick="chooseRoom('hetero')">Sala Hetero</button>
-  </div>
+<!-- Gênero de interesse (multi-select) 2 -->
+<div class="form-group">
+  <label for="regGeneroInteresse2">Gênero de interesse 2:</label>
+  <select id="regGeneroInteresse2" multiple required>
+    <option value="1">Homem</option>
+    <option value="2">Mulher</option>
+    <option value="3">Trans operada</option>
+    <option value="4">Trans não operada, com silicone</option>
+    <option value="5">Trans</option>
+    <option value="6">Travesti siliconada</option>
+    <option value="7">Travesti</option>
+    <option value="8">Tranny</option>
+    <option value="9">Drag queen</option>
+    <option value="10">Crossdresser</option>
+    <option value="11">Homem de calcinha</option>
+    <option value="12">Femboy</option>
+    <option value="13">Ladyboy</option>
+    <option value="14">Homem trans, mastectomia</option>
+    <option value="15">Homem trans</option>
+  </select>
+</div>
+<!-- Container para detalhes de cada gênero selecionado (Gênero 2) -->
+<div id="generoInteresseDetails2"></div>
 
-  <!-- Tela do Chat com Sidebar (inicialmente hidden) -->
-  <div id="chatWrapper" class="hidden">
-    <!-- Sidebar Lateral para o Perfil -->
-    <div class="sidebar closed" id="sidebar">
-      <button class="toggle-btn" id="toggleBtn">&#9776;</button>
-      <div class="profile-box" id="profileInfo">
-        <!-- Informações do perfil serão exibidas aqui -->
+        <!-- Seleção de Conexão -->
+        <div class="form-group">
+          <label for="regConexao">Conexão:</label>
+          <select id="regConexao" required>
+            <option value="">Selecione</option>
+            <option value="1">Romântico</option>
+            <option value="2">Arromântico</option>
+            <option value="3">Cúmplicidade</option>
+          </select>
+        </div>
+        <button type="submit" id="registerBtn">Continuar</button>
+      </form>
+    </div>
+
+    <!-- Tela de Seleção de Sala -->
+    <div id="roomSelectionScreen" class="screen hidden">
+      <h1>Escolha sua Sala</h1>
+      <button class="room-btn" onclick="chooseRoom('mista')">Sala Mista</button>
+      <button class="room-btn" onclick="chooseRoom('lgbttqiapn')">Sala LGBTTQIAPN+</button>
+      <button class="room-btn" onclick="chooseRoom('hetero')">Sala Hetero</button>
+    </div>
+
+    <!-- Tela do Chat com Sidebar -->
+    <div id="chatWrapper" class="hidden">
+      <!-- Sidebar para o Perfil -->
+      <div class="sidebar closed" id="sidebar">
+        <button class="toggle-btn" id="toggleBtn">&#9776;</button>
+        <div class="profile-box" id="profileInfo">
+          <!-- Informações do perfil serão exibidas aqui -->
+        </div>
+      </div>
+      <!-- Área Principal do Chat -->
+      <div class="chat-main">
+        <div class="chat-header" id="chatHeader"></div>
+        <div class="chat-messages" id="chatMessages">
+          <!-- Mensagens serão adicionadas aqui -->
+        </div>
+        <div class="chat-input">
+          <input type="text" id="messageInput" placeholder="Digite sua mensagem...">
+          <button id="sendBtn">Enviar</button>
+        </div>
       </div>
     </div>
-    <!-- Área Principal do Chat -->
-    <div class="chat-main">
-      <div class="chat-header" id="chatHeader"></div>
-      <div class="chat-messages" id="chatMessages">
-        <!-- Mensagens do chat -->
-      </div>
-      <div class="chat-input">
-        <input type="text" id="messageInput" placeholder="Digite sua mensagem...">
-        <button id="sendBtn">Enviar</button>
-      </div>
-    </div>
   </div>
 
-  <script>
-    // Variáveis globais para os dados do usuário e controle de sala
+  <script>document.addEventListener('DOMContentLoaded', function() {
+    // Variáveis globais para dados do usuário e controle de sala
     let username = '';
     let birthdate = '';
-    let roomKey = ""; // Chave para controle de limite por sala
+    let room = ''; // Variável para armazenar a sala selecionada
 
-    // Formatação automática do campo de data de nascimento
+    // Formatação automática da data de nascimento
     const regBirthdateInput = document.getElementById('regBirthdate');
     regBirthdateInput.addEventListener('input', function(e) {
       let value = e.target.value.replace(/\D/g, '');
@@ -333,7 +453,7 @@
       e.target.value = formatted;
     });
 
-    // Cálculo do signo zodiacal
+    // Funções auxiliares para calcular signo e idade
     function getZodiacSign(day, month) {
       if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return "Aquário";
       else if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return "Peixes";
@@ -349,8 +469,6 @@
       else if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) return "Capricórnio";
       return "";
     }
-
-    // Cálculo da idade a partir da data de nascimento (dd/mm/aaaa)
     function getAge(birthdateStr) {
       const parts = birthdateStr.split('/');
       if (parts.length !== 3) return "";
@@ -365,6 +483,32 @@
       return age;
     }
 
+    // Atualiza container com inputs para detalhes dos gêneros selecionados
+    const regGeneroInteresse1 = document.getElementById('regGeneroInteresse1');
+    const generoInteresseDetails1 = document.getElementById('generoInteresseDetails1');
+    regGeneroInteresse1.addEventListener('change', function() {
+      generoInteresseDetails1.innerHTML = "";
+      Array.from(regGeneroInteresse1.selectedOptions).forEach(option => {
+        const div = document.createElement('div');
+        div.className = "detail-group";
+        div.innerHTML = `<label for="detail_${option.value}">Detalhes para ${option.text}:</label>
+                         <input type="text" id="detail_${option.value}" placeholder="Especifique o que busca">`;
+        generoInteresseDetails1.appendChild(div);
+      });
+    });
+    const regGeneroInteresse2 = document.getElementById('regGeneroInteresse2');
+    const generoInteresseDetails2 = document.getElementById('generoInteresseDetails2');
+    regGeneroInteresse2.addEventListener('change', function() {
+      generoInteresseDetails2.innerHTML = "";
+      Array.from(regGeneroInteresse2.selectedOptions).forEach(option => {
+        const div = document.createElement('div');
+        div.className = "detail-group";
+        div.innerHTML = `<label for="detail_${option.value}">Detalhes para ${option.text}:</label>
+                          <input type="text" id="detail_${option.value}" placeholder="Especifique o que busca">`;
+        generoInteresseDetails2.appendChild(div);
+      });
+    });
+
     // Processamento do formulário de cadastro
     const registrationForm = document.getElementById('registrationForm');
     registrationForm.addEventListener('submit', function(e) {
@@ -373,30 +517,39 @@
       birthdate = document.getElementById('regBirthdate').value.trim();
       const identification = document.getElementById('regId').value;
       const estadoCivil = document.getElementById('regEstadoCivil').value;
-      const busca = document.getElementById('regBusca').value;
       const conexao = document.getElementById('regConexao').value;
-      
-      if (username && birthdate && identification && estadoCivil && busca && conexao) {
-        // Calcula idade e signo
+      const selectedGenero1 = Array.from(regGeneroInteresse1.selectedOptions).map(opt => opt.text);
+      const selectedGenero2 = Array.from(regGeneroInteresse2.selectedOptions).map(opt => opt.text);
+
+      let generoDetalhes1 = [];
+      Array.from(regGeneroInteresse1.selectedOptions).forEach(option => {
+        const detailInput = document.getElementById("detail_" + option.value);
+        if(detailInput && detailInput.value.trim() !== "") {
+          generoDetalhes1.push(`${option.text}: ${detailInput.value.trim()}`);
+        }
+      });
+
+      if (username && birthdate && identification && estadoCivil && selectedGenero1.length && conexao) {
         const parts = birthdate.split('/');
         if (parts.length === 3) {
           const day = parseInt(parts[0], 10);
           const month = parseInt(parts[1], 10);
           const age = getAge(birthdate);
           const zodiac = getZodiacSign(day, month);
-          // Cria o perfil para ser exibido na sidebar
           const userProfile = `
             <div>Nome: <span>${username}</span></div>
             <div>Idade: <span>${age < 10 ? '0' + age : age} anos</span></div>
             <div>Signo: <span>${zodiac}</span></div>
             <div>Identificação: <span>${document.getElementById('regId').selectedOptions[0].text}</span></div>
             <div>Estado Civil: <span>${document.getElementById('regEstadoCivil').selectedOptions[0].text}</span></div>
-            <div>Em Busca de: <span>${document.getElementById('regBusca').selectedOptions[0].text}</span></div>
+            <div>Gêneros de interesse 1: <span>${selectedGenero1.join(", ")}</span></div>
+            <div>Detalhes 1: <span>${generoDetalhes1.join(" | ")}</span></div>
+            <div>Gêneros de interesse 2: <span>${selectedGenero2.join(", ")}</span></div>
             <div>Conexão: <span>${document.getElementById('regConexao').selectedOptions[0].text}</span></div>
           `;
           document.getElementById('profileInfo').innerHTML = userProfile;
         }
-        // Após o cadastro, exibe a tela de seleção de sala e oculta o cadastro
+        // Alterna para tela de seleção de sala
         document.getElementById('registrationScreen').classList.add('hidden');
         document.getElementById('roomSelectionScreen').classList.remove('hidden');
       }
@@ -411,8 +564,7 @@
       const count = parseInt(localStorage.getItem(roomKey)) || 0;
       localStorage.setItem(roomKey, count + 1);
     }
-
-    // Seleção da sala (após cadastro)
+    // Seleção da sala
     function chooseRoom(room) {
       const roomKeyLocal = "room_" + room;
       if (!canJoinRoom(roomKeyLocal)) {
@@ -420,32 +572,26 @@
         return;
       }
       incrementRoomCount(roomKeyLocal);
-      // Atualiza o cabeçalho do chat com o nome da sala
-      document.getElementById('chatHeader').textContent = "Chat SJC - " + room.toUpperCase();
-      // Adiciona a sala escolhida ao perfil exibido na sidebar
-      document.getElementById('profileInfo').innerHTML += `<div>Sala: <span>${room.toUpperCase()}</span></div>`;
-      // Oculta a tela de seleção de sala e exibe a tela do chat
+      room = room.toUpperCase(); // Define a sala selecionada
+      document.getElementById('chatHeader').textContent = "Chat SJC - " + room;
+      document.getElementById('profileInfo').innerHTML += `<div>Sala: <span>${room}</span></div>`;
       document.getElementById('roomSelectionScreen').classList.add('hidden');
       document.getElementById('chatWrapper').classList.remove('hidden');
       addMessage(`Bem-vindo, ${username}!`, 'system');
     }
-
     // Toggle da Sidebar
     const toggleBtn = document.getElementById('toggleBtn');
     const sidebar = document.getElementById('sidebar');
     toggleBtn.addEventListener('click', function() {
       sidebar.classList.toggle('closed');
     });
-
-    // Envio de mensagem no chat
+    // Envio e exibição de mensagens
     const messageInput = document.getElementById('messageInput');
     const sendBtn = document.getElementById('sendBtn');
     sendBtn.addEventListener('click', sendMessage);
     messageInput.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') sendMessage();
     });
-    
-    // Função para adicionar mensagens na área de chat
     const chatMessages = document.getElementById('chatMessages');
     function addMessage(text, sender) {
       const msgDiv = document.createElement('div');
@@ -456,8 +602,6 @@
       chatMessages.appendChild(msgDiv);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-    
-    // Simulação de resposta automática
     function sendMessage() {
       const text = messageInput.value.trim();
       if (text) {
@@ -468,6 +612,31 @@
         }, 1000);
       }
     }
-  </script>
+
+    // Ajuste no tamanho da tela de chat
+    function adjustChatSize() {
+      const chatWrapper = document.getElementById('chatWrapper');
+      if (chatWrapper && !chatWrapper.classList.contains('hidden')) {
+        // Calcula a altura disponível subtraindo a altura do header e do input
+        const chatHeaderHeight = document.getElementById('chatHeader').offsetHeight;
+        const chatInputHeight = document.querySelector('.chat-input').offsetHeight;
+        const availableHeight = window.innerHeight - chatHeaderHeight - chatInputHeight;
+
+        // Define a altura do container de mensagens
+        document.getElementById('chatMessages').style.height = `${availableHeight - 20}px`; // 20px para margem
+      }
+    }
+
+    // Chama a função adjustChatSize sempre que a janela é redimensionada
+    window.addEventListener('resize', adjustChatSize);
+
+    // Garante que o tamanho do chat seja ajustado assim que a tela de chat é exibida
+    const roomSelectionScreen = document.getElementById('roomSelectionScreen');
+    roomSelectionScreen.addEventListener('transitionend', () => {
+      if (roomSelectionScreen.classList.contains('hidden')) {
+        adjustChatSize();
+      }
+    });
+  });</script>
 </body>
 </html>

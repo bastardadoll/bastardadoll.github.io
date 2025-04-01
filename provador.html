@@ -1,93 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
   <title>Provador Virtual</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
     /* CSS Reset */
-    html,
-    body,
-    div,
-    span,
-    applet,
-    object,
-    iframe,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    p,
-    blockquote,
-    pre,
-    a,
-    abbr,
-    acronym,
-    address,
-    big,
-    cite,
-    code,
-    del,
-    dfn,
-    em,
-    img,
-    ins,
-    kbd,
-    q,
-    s,
-    samp,
-    small,
-    strike,
-    strong,
-    sub,
-    sup,
-    tt,
-    var,
-    b,
-    u,
-    i,
-    center,
-    dl,
-    dt,
-    dd,
-    ol,
-    ul,
-    li,
-    fieldset,
-    form,
-    label,
-    legend,
-    table,
-    caption,
-    tbody,
-    tfoot,
-    thead,
-    tr,
-    th,
-    td,
-    article,
-    aside,
-    canvas,
-    details,
-    embed,
-    figure,
-    figcaption,
-    footer,
-    header,
-    hgroup,
-    menu,
-    nav,
-    output,
-    ruby,
-    section,
-    summary,
-    time,
-    mark,
-    audio,
-    video {
+    html, body, div, span, applet, object, iframe,
+    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+    a, abbr, acronym, address, big, cite, code,
+    del, dfn, em, img, ins, kbd, q, s, samp,
+    small, strike, strong, sub, sup, tt, var,
+    b, u, i, center,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td,
+    article, aside, canvas, details, embed, 
+    figure, figcaption, footer, header, hgroup, 
+    menu, nav, output, ruby, section, summary,
+    time, mark, audio, video {
       margin: 0;
       padding: 0;
       border: 0;
@@ -95,102 +26,74 @@
       font: inherit;
       vertical-align: baseline;
     }
-
-    article,
-    aside,
-    details,
-    figcaption,
-    figure,
-    footer,
-    header,
-    hgroup,
-    menu,
-    nav,
-    section {
+    article, aside, details, figcaption, figure,
+    footer, header, hgroup, menu, nav, section {
       display: block;
     }
-
     body {
       line-height: 1;
+      font-family: sans-serif;
+      background-color: #f0f0f0;
     }
-
-    ol,
-    ul {
+    ol, ul {
       list-style: none;
     }
-
-    blockquote,
-    q {
+    blockquote, q {
       quotes: none;
     }
-
-    blockquote:before,
-    blockquote:after,
-    q:before,
-    q:after {
+    blockquote:before, blockquote:after,
+    q:before, q:after {
       content: '';
       content: none;
     }
-
     table {
       border-collapse: collapse;
       border-spacing: 0;
     }
 
-    /* General Styles */
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f0f0f0;
-      overflow: hidden;
-      height: 100vh;
+    /* Layout geral */
+    html, body {
+      height: 100%;
     }
-
     #app-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
-      height: 100%;
+      height: 100vh;
+      padding: 5px;
+      box-sizing: border-box;
     }
-
     #header {
-      font-size: 2em;
-      margin-bottom: 20px;
+      font-size: 1.8em;
       color: #e67e22;
       text-align: center;
+      margin-bottom: 5px;
     }
-
     #main-container {
       display: flex;
-      width: 100%;
-      height: calc(100% - 80px);
-      max-width: none;
-      margin: 0 auto;
-      border: 5px solid #e67e22;
       flex-direction: column;
+      width: 100%;
+      flex: 1;
+      border: 3px solid #e67e22;
+      background-color: #fff;
+      box-sizing: border-box;
     }
-
+    /* Área do manequim e painel de controle na versão mobile */
     #mannequin-area {
       position: relative;
-      padding: 20px;
       width: 100%;
-      padding: 10px;
-      flex: 2;
+      height: 65%;
+      box-sizing: border-box;
+      padding: 5px;
     }
-
     #mannequin-container {
       position: relative;
       width: 100%;
-      max-width: none;
-      aspect-ratio: 1080 / 1920;
-      margin: 0 auto;
+      height: 100%;
       background-color: #f2f2f2;
       overflow: hidden;
       border: 2px solid #ccc;
     }
-
     #mannequin {
       position: absolute;
       width: 100%;
@@ -200,7 +103,6 @@
       object-fit: cover;
       z-index: 1;
     }
-
     .piece {
       position: absolute;
       width: 100%;
@@ -211,52 +113,42 @@
       cursor: move;
       user-select: none;
     }
-
-    /* Keyframes for slide-in animation */
     @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
     }
-
     .slide-in {
       animation: slideIn 0.5s ease forwards;
     }
-
+    /* Painel de controle com opções de peças */
     #control-panel {
-      padding: 20px;
-      text-align: center;
-      background-color: #fff;
       width: 100%;
-      padding: 10px;
+      height: 35%;
+      padding: 5px;
+      box-sizing: border-box;
+      background-color: #fff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    #control-panel h2 {
+      color: #333;
+      font-size: 1.2em;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+    .piece-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+      gap: 3px;
+      padding: 3px;
       flex: 1;
       overflow-y: auto;
     }
-
-    #control-panel h2 {
-      color: #333;
-      margin-bottom: 15px;
-    }
-
-    /* Grid para as peças */
-    .piece-selector {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-      /* Ajusta o tamanho mínimo e máximo das células */
-      gap: 5px;
-      margin-bottom: 10px;
-      padding: 5px;
-    }
-
     .piece-button {
-      padding: 5px;
-      font-size: 12px;
+      padding: 3px;
+      font-size: 10px;
       background-color: #f0f0f0;
       border: 1px solid #ccc;
       cursor: pointer;
@@ -268,67 +160,64 @@
       align-items: center;
       justify-content: center;
     }
-
     .piece-button:hover {
       background-color: #ddd;
     }
-
-    #controls {
-      margin: 10px auto;
-      max-width: 300px;
-      text-align: center;
+    .piece-thumbnail {
+      width: 35px;
+      height: 35px;
+      margin-bottom: 2px;
     }
-
+    #controls {
+      text-align: center;
+      margin-top: 3px;
+    }
     #controls button {
-      margin: 3px;
-      padding: 8px 12px;
-      font-size: 12px;
+      margin: 2px;
+      padding: 6px 10px;
+      font-size: 10px;
       cursor: pointer;
     }
-
-    /* Estilos para as miniaturas das peças */
-    .piece-thumbnail {
-      width: 40px;
-      height: 40px;
-      margin-bottom: 3px;
-    }
-
-    /* Media query para telas menores */
+    /* Media query para telas maiores */
     @media (min-width: 768px) {
       #main-container {
         flex-direction: row;
-        /* Restaura para row em telas maiores */
       }
-
       #mannequin-area {
-        flex: 2;
         width: 75%;
+        height: auto;
+        padding: 10px;
       }
-
+      #mannequin-container {
+        aspect-ratio: 1080 / 1920;
+      }
       #control-panel {
-        flex: 1;
         width: 25%;
+        height: auto;
+        overflow-y: auto;
+        padding: 10px;
+      }
+      .piece-selector {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      }
+      #controls button {
+        font-size: 12px;
       }
     }
   </style>
 </head>
-
 <body>
   <div id="app-container">
     <h1 id="header">Provador Virtual</h1>
     <div id="main-container">
       <div id="mannequin-area">
-        <!-- Container do manequim -->
         <div id="mannequin-container">
-          <!-- Manequim em 1080x1920 (vista frontal) -->
           <img id="mannequin" src="https://bastardadoll.github.io/frente.png" alt="Manequim">
-          <!-- As peças serão inseridas via JavaScript -->
         </div>
       </div>
       <div id="control-panel">
         <h2>Peças</h2>
         <div class="piece-selector">
-          <!-- Botões para adicionar peças -->
           <button class="piece-button" onclick="addPiece('top', 1)">
             <img src="https://bastardadoll.github.io/top1.png" alt="Top 1" class="piece-thumbnail">
             Top 1
@@ -379,30 +268,16 @@
   </div>
 
   <script type="importmap">
-{
-  "imports": {
-    "lodash": "https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/+esm"
+  {
+    "imports": {
+      "lodash": "https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/+esm"
+    }
   }
-}
-</script>
+  </script>
 
   <script type="module">
-    /**
-     * currentView indica se o manequim está mostrando a frente ou o verso.
-     * Pode ser 'frente' ou 'verso'.
-     */
     let currentView = 'frente';
-
-    /**
-     * currentPieces: armazena os elementos de cada tipo
-     * para poder substituir ou remover quando necessário.
-     */
     const currentPieces = {};
-
-    /**
-     * Definição dos arquivos de cada peça, em cada vista (frente/verso).
-     * Todos os PNGs têm o mesmo tamanho 1080x1920.
-     */
     const piecesData = {
       top: {
         zIndex: 2,
@@ -428,9 +303,7 @@
       plug: {
         zIndex: 5,
         files: {
-          frente: [
-            /* se não tiver frente, pode deixar vazio */
-          ],
+          frente: [],
           verso: ['https://bastardadoll.github.io/plug1-verso.png', 'https://bastardadoll.github.io/plug2-verso.png']
         }
       },
@@ -443,139 +316,81 @@
       }
     };
 
-    /**
-     * Troca a imagem do manequim e das peças para frente ou verso.
-     */
     window.toggleView = function() {
       currentView = currentView === 'frente' ? 'verso' : 'frente';
-      console.log('Toggling view to:', currentView);
-
-      // Troca a imagem do manequim
       const mannequin = document.getElementById('mannequin');
-      mannequin.src = currentView === 'frente' ?
-        'https://bastardadoll.github.io/frente.png' :
-        'https://bastardadoll.github.io/verso.png'; // TODO add back image
+      mannequin.src = currentView === 'frente'
+        ? 'https://bastardadoll.github.io/frente.png'
+        : 'https://bastardadoll.github.io/verso.png';
 
-      // Atualiza cada peça
       Object.keys(currentPieces).forEach(type => {
         const pieceEl = currentPieces[type];
         const data = piecesData[type];
-        const variation = pieceEl.dataset.variation; // "1" ou "2"
-
-        console.log('Updating piece:', type, 'Variation:', variation, 'Current view:', currentView);
-
-        // Se não houver imagem para a vista atual, oculta o elemento
+        const variation = pieceEl.dataset.variation;
         if (!data.files[currentView] || !data.files[currentView].length) {
           pieceEl.style.display = 'none';
-          console.log('Hiding piece:', type, 'because no image for current view');
         } else {
           pieceEl.style.display = 'block';
-          // Atualiza o src da peça
           const newSrc = data.files[currentView][variation - 1];
           pieceEl.src = newSrc;
-          console.log('Setting source for piece:', type, 'to', newSrc);
         }
       });
     }
 
-    /**
-     * Adiciona (ou substitui) uma peça do tipo especificado e variação (1 ou 2).
-     */
     function addPiece(type, variation) {
       const data = piecesData[type];
       if (!data) return;
-
-      console.log('Adding piece:', type, 'Variation:', variation, 'Current view:', currentView);
-
-      // Se já existir uma peça desse tipo, remove com animação
       if (currentPieces[type]) {
         const oldEl = currentPieces[type];
         oldEl.classList.remove('slide-in');
-        //oldEl.classList.add('slide-in'); // Remove the piece immediately
         oldEl.addEventListener('animationend', () => oldEl.remove());
         delete currentPieces[type];
         oldEl.remove();
       }
-
-      // Cria o elemento <img> para a nova peça
       const img = document.createElement('img');
-      img.classList.add('piece');
-      // Ativa a animação de entrada
-      img.classList.add('slide-in');
-
-      // Define o arquivo de acordo com a vista atual e a variação
+      img.classList.add('piece', 'slide-in');
       const fileList = data.files[currentView] || [];
-      if (fileList.length === 0) {
-        // Exemplo: se for "plug" e estiver em frente, não tem imagem
-        return;
-      }
-      img.src = fileList[variation - 1]; // variation é 1 ou 2 -> array index 0 ou 1
+      if (fileList.length === 0) return;
+      img.src = fileList[variation - 1];
       img.dataset.type = type;
       img.dataset.variation = variation;
-
-      // Ajusta estilo
       img.style.zIndex = data.zIndex || 1;
-
-      // Adiciona ao container
       const container = document.getElementById('mannequin-container');
       container.appendChild(img);
-
-      // Torna arrastável (se quiser permitir ajustes)
       makeDraggable(img);
-
-      // Armazena referência
       currentPieces[type] = img;
     }
     window.addPiece = addPiece;
 
-    /**
-     * Remove todas as peças.
-     */
     window.removeAll = function() {
       Object.keys(currentPieces).forEach(type => {
         const pieceEl = currentPieces[type];
         pieceEl.remove();
       });
-      // Esvazia o objeto
       for (let key in currentPieces) {
         delete currentPieces[key];
       }
     }
 
-    /**
-     * Função para tornar uma peça arrastável dentro do container.
-     * Se você não quiser esse recurso, pode remover essa parte.
-     */
     function makeDraggable(el) {
       let isDragging = false;
-      let offsetX = 0,
-        offsetY = 0;
-
+      let offsetX = 0, offsetY = 0;
       el.addEventListener('pointerdown', (e) => {
         isDragging = true;
         el.setPointerCapture(e.pointerId);
-
-        // Posição inicial do mouse em relação ao elemento
         const rect = el.getBoundingClientRect();
         offsetX = e.clientX - rect.left;
         offsetY = e.clientY - rect.top;
       });
-
       el.addEventListener('pointermove', (e) => {
         if (!isDragging) return;
-
         const container = document.getElementById('mannequin-container');
         const containerRect = container.getBoundingClientRect();
-
-        // Calcula a nova posição
         let newX = e.clientX - containerRect.left - offsetX;
         let newY = e.clientY - containerRect.top - offsetY;
-
-        // Aplica ao elemento
         el.style.left = newX + 'px';
         el.style.top = newY + 'px';
       });
-
       el.addEventListener('pointerup', (e) => {
         isDragging = false;
         el.releasePointerCapture(e.pointerId);
@@ -583,5 +398,4 @@
     }
   </script>
 </body>
-
 </html>

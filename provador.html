@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Provador Virtual</title>
+  <style>
+    /* CSS Reset */
+    html,
+    body,
+    div,
+    span,
+    applet,
+    object,
+    iframe,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    blockquote,
+    pre,
+    a,
+    abbr,
+    acronym,
+    address,
+    big,
+    cite,
+    code,
+    del,
+    dfn,
+    em,
+    img,
+    ins,
+    kbd,
+    q,
+    s,
+    samp,
+    small,
+    strike,
+    strong,
+    sub,
+    sup,
+    tt,
+    var,
+    b,
+    u,
+    i,
+    center,
+    dl,
+    dt,
+    dd,
+    ol,
+    ul,
+    li,
+    fieldset,
+    form,
+    label,
+    legend,
+    table,
+    caption,
+    tbody,
+    tfoot,
+    thead,
+    tr,
+    th,
+    td,
+    article,
+    aside,
+    canvas,
+    details,
+    embed,
+    figure,
+    figcaption,
+    footer,
+    header,
+    hgroup,
+    menu,
+    nav,
+    output,
+    ruby,
+    section,
+    summary,
+    time,
+    mark,
+    audio,
+    video {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      font-size: 100%;
+      font: inherit;
+      vertical-align: baseline;
+    }
+
+    article,
+    aside,
+    details,
+    figcaption,
+    figure,
+    footer,
+    header,
+    hgroup,
+    menu,
+    nav,
+    section {
+      display: block;
+    }
+
+    body {
+      line-height: 1;
+    }
+
+    ol,
+    ul {
+      list-style: none;
+    }
+
+    blockquote,
+    q {
+      quotes: none;
+    }
+
+    blockquote:before,
+    blockquote:after,
+    q:before,
+    q:after {
+      content: '';
+      content: none;
+    }
+
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+
+    /* General Styles */
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+
+    #app-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    #header {
+      font-size: 2em;
+      margin-bottom: 20px;
+      color: #e67e22;
+    }
+
+    #main-container {
+      display: flex;
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      border: 5px solid #e67e22;
+      flex-direction: row;
+    }
+
+    #mannequin-area {
+      flex: 2;
+      position: relative;
+      padding: 20px;
+      width: 75%;
+      padding: 10px;
+    }
+
+    #mannequin-container {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+      aspect-ratio: 1080 / 1920;
+      margin: 0 auto;
+      background-color: #f2f2f2;
+      overflow: hidden;
+      border: 2px solid #ccc;
+    }
+
+    #mannequin {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    .piece {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+      cursor: move;
+      user-select: none;
+    }
+
+    /* Keyframes for slide-in animation */
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .slide-in {
+      animation: slideIn 0.5s ease forwards;
+    }
+
+
+    #control-panel {
+      flex: 1;
+      padding: 20px;
+      text-align: center;
+      background-color: #fff;
+      width: 25%;
+      padding: 10px;
+    }
+
+    #control-panel h2 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    /* Grid para as peças */
+    .piece-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      /* Ajusta o tamanho mínimo e máximo das células */
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .piece-button {
+      padding: 10px 15px;
+      font-size: 14px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin: 5px 0;
+      width: 100%;
+      /* Garante que os botões preencham as células do grid */
+      box-sizing: border-box;
+      /* Inclui padding e borda no cálculo do tamanho */
+    }
+
+    .piece-button:hover {
+      background-color: #ddd;
+    }
+
+    #controls {
+      margin: 20px auto;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    #controls button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* Estilos para as miniaturas das peças */
+    .piece-thumbnail {
+      width: 50px;
+      height: 50px;
+      margin-right: 5px;
+      vertical-align: middle;
+      /* Alinha verticalmente com o texto */
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app-container">
+    <h1 id="header">Provador Virtual</h1>
+    <div id="main-container">
+      <div id="mannequin-area">
+        <!-- Container do manequim -->
+        <div id="mannequin-container">
+          <!-- Manequim em 1080x1920 (vista frontal) -->
+          <img id="mannequin" src="https://bastardadoll.github.io/frente.png" alt="Manequim">
+          <!-- As peças serão inseridas via JavaScript -->
+        </div>
+      </div>
+      <div id="control-panel">
+        <h2>Peças</h2>
+        <div class="piece-selector">
+          <!-- Botões para adicionar peças -->
+          <button class="piece-button" onclick="addPiece('top', 1)">
+            <img src="https://bastardadoll.github.io/top1.png" alt="Top 1" class="piece-thumbnail">
+            Top 1
+          </button>
+          <button class="piece-button" onclick="addPiece('top', 2)">
+            <img src="/a/4f54ef24-6c2a-417d-9926-db7e433bb6e2" alt="Top 2" class="piece-thumbnail">
+            Top 2
+          </button>
+          <button class="piece-button" onclick="addPiece('shorts', 1)">
+            <img src="/a/4f54ef24-6c2a-417d-9926-db7e433bb6e2" alt="Shorts 1" class="piece-thumbnail">
+            Shorts 1
+          </button>
+          <button class="piece-button" onclick="addPiece('shorts', 2)">
+            <img src="/a/4f54ef24-6c2a-417d-9926-db7e433bb6e2" alt="Shorts 2" class="piece-thumbnail">
+            Shorts 2
+          </button>
+          <button class="piece-button" onclick="addPiece('calcinhas', 1)">
+            <img src="https://bastardadoll.github.io/calcinha1.png" alt="Calcinha 1" class="piece-thumbnail">
+            Calcinha 1
+          </button>
+          <button class="piece-button" onclick="addPiece('calcinhas', 2)">
+            <img src="https://bastardadoll.github.io/calcinha2.png" alt="Calcinha 2" class="piece-thumbnail">
+            Calcinha 2
+          </button>
+          <button class="piece-button" onclick="addPiece('plug', 1)">
+            <img src="https://bastardadoll.github.io/plug1.png" alt="Plug 1" class="piece-thumbnail">
+            Plug 1
+          </button>
+          <button class="piece-button" onclick="addPiece('plug', 2)">
+            <img src="https://bastardadoll.github.io/" alt="Plug 2" class="piece-thumbnail">
+            Plug 2
+          </button>
+          <button class="piece-button" onclick="addPiece('vestido', 1)">
+            <img src="https://bastardadoll.github.io/" alt="Vestido 1" class="piece-thumbnail">
+            Vestido 1
+          </button>
+          <button class="piece-button" onclick="addPiece('vestido', 2)">
+            <img src="https://bastardadoll.github.io/" alt="Vestido 2" class="piece-thumbnail">
+            Vestido 2
+          </button>
+        </div>
+        <button onclick="toggleView()">Alternar Frente/Verso</button>
+        <button onclick="removeAll()">Remover Todas as Peças</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="importmap">
+{
+  "imports": {
+    "lodash": "https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/+esm"
+  }
+}
+</script>
+
+  <script type="module">
+    /**
+     * currentView indica se o manequim está mostrando a frente ou o verso.
+     * Pode ser 'frente' ou 'verso'.
+     */
+    let currentView = 'frente';
+
+    /**
+     * currentPieces: armazena os elementos de cada tipo
+     * para poder substituir ou remover quando necessário.
+     */
+    const currentPieces = {};
+
+    /**
+     * Definição dos arquivos de cada peça, em cada vista (frente/verso).
+     * Todos os PNGs têm o mesmo tamanho 1080x1920.
+     */
+    const piecesData = {
+      top: {
+        zIndex: 2,
+        files: {
+          frente: ['https://bastardadoll.github.io/top1-frente.png', 'https://bastardadoll.github.io/top2-frente.png'],
+          verso: ['top1-verso.png', 'top2-verso.png']
+        }
+      },
+      shorts: {
+        zIndex: 4,
+        files: {
+          frente: ['https://bastardadoll.github.io/short1-frente.png', 'https://bastardadoll.github.io/short2-frente.png'],
+          verso: ['https://bastardadoll.github.io/short1-verso.png', 'https://bastardadoll.github.io/short2-verso.png']
+        }
+      },
+      calcinhas: {
+        zIndex: 3,
+        files: {
+          frente: ['https://bastardadoll.github.io/calcinha-frente1.png', 'https://bastardadoll.github.io/calcinha-frente2.png'],
+          verso: ['https://bastardadoll.github.io/calcinha-frente2.png', 'https://bastardadoll.github.io/calcinha-verso2.png']
+        }
+      },
+      plug: {
+        zIndex: 5,
+        files: {
+          frente: [
+            /* se não tiver frente, pode deixar vazio */
+          ],
+          verso: ['https://bastardadoll.github.io/plug1-verso.png', 'https://bastardadoll.github.io/plug2-verso.png']
+        }
+      },
+      vestido: {
+        zIndex: 3,
+        files: {
+          frente: ['https://bastardadoll.github.io/vestido1-frente.png', 'https://bastardadoll.github.io/vestido2-frente.png'],
+          verso: ['https://bastardadoll.github.io/vestido1-verso.png', 'https://bastardadoll.github.io/vestido2-verso.png']
+        }
+      }
+    };
+
+    /**
+     * Troca a imagem do manequim e das peças para frente ou verso.
+     */
+    window.toggleView = function() {
+      currentView = currentView === 'frente' ? 'verso' : 'frente';
+      console.log('Toggling view to:', currentView);
+
+      // Troca a imagem do manequim
+      const mannequin = document.getElementById('mannequin');
+      mannequin.src = currentView === 'frente' ?
+        'https://bastardadoll.github.io/frente.png' :
+        'https://bastardadoll.github.io/verso.png'; // TODO add back image
+
+      // Atualiza cada peça
+      Object.keys(currentPieces).forEach(type => {
+        const pieceEl = currentPieces[type];
+        const data = piecesData[type];
+        const variation = pieceEl.dataset.variation; // "1" ou "2"
+
+        console.log('Updating piece:', type, 'Variation:', variation, 'Current view:', currentView);
+
+        // Se não houver imagem para a vista atual, oculta o elemento
+        if (!data.files[currentView] || !data.files[currentView].length) {
+          pieceEl.style.display = 'none';
+          console.log('Hiding piece:', type, 'because no image for current view');
+        } else {
+          pieceEl.style.display = 'block';
+          // Atualiza o src da peça
+          const newSrc = data.files[currentView][variation - 1];
+          pieceEl.src = newSrc;
+          console.log('Setting source for piece:', type, 'to', newSrc);
+        }
+      });
+    }
+
+    /**
+     * Adiciona (ou substitui) uma peça do tipo especificado e variação (1 ou 2).
+     */
+    function addPiece(type, variation) {
+      const data = piecesData[type];
+      if (!data) return;
+
+      console.log('Adding piece:', type, 'Variation:', variation, 'Current view:', currentView);
+
+      // Se já existir uma peça desse tipo, remove com animação
+      if (currentPieces[type]) {
+        const oldEl = currentPieces[type];
+        oldEl.classList.remove('slide-in');
+        //oldEl.classList.add('slide-in'); // Remove the piece immediately
+        oldEl.addEventListener('animationend', () => oldEl.remove());
+        delete currentPieces[type];
+        oldEl.remove();
+      }
+
+      // Cria o elemento <img> para a nova peça
+      const img = document.createElement('img');
+      img.classList.add('piece');
+      // Ativa a animação de entrada
+      img.classList.add('slide-in');
+
+      // Define o arquivo de acordo com a vista atual e a variação
+      const fileList = data.files[currentView] || [];
+      if (fileList.length === 0) {
+        // Exemplo: se for "plug" e estiver em frente, não tem imagem
+        return;
+      }
+      img.src = fileList[variation - 1]; // variation é 1 ou 2 -> array index 0 ou 1
+      img.dataset.type = type;
+      img.dataset.variation = variation;
+
+      // Ajusta estilo
+      img.style.zIndex = data.zIndex || 1;
+
+      // Adiciona ao container
+      const container = document.getElementById('mannequin-container');
+      container.appendChild(img);
+
+      // Torna arrastável (se quiser permitir ajustes)
+      makeDraggable(img);
+
+      // Armazena referência
+      currentPieces[type] = img;
+    }
+    window.addPiece = addPiece;
+
+    /**
+     * Remove todas as peças.
+     */
+    window.removeAll = function() {
+      Object.keys(currentPieces).forEach(type => {
+        const pieceEl = currentPieces[type];
+        pieceEl.remove();
+      });
+      // Esvazia o objeto
+      for (let key in currentPieces) {
+        delete currentPieces[key];
+      }
+    }
+
+    /**
+     * Função para tornar uma peça arrastável dentro do container.
+     * Se você não quiser esse recurso, pode remover essa parte.
+     */
+    function makeDraggable(el) {
+      let isDragging = false;
+      let offsetX = 0,
+        offsetY = 0;
+
+      el.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        el.setPointerCapture(e.pointerId);
+
+        // Posição inicial do mouse em relação ao elemento
+        const rect = el.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+      });
+
+      el.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+
+        const container = document.getElementById('mannequin-container');
+        const containerRect = container.getBoundingClientRect();
+
+        // Calcula a nova posição
+        let newX = e.clientX - containerRect.left - offsetX;
+        let newY = e.clientY - containerRect.top - offsetY;
+
+        // Aplica ao elemento
+        el.style.left = newX + 'px';
+        el.style.top = newY + 'px';
+      });
+
+      el.addEventListener('pointerup', (e) => {
+        isDragging = false;
+        el.releasePointerCapture(e.pointerId);
+      });
+    }
+  </script>
+</body>
+
+</html>

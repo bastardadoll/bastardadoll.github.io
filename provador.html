@@ -170,17 +170,14 @@
       margin: 0 auto;
       border: 5px solid #e67e22;
       flex-direction: column;
-      /* Alterado para column */
     }
 
     #mannequin-area {
       position: relative;
       padding: 20px;
       width: 100%;
-      /* Ocupa a largura total */
       padding: 10px;
       flex: 2;
-      /* Distribui o espaço vertical */
     }
 
     #mannequin-container {
@@ -232,18 +229,14 @@
       animation: slideIn 0.5s ease forwards;
     }
 
-
     #control-panel {
       padding: 20px;
       text-align: center;
       background-color: #fff;
       width: 100%;
-      /* Ocupa a largura total */
       padding: 10px;
       flex: 1;
-      /* Distribui o espaço vertical */
       overflow-y: auto;
-      /* Adiciona barra de rolagem vertical se necessário */
     }
 
     #control-panel h2 {
@@ -254,24 +247,26 @@
     /* Grid para as peças */
     .piece-selector {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
       /* Ajusta o tamanho mínimo e máximo das células */
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 5px;
+      margin-bottom: 10px;
+      padding: 5px;
     }
 
     .piece-button {
-      padding: 10px 15px;
-      font-size: 14px;
+      padding: 5px;
+      font-size: 12px;
       background-color: #f0f0f0;
       border: 1px solid #ccc;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      margin: 5px 0;
       width: 100%;
-      /* Garante que os botões preencham as células do grid */
       box-sizing: border-box;
-      /* Inclui padding e borda no cálculo do tamanho */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     .piece-button:hover {
@@ -279,25 +274,23 @@
     }
 
     #controls {
-      margin: 20px auto;
-      max-width: 400px;
+      margin: 10px auto;
+      max-width: 300px;
       text-align: center;
     }
 
     #controls button {
-      margin: 5px;
-      padding: 10px 15px;
-      font-size: 14px;
+      margin: 3px;
+      padding: 8px 12px;
+      font-size: 12px;
       cursor: pointer;
     }
 
     /* Estilos para as miniaturas das peças */
     .piece-thumbnail {
-      width: 50px;
-      height: 50px;
-      margin-right: 5px;
-      vertical-align: middle;
-      /* Alinha verticalmente com o texto */
+      width: 40px;
+      height: 40px;
+      margin-bottom: 3px;
     }
 
     /* Media query para telas menores */
@@ -377,8 +370,10 @@
             Vestido 2
           </button>
         </div>
-        <button onclick="toggleView()">Alternar Frente/Verso</button>
-        <button onclick="removeAll()">Remover Todas as Peças</button>
+        <div id="controls">
+          <button onclick="toggleView()">Alternar Frente/Verso</button>
+          <button onclick="removeAll()">Remover Todas as Peças</button>
+        </div>
       </div>
     </div>
   </div>

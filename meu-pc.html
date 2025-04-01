@@ -17,6 +17,14 @@
       min-height: 100vh;
     }
 
+    header {
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1em;
+      padding: 1em 0;
+      text-align: center;
+    }
+
     h1,
     h2,
     h3 {
@@ -26,11 +34,6 @@
 
     h1 {
       font-size: 2.5em;
-      text-align: center;
-      padding: 1em 0;
-      background-color: #fff;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      margin-bottom: 1em;
     }
 
     section {
@@ -150,16 +153,23 @@
       }
 
       table {
-        overflow-x: auto;
+        overflow-x: auto; /* Enable horizontal scrolling */
         display: block;
+      }
+
+      th, td {
+        padding: 0.75em; /* Reduce padding for smaller screens */
+        white-space: nowrap; /* Prevent text wrapping in table cells */
       }
     }
   </style>
 </head>
 
 <body>
-
-  <h1>Painel de Controle e Análise - Dell OptiPlex 760</h1>
+  <header>
+    <h1>Painel de Controle e Análise</h1>
+    <h2>Dell OptiPlex 760</h2>
+  </header>
 
   <section>
     <h2>Configuração Atual</h2>
@@ -202,31 +212,25 @@
       <li class="upgrade-item">
         <strong>Expansão de Armazenamento:</strong> Trocar o SSD de 120 GB por um SSD SATA de 240 GB/480 GB (ex.:
         Kingston A400) para mais espaço e velocidade.
-        <button onclick="analyzeUpgrade('armazenamento')">Analisar Upgrade de Armazenamento</button>
       </li>
       <li class="upgrade-item">
         <strong>Aumento de Memória RAM:</strong> Adicionar mais 4 GB DDR2 (totalizando 8 GB) para melhor multitarefa.
-        <button onclick="analyzeUpgrade('ram')">Analisar Upgrade de RAM</button>
       </li>
       <li class="upgrade-item">
         <strong>Upgrade de Processador:</strong> Substituir pelo Intel Core 2 Quad Q9650 (4 núcleos, 3.0 GHz) ou modelos
         similares (Q9550/Q9400) para melhor desempenho.
-        <button onclick="analyzeUpgrade('processador')">Analisar Upgrade de Processador</button>
       </li>
       <li class="upgrade-item">
         <strong>Placa de Vídeo Dedicada:</strong> Instalar uma low profile, como NVIDIA GT 1030 GDDR5 ou AMD RX 550, para
         gráficos superiores (verificar a fonte de alimentação).
-        <button onclick="analyzeUpgrade('video')">Analisar Upgrade de Placa de Vídeo</button>
       </li>
       <li class="upgrade-item">
         <strong>Upgrade da Fonte (Opcional):</strong> Substituir a fonte original (255W) por uma de 400W-500W,
         possibilitando suporte a GPUs mais exigentes (GTX 1650 Low Profile).
-        <button onclick="analyzeUpgrade('fonte')">Analisar Upgrade da Fonte</button>
       </li>
       <li class="upgrade-item">
         <strong>Adicionar Wi-Fi (Opcional):</strong> Instalar uma placa PCIe Wi-Fi AC (ex.: TP-Link Archer T4E) para
         conectividade sem fio.
-        <button onclick="analyzeUpgrade('wifi')">Analisar Upgrade de Wi-Fi</button>
       </li>
     </ol>
   </section>

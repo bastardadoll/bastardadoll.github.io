@@ -95,7 +95,7 @@
       overflow: hidden;
       border: 2px solid #ccc;
     }
-    /* Para manter o manequim 100% visível, usamos contain */
+    /* O manequim é 1920x1080 e usamos object-fit: contain para exibir a imagem inteira */
     #mannequin {
       position: absolute;
       width: 100%;
@@ -114,6 +114,7 @@
       transition: transform 0.5s ease, opacity 0.5s ease;
       cursor: move;
       user-select: none;
+      object-fit: contain;
     }
     @keyframes slideIn {
       from { transform: translateX(100%); opacity: 0; }
@@ -148,6 +149,7 @@
       flex: 1;
       overflow-y: auto;
     }
+    /* Os botões exibem imagens de opções em 720×720 (originais) mas serão redimensionadas para caber na grade */
     .piece-button {
       padding: 3px;
       font-size: 10px;
@@ -166,9 +168,13 @@
       background-color: #ddd;
     }
     .piece-thumbnail {
-      width: 35px;
-      height: 35px;
+      /* Como a imagem original é 720x720, a exibimos em um tamanho menor mantendo a proporção */
+      width: 100%;
+      height: auto;
+      max-width: 60px;
+      max-height: 60px;
       margin-bottom: 2px;
+      object-fit: contain;
     }
     #controls {
       text-align: center;
@@ -191,10 +197,10 @@
         height: auto;
         padding: 10px;
       }
-      /* Manter o aspecto 1080x1920 e usar contain para não cortar */
+      /* Define o container do manequim com aspecto 1920x1080 (16:9) */
       #mannequin-container {
         width: 100%;
-        aspect-ratio: 1080 / 1920;
+        aspect-ratio: 1920 / 1080;
       }
       #control-panel {
         width: 25%;

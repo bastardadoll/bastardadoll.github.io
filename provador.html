@@ -11,14 +11,12 @@
     a, abbr, acronym, address, big, cite, code,
     del, dfn, em, img, ins, kbd, q, s, samp,
     small, strike, strong, sub, sup, tt, var,
-    b, u, i, center,
-    dl, dt, dd, ol, ul, li,
-    fieldset, form, label, legend,
-    table, caption, tbody, tfoot, thead, tr, th, td,
-    article, aside, canvas, details, embed, 
-    figure, figcaption, footer, header, hgroup, 
-    menu, nav, output, ruby, section, summary,
-    time, mark, audio, video {
+    b, u, i, center, dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend, table, caption,
+    tbody, tfoot, thead, tr, th, td,
+    article, aside, details, figcaption, figure,
+    footer, header, hgroup, menu, nav, output,
+    ruby, section, summary, time, mark, audio, video {
       margin: 0;
       padding: 0;
       border: 0;
@@ -32,8 +30,6 @@
     }
     body {
       line-height: 1;
-      font-family: sans-serif;
-      background-color: #f0f0f0;
     }
     ol, ul {
       list-style: none;
@@ -51,169 +47,153 @@
       border-spacing: 0;
     }
 
-    /* Layout geral */
-    html, body {
-      height: 100%;
+    /* Estilos Gerais */
+    body {
+      font-family: sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
     }
+
+    /* Container Principal com Flexbox */
     #app-container {
       display: flex;
       flex-direction: column;
-      align-items: center;
       height: 100vh;
-      padding: 5px;
-      box-sizing: border-box;
     }
+
+    /* Header (opcional, pode ficar fixo ou integrado) */
     #header {
-      font-size: 1.8em;
-      color: #e67e22;
       text-align: center;
-      margin-bottom: 5px;
+      font-size: 1.6em;
+      padding: 10px;
+      color: #e67e22;
+      background-color: #fff;
+      flex-shrink: 0;
     }
+
+    /* Área principal com manequim e painel */
     #main-container {
       display: flex;
-      flex-direction: column;
-      width: 100%;
       flex: 1;
-      border: 3px solid #e67e22;
-      background-color: #fff;
-      box-sizing: border-box;
+      overflow: hidden;
     }
-    /* Área do manequim e painel de controle na versão mobile */
-    #mannequin-area {
-      position: relative;
-      width: 100%;
-      height: 65%;
-      box-sizing: border-box;
-      padding: 5px;
-    }
+
+    /* Container do Manequim */
     #mannequin-container {
+      flex: 2;
       position: relative;
-      width: 100%;
-      height: 100%;
       background-color: #f2f2f2;
-      overflow: hidden;
       border: 2px solid #ccc;
-    }
-    #mannequin {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      object-fit: cover;
-      z-index: 1;
-    }
-    .piece {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      transition: transform 0.5s ease, opacity 0.5s ease;
-      cursor: move;
-      user-select: none;
-    }
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-    .slide-in {
-      animation: slideIn 0.5s ease forwards;
-    }
-    /* Painel de controle com opções de peças */
-    #control-panel {
-      width: 100%;
-      height: 35%;
-      padding: 5px;
-      box-sizing: border-box;
-      background-color: #fff;
-      overflow: hidden;
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
+
+    /* A imagem do manequim usa object-fit: contain para exibição completa */
+    #mannequin {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Painel de Controle para as opções de peças */
+    #control-panel {
+      flex: 1;
+      background-color: #fff;
+      padding: 10px;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
     #control-panel h2 {
-      color: #333;
-      font-size: 1.2em;
-      margin-bottom: 5px;
       text-align: center;
+      color: #333;
+      margin-bottom: 10px;
     }
+
+    /* Grid de botões de peças */
     .piece-selector {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-      gap: 3px;
-      padding: 3px;
-      flex: 1;
-      overflow-y: auto;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 5px;
+      margin-bottom: 10px;
     }
+
     .piece-button {
-      padding: 3px;
-      font-size: 10px;
-      background-color: #f0f0f0;
-      border: 1px solid #ccc;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      width: 100%;
-      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 5px;
+      font-size: 12px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-sizing: border-box;
     }
+
     .piece-button:hover {
       background-color: #ddd;
     }
+
     .piece-thumbnail {
-      width: 35px;
-      height: 35px;
-      margin-bottom: 2px;
+      width: 40px;
+      height: 40px;
+      margin-bottom: 3px;
     }
+
     #controls {
       text-align: center;
-      margin-top: 3px;
     }
+
     #controls button {
-      margin: 2px;
-      padding: 6px 10px;
-      font-size: 10px;
+      margin: 3px;
+      padding: 8px 12px;
+      font-size: 12px;
       cursor: pointer;
     }
-    /* Media query para telas maiores */
+
+    /* Animação slide-in para as peças */
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    .slide-in {
+      animation: slideIn 0.5s ease forwards;
+    }
+
+    /* Ajuste para telas maiores (desktop): layout em linha */
     @media (min-width: 768px) {
+      #app-container {
+        flex-direction: column;
+      }
       #main-container {
         flex-direction: row;
       }
-      #mannequin-area {
-        width: 75%;
+      #mannequin-container, #control-panel {
         height: auto;
-        padding: 10px;
-      }
-      #mannequin-container {
-        aspect-ratio: 1080 / 1920;
-      }
-      #control-panel {
-        width: 25%;
-        height: auto;
-        overflow-y: auto;
-        padding: 10px;
-      }
-      .piece-selector {
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-      }
-      #controls button {
-        font-size: 12px;
       }
     }
   </style>
 </head>
 <body>
   <div id="app-container">
-    <h1 id="header">Provador Virtual</h1>
+    <div id="header">Provador Virtual</div>
     <div id="main-container">
-      <div id="mannequin-area">
-        <div id="mannequin-container">
-          <img id="mannequin" src="https://bastardadoll.github.io/frente.png" alt="Manequim">
-        </div>
+      <div id="mannequin-container">
+        <img id="mannequin" src="https://bastardadoll.github.io/frente.png" alt="Manequim">
+        <!-- As peças serão inseridas via JavaScript -->
       </div>
       <div id="control-panel">
         <h2>Peças</h2>
@@ -223,15 +203,15 @@
             Top 1
           </button>
           <button class="piece-button" onclick="addPiece('top', 2)">
-            <img src="/a/4f54ef24-6c2a-417d-9926-db7e433bb6e2" alt="Top 2" class="piece-thumbnail">
+            <img src="https://bastardadoll.github.io/top2.png" alt="Top 2" class="piece-thumbnail">
             Top 2
           </button>
           <button class="piece-button" onclick="addPiece('shorts', 1)">
-            <img src="/a/4f54ef24-6c2a-417d-9926-db7e433bb6e2" alt="Shorts 1" class="piece-thumbnail">
+            <img src="https://bastardadoll.github.io/short1.png" alt="Shorts 1" class="piece-thumbnail">
             Shorts 1
           </button>
           <button class="piece-button" onclick="addPiece('shorts', 2)">
-            <img src="/a/4f54ef24-6c2a-417d-9926-db7e433bb6e2" alt="Shorts 2" class="piece-thumbnail">
+            <img src="https://bastardadoll.github.io/short2.png" alt="Shorts 2" class="piece-thumbnail">
             Shorts 2
           </button>
           <button class="piece-button" onclick="addPiece('calcinhas', 1)">
@@ -247,15 +227,15 @@
             Plug 1
           </button>
           <button class="piece-button" onclick="addPiece('plug', 2)">
-            <img src="https://bastardadoll.github.io/" alt="Plug 2" class="piece-thumbnail">
+            <img src="https://bastardadoll.github.io/plug2.png" alt="Plug 2" class="piece-thumbnail">
             Plug 2
           </button>
           <button class="piece-button" onclick="addPiece('vestido', 1)">
-            <img src="https://bastardadoll.github.io/" alt="Vestido 1" class="piece-thumbnail">
+            <img src="https://bastardadoll.github.io/vestido1.png" alt="Vestido 1" class="piece-thumbnail">
             Vestido 1
           </button>
           <button class="piece-button" onclick="addPiece('vestido', 2)">
-            <img src="https://bastardadoll.github.io/" alt="Vestido 2" class="piece-thumbnail">
+            <img src="https://bastardadoll.github.io/vestido2.png" alt="Vestido 2" class="piece-thumbnail">
             Vestido 2
           </button>
         </div>
@@ -278,6 +258,7 @@
   <script type="module">
     let currentView = 'frente';
     const currentPieces = {};
+
     const piecesData = {
       top: {
         zIndex: 2,
@@ -297,7 +278,7 @@
         zIndex: 3,
         files: {
           frente: ['https://bastardadoll.github.io/calcinha-frente1.png', 'https://bastardadoll.github.io/calcinha-frente2.png'],
-          verso: ['https://bastardadoll.github.io/calcinha-frente2.png', 'https://bastardadoll.github.io/calcinha-verso2.png']
+          verso: ['https://bastardadoll.github.io/calcinha-verso1.png', 'https://bastardadoll.github.io/calcinha-verso2.png']
         }
       },
       plug: {
@@ -331,8 +312,7 @@
           pieceEl.style.display = 'none';
         } else {
           pieceEl.style.display = 'block';
-          const newSrc = data.files[currentView][variation - 1];
-          pieceEl.src = newSrc;
+          pieceEl.src = data.files[currentView][variation - 1];
         }
       });
     }
@@ -340,6 +320,8 @@
     function addPiece(type, variation) {
       const data = piecesData[type];
       if (!data) return;
+
+      // Se já existir uma peça deste tipo, remova-a
       if (currentPieces[type]) {
         const oldEl = currentPieces[type];
         oldEl.classList.remove('slide-in');
@@ -347,6 +329,7 @@
         delete currentPieces[type];
         oldEl.remove();
       }
+
       const img = document.createElement('img');
       img.classList.add('piece', 'slide-in');
       const fileList = data.files[currentView] || [];
@@ -355,6 +338,7 @@
       img.dataset.type = type;
       img.dataset.variation = variation;
       img.style.zIndex = data.zIndex || 1;
+
       const container = document.getElementById('mannequin-container');
       container.appendChild(img);
       makeDraggable(img);
@@ -375,6 +359,7 @@
     function makeDraggable(el) {
       let isDragging = false;
       let offsetX = 0, offsetY = 0;
+
       el.addEventListener('pointerdown', (e) => {
         isDragging = true;
         el.setPointerCapture(e.pointerId);
@@ -382,6 +367,7 @@
         offsetX = e.clientX - rect.left;
         offsetY = e.clientY - rect.top;
       });
+
       el.addEventListener('pointermove', (e) => {
         if (!isDragging) return;
         const container = document.getElementById('mannequin-container');
@@ -391,6 +377,7 @@
         el.style.left = newX + 'px';
         el.style.top = newY + 'px';
       });
+
       el.addEventListener('pointerup', (e) => {
         isDragging = false;
         el.releasePointerCapture(e.pointerId);

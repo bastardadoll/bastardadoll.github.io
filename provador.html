@@ -19,6 +19,7 @@
     figure, figcaption, footer, header, hgroup, 
     menu, nav, output, ruby, section, summary,
     time, mark, audio, video {
+      color: #d35400;
       margin: 0;
       padding: 0;
       border: 0;
@@ -136,7 +137,7 @@
       justify-content: space-between;
     }
     #control-panel h2 {
-      color: #333;
+      color: #d35400;
       font-size: 1.2em;
       margin-bottom: 5px;
       text-align: center;
@@ -151,6 +152,7 @@
     }
     /* Os botões exibem imagens de opções em 720×720 (originais) mas serão redimensionadas para caber na grade */
     .piece-button {
+      color: #d35400;
       padding: 3px;
       font-size: 10px;
       background-color: #f0f0f0;
@@ -175,17 +177,51 @@
       max-height: 60px;
       margin-bottom: 2px;
       object-fit: contain;
-    }
-    #controls {
-      text-align: center;
-      margin-top: 3px;
-    }
-    #controls button {
-      margin: 2px;
-      padding: 6px 10px;
-      font-size: 10px;
-      cursor: pointer;
-    }
+    }#controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px;
+}
+
+#controls button {
+  background-color: #e67e22;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  text-align: center;
+  min-width: 120px;
+}
+
+#controls button:hover {
+  background-color: #d35400;
+}
+
+#controls button:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 480px) {
+  #controls button {
+    font-size: 12px;
+    padding: 6px 10px;
+    min-width: 100px;
+  }
+}
+
+@media (min-width: 768px) {
+  #controls button {
+    font-size: 16px;
+    padding: 10px 16px;
+    min-width: 140px;
+  }
+}
 
     /* Layout para telas maiores */
     @media (min-width: 768px) {

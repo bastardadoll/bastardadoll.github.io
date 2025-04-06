@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Roleta de Nomes - Sorteio de Calcinhas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f2f2f2;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #6a3093;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    input[type="text"],
+    input[type="number"] {
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #d0b0e0;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      background: #8e44ad;
+      color: #fff;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background: #6a3093;
+    }
+    #namesList {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #d0b0e0;
+      border-radius: 4px;
+    }
+    #namesList li {
+      padding: 8px;
+      margin: 5px;
+      background: #f9f0ff;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #namesList li.highlight {
+      background: #8e44ad;
+      color: white;
+    }
+    .remove-btn {
+      background: #e74c3c;
+      padding: 4px 8px;
+      font-size: 0.9rem;
+    }
+    .remove-btn:hover {
+      background: #c0392b;
+    }
+    #roleta {
+      margin-top: 20px;
+      text-align: center;
+      min-height: 50px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #6a3093;
+    }
+    #winners {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f9f0ff;
+      border-radius: 8px;
+      min-height: 100px;
+    }
+    #winners p {
+      padding: 8px;
+      margin: 5px 0;
+      background: #e0d0f0;
+      border-radius: 4px;
+      animation: fadeIn 0.5s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Overlay final */
+    #finalOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      color: #fff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 1000;
+      animation: fadeIn 0.5s;
+    }
+    #finalOverlay h2 {
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    #finalOverlay ul {
+      list-style: none;
+      padding: 0;
+      max-height: 60%;
+      overflow-y: auto;
+      text-align: left;
+      width: 80%;
+      max-width: 600px;
+      margin: auto;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 10px;
+    }
+    #finalOverlay li {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    #finalOverlay li:last-child {
+      border-bottom: none;
+    }
+    .actions {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .size-inputs {
+      display: flex;
+      gap: 10px;
+    }
+    .size-inputs div {
+      flex: 1;
+    }
+    .winner-size {
+      display: inline-block;
+      background-color: #8e44ad;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.9em;
+      margin-left: 10px;
+    }
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background-color: #f00;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Roleta de Nomes - Sorteio de Calcinhas</h1>
+    
+    <!-- Área de Inserção de Nomes -->
+    <div class="form-group">
+      <label for="nameInput">Inserir nome (não repetido):</label>
+      <input type="text" id="nameInput" placeholder="Digite o nome">
+      <button id="addNameBtn">Adicionar Nome</button>
+    </div>
+    <ul id="namesList"></ul>
+    
+    <!-- Área de Inserção das Quantidades e Tamanhos -->
+    <div class="form-group">
+      <label>Quantidade de calcinhas:</label>
+      <div class="size-inputs">
+        <div>
+          <label for="qtyP">Tamanho P:</label>
+          <input type="number" id="qtyP" min="0" value="0">
+        </div>
+        <div>
+          <label for="qtyM">Tamanho M:</label>
+          <input type="number" id="qtyM" min="0" value="0">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Botão de Sortear -->
+    <div class="actions">
+      <button id="startSorteioBtn">Sortear</button>
+      <button id="newSorteioBtn" style="display:none; background:#28a745;">Novo Sorteio</button>
+    </div>
+    
+    <!-- Área de Visualização da Roleta e Vencedores -->
+    <div id="roleta"></div>
+    <div id="winners"></div>
+  </div>
+  
+  <!-- Overlay com resultado final -->
+  <div id="finalOverlay">
+    <h2>Resultado Final</h2>
+    <ul id="finalList"></ul>
+    <button id="closeOverlayBtn">Fechar</button>
+  </div>
+  
+  <script>
+    // Variáveis e armazenamento local
+    let names = JSON.parse(localStorage.getItem('names')) || [];
+    const namesListEl = document.getElementById('namesList');
+    const nameInput = document.getElementById('nameInput');
+    const addNameBtn = document.getElementById('addNameBtn');
+    const qtyPInput = document.getElementById('qtyP');
+    const qtyMInput = document.getElementById('qtyM');
+    const startSorteioBtn = document.getElementById('startSorteioBtn');
+    const newSorteioBtn = document.getElementById('newSorteioBtn');
+    const roletaEl = document.getElementById('roleta');
+    const winnersEl = document.getElementById('winners');
+    const finalOverlay = document.getElementById('finalOverlay');
+    const finalListEl = document.getElementById('finalList');
+    const closeOverlayBtn = document.getElementById('closeOverlayBtn');
+
+    let winners = []; // para armazenar o resultado final
+    let isSpinning = false; // controla se o sorteio está em andamento
+
+    // Função para salvar no localStorage
+    function saveNames() {
+      localStorage.setItem('names', JSON.stringify(names));
+    }
+
+    // Função para atualizar a lista de nomes
+    function updateNamesList() {
+      namesListEl.innerHTML = '';
+      if (names.length === 0) {
+        namesListEl.innerHTML = '<li style="justify-content:center;background:none;">Nenhum nome adicionado</li>';
+        return;
+      }
+      
+      names.forEach((name, index) => {
+        const li = document.createElement('li');
+        li.textContent = name;
+        li.setAttribute('data-index', index);
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'X';
+        removeBtn.classList.add('remove-btn');
+        removeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          names.splice(index, 1);
+          saveNames();
+          updateNamesList();
+        });
+        li.appendChild(removeBtn);
+        namesListEl.appendChild(li);
+      });
+    }
+    updateNamesList();
+
+    // Adicionar nome (verificando duplicatas)
+    function addName() {
+      const newName = nameInput.value.trim();
+      if (newName === '') {
+        alert('Por favor, digite um nome válido.');
+        return;
+      }
+      if (names.includes(newName)) {
+        alert('Nome já inserido!');
+        return;
+      }
+      names.push(newName);
+      saveNames();
+      updateNamesList();
+      nameInput.value = '';
+      nameInput.focus();
+    }
+
+    addNameBtn.addEventListener('click', addName);
+    nameInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') addName();
+    });
+
+    // Função para embaralhar array (utilizado na roleta)
+    function shuffle(array) {
+      const newArray = [...array];
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+      }
+      return newArray;
+    }
+
+    // Função para simular efeito da roleta
+    function startRoleta(duration = 3000, callback) {
+      isSpinning = true;
+      const intervalTime = 100;
+      let elapsed = 0;
+      const interval = setInterval(() => {
+        // Seleciona um nome aleatório para destacar
+        const lis = namesListEl.querySelectorAll('li');
+        if(lis.length > 0) {
+          lis.forEach(li => li.classList.remove('highlight'));
+          const randomIndex = Math.floor(Math.random() * lis.length);
+          lis[randomIndex].classList.add('highlight');
+          roletaEl.textContent = 'Sorteando: ' + lis[randomIndex].textContent.replace('X','').trim();
+        }
+        elapsed += intervalTime;
+        if (elapsed >= duration) {
+          clearInterval(interval);
+          // Limpa destaque
+          lis.forEach(li => li.classList.remove('highlight'));
+          roletaEl.textContent = '';
+          callback();
+        }
+      }, intervalTime);
+    }
+
+    // Função para criar efeito de confete
+    function createConfetti() {
+      const colors = ['#8e44ad', '#3498db', '#e74c3c', '#f1c40f', '#2ecc71'];
+      
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.top = -10 + 'px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.width = Math.random() * 10 + 5 + 'px';
+        confetti.style.height = Math.random() * 10 + 5 + 'px';
+        document.body.appendChild(confetti);
+        
+        const animationDuration = Math.random() * 3 + 2;
+        
+        confetti.animate([
+          { top: -10 + 'px', transform: 'rotate(0deg)', opacity: 1 },
+          { top: 100 + 'vh', transform: 'rotate(' + (Math.random() * 360) + 'deg)', opacity: 0 }
+        ], {
+          duration: animationDuration * 1000,
+          easing: 'cubic-bezier(0.1, 0.8, 0.9, 1)'
+        });
+        
+        setTimeout(() => {
+          confetti.remove();
+        }, animationDuration * 1000);
+      }
+    }
+
+    // Função para realizar o sorteio
+    function startSorteio() {
+      // Valida se há nomes e se as quantidades foram informadas
+      if (names.length === 0) {
+        alert('Insira ao menos um nome para sortear.');
+        return;
+      }
+      
+      const qtyP = parseInt(qtyPInput.value) || 0;
+      const qtyM = parseInt(qtyMInput.value) || 0;
+      const total = qtyP + qtyM;
+      
+      if (total <= 0) {
+        alert('Informe a quantidade de calcinhas a sortear.');
+        return;
+      }
+      
+      if (total > names.length) {
+        alert('A quantidade de prêmios não pode ser maior que o número de participantes.');
+        return;
+      }
+      
+      // Prepara array de tamanhos com base nas quantidades informadas
+      let sizes = [];
+      for (let i = 0; i < qtyP; i++) sizes.push('P');
+      for (let i = 0; i < qtyM; i++) sizes.push('M');
+      
+      // Embaralha os tamanhos para seleção aleatória
+      sizes = shuffle(sizes);
+      
+      // Desabilita controles durante o sorteio
+      disableControls();
+      
+      // Limpa resultados anteriores
+      winnersEl.innerHTML = '';
+      winners = [];
+      
+      // Inicia efeito da roleta e após o efeito inicia os sorteios
+      startRoleta(3000, () => {
+        let availableNames = [...names]; // Cópia dos nomes disponíveis
+        let drawIndex = 0;
+        
+        // Função para sortear um vencedor a cada 3 segundos
+        function drawWinner() {
+          if (drawIndex < sizes.length) {
+            // Seleciona um nome aleatório dos disponíveis
+            const randomIndex = Math.floor(Math.random() * availableNames.length);
+            const winnerName = availableNames[randomIndex];
+            const size = sizes[drawIndex];
+            
+            // Adiciona aos vencedores e remove dos disponíveis
+            winners.push({ name: winnerName, size });
+            availableNames.splice(randomIndex, 1);
+            
+            // Exibe o vencedor com efeito
+            setTimeout(() => {
+              const winnerElement = document.createElement('p');
+              winnerElement.innerHTML = `${winnerName} <span class="winner-size">Tamanho ${size}</span>`;
+              winnersEl.appendChild(winnerElement);
+              winnerElement.scrollIntoView({ behavior: 'smooth' });
+              
+              drawIndex++;
+              drawWinner();
+            }, 1000);
+          } else {
+            // Ao finalizar, mostra overlay com os resultados
+            isSpinning = false;
+            showFinalResults();
+            createConfetti();
+          }
+        }
+        drawWinner();
+      });
+    }
+
+    // Função para desabilitar controles durante o sorteio
+    function disableControls() {
+      nameInput.disabled = true;
+      addNameBtn.disabled = true;
+      qtyPInput.disabled = true;
+      qtyMInput.disabled = true;
+      startSorteioBtn.disabled = true;
+      document.querySelectorAll('.remove-btn').forEach(btn => btn.disabled = true);
+    }
+
+    // Função para habilitar controles após o sorteio
+    function enableControls() {
+      nameInput.disabled = false;
+      addNameBtn.disabled = false;
+      qtyPInput.disabled = false;
+      qtyMInput.disabled = false;
+      startSorteioBtn.disabled = false;
+      document.querySelectorAll('.remove-btn').forEach(btn => btn.disabled = false);
+    }
+
+    startSorteioBtn.addEventListener('click', startSorteio);
+
+    // Função para exibir o overlay com os resultados finais
+    function showFinalResults() {
+      finalListEl.innerHTML = '';
+      winners.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${item.name}</strong> - Tamanho ${item.size}`;
+        finalListEl.appendChild(li);
+      });
+      finalOverlay.style.display = 'flex';
+      newSorteioBtn.style.display = 'inline-block';
+    }
+
+    // Botão para fechar o overlay
+    closeOverlayBtn.addEventListener('click', () => {
+      finalOverlay.style.display = 'none';
+    });
+
+    // Reiniciar novo sorteio
+    function newSorteio() {
+      winners = [];
+      winnersEl.innerHTML = '';
+      roletaEl.innerHTML = '';
+      newSorteioBtn.style.display = 'none';
+      enableControls();
+    }
+
+    newSorteioBtn.addEventListener('click', newSorteio);
+  </script>
+</body>
+</html>

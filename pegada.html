@@ -64,7 +64,7 @@ body {
     font-family: 'Inter', sans-serif;
     color: var(--text-color);
     background-color: var(--background-color-dark);
-    overflow-y: auto; /* Permitir rolagem vertical em telas pequenas */
+    overflow-y: hidden; /* Prevent vertical scrolling */
     overflow-x: hidden; /* Esconder barra de rolagem horizontal */
     transition: background-color var(--transition-speed) ease-in-out; /* Transição suave da cor de fundo */
 }
@@ -117,8 +117,8 @@ body {
 #manifesto-container {
     position: relative;
     width: 100%;
-    min-height: 100vh;
-    overflow: hidden;
+    height: 100vh; /* Ensure container takes full viewport height */
+    overflow: hidden; /* Prevent overflow from container */
 }
 
 .manifesto-section {
@@ -126,7 +126,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    min-height: 100vh;
+    height: 100vh; /* Change min-height to height to ensure full viewport */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -137,21 +137,21 @@ body {
     visibility: hidden; /* Inicialmente oculto e fora do fluxo de acessibilidade */
     transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
     background: var(--background-color-dark); /* Fundo padrão */
+    overflow-y: auto; /* Allow scrolling *within* a section if content exceeds height */
 }
 
 .manifesto-section.active {
     opacity: 1;
     visibility: visible; /* Torna visível quando ativo */
-    position: relative; /* Mudar para relative quando ativo para ocupar espaço e permitir rolagem se necessário */
-    min-height: 100vh; /* Garantir altura mínima mesmo em relative */
+    /* Remove position: relative; keep position: absolute */
 }
 
 .line {
     opacity: 0; /* Inicialmente oculto */
     transform: translateY(20px); /* Começa ligeiramente abaixo */
     transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Animação de fade-in e subida */
-    margin: 10px 0;
-    font-size: 1.5em; /* Tamanho de fonte base para as linhas */
+    margin: 5px 0; /* Slightly reduce margin to help fit content */
+    font-size: 1.4em; /* Slightly reduce base font size */
     max-width: 800px; /* Largura máxima para melhor legibilidade */
     width: 100%; /* Garantir que ocupe a largura disponível (considerando padding) */
     line-height: 1.4; /* Espaçamento entre linhas */
@@ -212,30 +212,28 @@ body {
     background: linear-gradient(45deg, var(--background-color-dark), var(--secondary-color));
 }
 #desire-reprograma-t .names {
-     font-size: 2em;
-     font-weight: 700;
-     margin-bottom: 20px;
+     font-size: 1.8em; /* Adjust size */
+     margin-bottom: 15px;
 }
 #desire-reprograma-t .project-intro {
-    font-size: 1.8em;
-    margin-top: 30px;
+    font-size: 1.6em; /* Adjust size */
+    margin-top: 20px;
 }
 #desire-reprograma-t .reprograma-text {
     color: var(--accent-color);
     font-weight: 900;
 }
 .feature-list {
-    margin-top: 40px;
+    margin-top: 25px; /* Adjust margin */
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 10px; /* Adjust gap */
     max-width: 600px;
     width: 100%;
 }
 .feature-item {
-    font-size: 1.3em;
-    font-weight: 700;
+    font-size: 1.2em; /* Adjust size */
     opacity: 0;
     transform: translateX(-30px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
@@ -272,7 +270,7 @@ body {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    font-size: 2.5em;
+    font-size: 2.2em; /* Adjust size */
     font-weight: 900;
     color: rgba(255, 255, 255, 0.08);
     pointer-events: none;
@@ -302,14 +300,14 @@ body {
      font-size: 1.3em;
 }
 .cta-section {
-    margin-top: 30px;
+    margin-top: 20px; /* Adjust margin */
     width: 100%;
     max-width: 700px;
 }
 .cta-title {
-     font-size: 1.8em;
+     font-size: 1.6em; /* Adjust size */
      font-weight: 700;
-     margin-bottom: 20px;
+     margin-bottom: 15px;
      color: var(--secondary-color);
      opacity: 0;
      transform: translateY(20px);
@@ -340,8 +338,8 @@ body {
     transform: scale(1);
 }
 .link-placeholder {
-    margin-top: 40px;
-    font-size: 1.5em;
+    margin-top: 30px; /* Adjust margin */
+    font-size: 1.3em; /* Adjust size */
     font-weight: 700;
      color: var(--accent-color);
     opacity: 0;
@@ -363,21 +361,20 @@ body {
     align-items: center;
 }
  #final .line {
-     font-size: 1.8em;
-     font-weight: 700;
-     margin: 20px 0;
+     font-size: 1.6em; /* Adjust size */
+     margin: 15px 0;
  }
 .final-logo-section {
-    margin-bottom: 40px;
+    margin-bottom: 20px; /* Adjust margin */
     display: flex;
     flex-direction: column;
     align-items: center;
     max-width: 100%;
 }
 #reprograma-logo {
-    width: 150px;
+    width: 130px; /* Adjust size */
     height: auto;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     opacity: 0;
     transform: scale(0.8);
     transition: opacity 1.5s ease-out, transform 1.5s ease-out;
@@ -390,7 +387,7 @@ body {
 }
 .final-words {
     margin-top: 10px;
-    font-size: 1.5em;
+    font-size: 1.3em; /* Adjust size */
     font-weight: 900;
     color: var(--accent-color);
     text-align: center;
@@ -405,85 +402,58 @@ body {
 /* Media Queries para Responsividade */
 @media (max-width: 768px) {
     .line {
-        font-size: 1.2em; /* Reduzir tamanho de fonte base */
-        padding: 0 10px; /* Adicionar um pouco mais de padding horizontal */
+        font-size: 1.1em; /* Further adjustments for smaller screens */
+        margin: 4px 0;
     }
 
-    #desire-reprograma-t .names {
-        font-size: 1.6em; /* Reduzir tamanho das fontes dos nomes */
-    }
-    #desire-reprograma-t .project-intro {
-        font-size: 1.4em; /* Reduzir tamanho do intro do projeto */
-    }
+    #desire-reprograma-t .names { font-size: 1.4em; margin-bottom: 10px;}
+    #desire-reprograma-t .project-intro { font-size: 1.2em; margin-top: 15px;}
+    .feature-list { margin-top: 20px; gap: 8px; }
+    .feature-item { font-size: 1.1em; }
 
-    .feature-item {
-        font-size: 1.2em; /* Reduzir tamanho das fontes dos itens de recurso */
-    }
+    #desire-philosophy .overlay-phrases-philosophy { font-size: 1.8em; }
+    #desire-philosophy .line { font-size: 1.2em; margin: 10px 0; }
 
-    #desire-philosophy .line {
-         font-size: 1.4em; /* Reduzir tamanho das frases de determinação */
-         margin: 15px 0;
-    }
 
-    #action .line {
-        font-size: 1.2em; /* Reduzir tamanho das frases de transformação */
-    }
+    #action .cta-section { margin-top: 15px; }
+    #action .cta-title { font-size: 1.4em; margin-bottom: 10px; }
+    #action .line { font-size: 1.1em; }
+    .link-placeholder { margin-top: 25px; font-size: 1.1em; }
 
-    #final .line {
-        font-size: 1.4em; /* Reduzir tamanho das frases de transformação */
-    }
-
-    #reprograma-logo {
-         width: 120px; /* Reduzir tamanho do logo */
-         margin-bottom: 15px;
-         max-width: 70%; /* Limite maior para telas menores */
-    }
-    .final-words {
-        font-size: 1.2em; /* Reduzir tamanho da tagline */
-    }
+    #final .line { font-size: 1.2em; margin: 10px 0;}
+    .final-logo-section { margin-bottom: 15px; }
+    #reprograma-logo { width: 100px; margin-bottom: 10px;}
+    .final-words { font-size: 1.1em; }
 }
 
 @media (max-width: 480px) {
     .line {
-        font-size: 1em; /* Reduzir ainda mais o tamanho base */
-        padding: 0 5px; /* Reduzir padding */
+        font-size: 0.9em; /* Further adjustments for very small screens */
+        margin: 3px 0;
     }
-    .manifesto-section {
-        padding: 15px; /* Reduzir padding geral da seção */
-    }
-
-    #desire-reprograma-t .names {
-        font-size: 1.4em;
-    }
-    #desire-reprograma-t .project-intro {
-        font-size: 1.2em;
+     .manifesto-section {
+        padding: 10px; /* Reduce padding */
     }
 
-    .feature-item {
-        font-size: 1em; /* Reduzir tamanho das fontes dos itens de recurso */
-    }
+    #desire-reprograma-t .names { font-size: 1.2em; margin-bottom: 8px;}
+    #desire-reprograma-t .project-intro { font-size: 1em; margin-top: 10px;}
+    .feature-list { margin-top: 15px; gap: 5px; }
+    .feature-item { font-size: 0.9em; }
 
-    #desire-philosophy .line {
-         font-size: 1.2em; /* Reduzir tamanho das frases de determinação */
-         margin: 10px 0;
-    }
+    #desire-philosophy .overlay-phrases-philosophy { font-size: 1.5em; }
+    #desire-philosophy .line { font-size: 1em; margin: 8px 0; }
 
-    #action .line {
-        font-size: 1em; /* Reduzir tamanho das frases de transformação */
-    }
 
-    #final .line {
-        font-size: 1.2em; /* Reduzir tamanho das frases de transformação */
-    }
+    #action .cta-section { margin-top: 10px; }
+    #action .cta-title { font-size: 1.2em; margin-bottom: 8px; }
+    #action .line { font-size: 0.9em; }
+    .cta-item { font-size: 0.9em; padding: 4px 8px; }
+    .link-placeholder { margin-top: 20px; font-size: 1em; }
 
-    #reprograma-logo {
-         width: 100px; /* Reduzir logo novamente */
-         margin-bottom: 10px;
-         max-width: 60%;
-    }
-    .final-words {
-        font-size: 1em;
-    }
+    #final .line { font-size: 1em; margin: 8px 0;}
+    .final-logo-section { margin-bottom: 10px; }
+    #reprograma-logo { width: 80px; margin-bottom: 8px;}
+    .final-words { font-size: 0.9em; }
 }
   </style>
     <script type="importmap">
@@ -547,10 +517,11 @@ body {
             <p class="line">“Esquecemos disso na batalha diária. O desprezo mútuo não gera solução.”</p>
             <p class="line">“E se a reencarnação existir? Que mundo queremos encontrar?”</p>
             <p class="line">“Acreditando ou não, prevenir é melhor.”</p>
-            <p class="line">“Talvez não vejamos o mundo ideal que sonhamos</p>
+            <p class="line">“Talvez não vejamos o mundo ideal que sonhamos…”</p> <!-- Added ellipsis to complete the thought -->
         </section>
 
         <section id="action" class="manifesto-section" aria-labelledby="action-line-1">
+             <!-- Removed empty line tags to save vertical space -->
             <div class="cta-section">
                 <p class="cta-title" id="action-line-1">Junte-se a nós.</p>
                 <ul class="cta-list">
@@ -558,18 +529,16 @@ body {
                     <li class="cta-item">Seja um dos fundadores</li>
                     <li class="cta-item">Compartilhe nossa visão</li>
                 </ul>
-                <p class="link-placeholder">https://reprograma-t.github.io/</p>
+                <p class="link-placeholder"><a href="https://reprograma-t.github.io/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">reprograma-t.github.io</a></p> <!-- Made the link clickable -->
             </div>
         </section>
 
         <section id="final" class="manifesto-section" aria-labelledby="final-line-1">
+             <!-- Removed empty line tag to save vertical space -->
             <div class="final-logo-section">
                 <img id="reprograma-logo" src="https://reprograma-t.github.io/logo.png" alt="Reprograma-T Logo">
                 <div class="final-words">
-                    <span class="final-word">Reprograma</span>
-                    <span class="final-word">T</span>
-                    <span class="final-word">A</span>
-                    <span class="final-word">Pegada</span>
+                    <span class="final-word">Reprograma-T</span> <!-- Combined for better flow -->
                 </div>
             </div>
             <p class="line" id="final-line-1">A pegada que deixaremos.</p>

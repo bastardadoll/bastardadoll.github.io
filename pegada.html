@@ -590,9 +590,10 @@ const transitionSpeed = parseFloat(computedStyle.getPropertyValue('--transition-
 
 function showSection(index) {
     if (index >= sections.length) {
-        console.log('Fim do manifesto');
-        // Optional: Add logic for what happens after the last section
-        return;
+        console.log('Fim do manifesto, redirecionando...');
+        // Redirect after the last section has finished showing and its delay has passed
+        window.location.href = 'https://bastardadoll.github.io/Alem-dos-Rotulos-Uma-Visao-Singular-da-Politica-e-da-Humanidade.html';
+        return; // Stop the function
     }
 
     const currentSection = sections[index];
@@ -688,7 +689,7 @@ function showSection(index) {
     if (currentSection.id === 'desire-reprograma-t') {
         const featureItems = currentSection.querySelectorAll('.feature-item');
         if (featureItems.length > 0) {
-            const delayForFeaturesStart = (lines.length > 0 ? lines.length * lineDelay : 0) + 500;
+            const delayForFeaturesStart = (lines.length > 0 ? lines.length * lineDelay : 0) + 500; // Adjust delay
             const lastFeatureDelay = (featureItems.length - 1) * 300;
             const featureAnimationDuration = 600;
             const totalFeatureTime = delayForFeaturesStart + lastFeatureDelay + featureAnimationDuration;
@@ -697,7 +698,7 @@ function showSection(index) {
     } else if (currentSection.id === 'desire-philosophy') {
         const overlayPhrases = currentSection.querySelectorAll('.overlay-phrase-philosophy');
         if (overlayPhrases.length > 0) {
-            const delayForOverlaysStart = (lines.length > 0 ? lines.length * lineDelay : 0) + 500;
+            const delayForOverlaysStart = (lines.length > 0 ? lines.length * lineDelay : 0) + 500; // Adjust delay
             const lastOverlayDelay = (overlayPhrases.length - 1) * 500;
             const overlayAnimationDuration = 1000;
             const totalOverlayTime = delayForOverlaysStart + lastOverlayDelay + overlayAnimationDuration;

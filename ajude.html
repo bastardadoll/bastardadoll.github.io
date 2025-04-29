@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junte-se ao Reprograma-T / Orby Chat</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #5e3370; /* Roxo escuro */
+            text-align: center;
+            margin-bottom: 1em;
+        }
+        h1 {
+            font-size: 2.5em;
+        }
+        h2 {
+            font-size: 1.8em;
+            border-bottom: 2px solid #dcdcdc;
+            padding-bottom: 0.5em;
+            margin-top: 1.5em;
+        }
+        h3 {
+            font-size: 1.4em;
+            color: #7a4a91; /* Roxo médio */
+            margin-top: 1.2em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+            margin-bottom: 2em;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #e8dff0; /* Lilás claro */
+            font-weight: bold;
+            color: #5e3370;
+        }
+        td:nth-child(3) { /* Coluna Prioridade */
+            text-align: center;
+            font-weight: bold;
+        }
+        .prioridade-essencial { color: #d32f2f; } /* Vermelho */
+        .prioridade-alta { color: #ff9800; } /* Laranja */
+        .prioridade-media { color: #fbc02d; } /* Amarelo */
+        .prioridade-baixa { color: #4caf50; } /* Verde */
+
+        .chamada {
+            background-color: #e8dff0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 2em;
+            text-align: center;
+        }
+        .chamada h3 {
+            margin-top: 0;
+            color: #5e3370;
+        }
+        .chamada ul {
+            list-style: none;
+            padding: 0;
+            margin: 1em 0;
+            text-align: left;
+            display: inline-block;
+        }
+        .chamada li::before {
+            content: '💜';
+            margin-right: 8px;
+            color: #7a4a91;
+        }
+        .remuneracao {
+            font-style: italic;
+            color: #555;
+            margin-top: 1em;
+            font-size: 0.9em;
+        }
+        form {
+            margin-top: 2em;
+            background-color: #f9f9f9;
+            padding: 25px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #5e3370;
+        }
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Important for padding */
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        button {
+            background-color: #7a4a91;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 20px auto 0;
+        }
+        button:hover {
+            background-color: #5e3370;
+        }
+        .final-message {
+            text-align: center;
+            margin-top: 2.5em;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #5e3370;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none; /* Initially hidden */
+        }
+
+         /* Specific styles for checkbox group */
+        .checkbox-group {
+            margin-bottom: 15px;
+        }
+        .checkbox-group label {
+            font-weight: normal; /* Labels inside group are normal */
+            margin-bottom: 5px;
+             display: block; /* Ensure labels are block for spacing */
+        }
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+            width: auto; /* Override default width */
+             margin-bottom: 0; /* Remove bottom margin for checkbox */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌟 Reprograma-T / Orby Chat 🌟</h1>
+        <p style="text-align: center; font-size: 1.1em; margin-bottom: 2em;">Um convite para construir tecnologia com humanidade, inclusão e propósito.</p>
+
+        <h2>Nossa Equipe Ideal</h2>
+        <p>Para dar vida à nossa visão de uma plataforma segura, empática e transformadora, identificamos algumas funções chave. Acreditamos que a diversidade de vivências é tão crucial quanto a habilidade técnica.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Função</th>
+                    <th>Descrição</th>
+                    <th>Prioridade</th>
+                    <th>Recomendações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Desenvolvedor(a) Full Stack (PHP, JS, Python, MySQL)</td>
+                    <td>Responsável pela estrutura do site e app: perfis, interações, check-in emocional, etc.</td>
+                    <td class="prioridade-essencial">🔴 Essencial</td>
+                    <td>Priorizar pessoas trans, negras, neurodivergentes ou de periferia com experiência prática.</td>
+                </tr>
+                <tr>
+                    <td>UX/UI Designer Inclusivo(a)</td>
+                    <td>Cria interfaces acessíveis, focadas em conforto neurocognitivo e identidade visual não opressora.</td>
+                    <td class="prioridade-essencial">🔴 Essencial</td>
+                    <td>Valorizar profissionais com vivência em acessibilidade (ex: autistas, PCDs visuais).</td>
+                </tr>
+                <tr>
+                    <td>Especialista em Acessibilidade Web</td>
+                    <td>Garante conformidade com WCAG e funcionalidade para navegação alternativa (teclado, leitores de tela).</td>
+                    <td class="prioridade-alta">🟠 Alta</td>
+                    <td>Fundamental para inclusão digital de públicos marginalizados.</td>
+                </tr>
+                <tr>
+                    <td>Psicólogo(a) Comunitário(a)</td>
+                    <td>Apoia a criação de espaços seguros, media conflitos e elabora diretrizes de convivência.</td>
+                    <td class="prioridade-essencial">🔴 Essencial</td>
+                    <td>Preferência por profissionais LGBTQIA+ ou com experiência em escuta coletiva.</td>
+                </tr>
+                <tr>
+                    <td>Facilitador(a) de CNV/Justiça Restaurativa</td>
+                    <td>Media conflitos e desenvolve políticas de moderação humanizada.</td>
+                    <td class="prioridade-media">🟡 Média</td>
+                    <td>Ideal para círculos de confiança e resolução de tensões.</td>
+                </tr>
+                <tr>
+                    <td>Consultor(a) em Diversidade e Inclusão</td>
+                    <td>Revisa linguagem, fluxos e políticas para evitar vieses opressivos.</td>
+                    <td class="prioridade-alta">🟠 Alta</td>
+                    <td>Priorizar pessoas da comunidade (trans, negras, indígenas, etc.).</td>
+                </tr>
+                 <tr>
+                    <td>Curador(a) de Conteúdo Digital</td>
+                    <td>Organiza biblioteca colaborativa com categorização ética e acessível.</td>
+                    <td class="prioridade-media">🟡 Média</td>
+                    <td>Preferência por formação em ciência da informação ou ativismo digital.</td>
+                </tr>
+                 <tr>
+                    <td>Redator(a) Inclusivo(a)</td>
+                    <td>Produz textos internos com linguagem acolhedora e não binária.</td>
+                    <td class="prioridade-media">🟡 Média</td>
+                    <td>Vivência em redes comunitárias e linguagem neutra é diferencial.</td>
+                </tr>
+                 <tr>
+                    <td>Designer Ilustrador(a)/Motion</td>
+                    <td>Cria identidade visual afetiva, ícones e animações sem estereótipos.</td>
+                    <td class="prioridade-media">🟡 Média</td>
+                    <td>Bem-vindes profissionais queer e/ou racializades.</td>
+                </tr>
+                 <tr>
+                    <td>Moderador(a) com Escuta Ativa</td>
+                    <td>Atua na mediação de conflitos com base em justiça restaurativa.</td>
+                    <td class="prioridade-essencial">🔴 Essencial</td>
+                    <td>Experiência em ambientes sensíveis e escuta empática.</td>
+                </tr>
+                 <tr>
+                    <td>Gestor(a) de Produto/Comunidade</td>
+                    <td>Conecta usuários, equipe e visão do projeto, organizando demandas.</td>
+                    <td class="prioridade-essencial">🔴 Essencial</td>
+                    <td>Priorizar pessoas da comunidade com visão de longo prazo.</td>
+                </tr>
+                 <tr>
+                    <td>Especialista em Dados Éticos</td>
+                    <td>Coleta e analisa métricas respeitando privacidade e saúde mental.</td>
+                    <td class="prioridade-media">🟡 Média</td>
+                    <td>Foco em anonimização e transparência.</td>
+                </tr>
+                 <tr>
+                    <td>Advogado(a) em Direitos Digitais</td>
+                    <td>Assessora em LGPD, termos de uso e proteção legal do projeto.</td>
+                    <td class="prioridade-essencial">🔴 Essencial</td>
+                    <td>Experiência em causas LGBTQIAPN+ ou minorias digitais.</td>
+                </tr>
+                 <tr>
+                    <td>Desenvolvedor(a) Mobile (futuro)</td>
+                    <td>Responsável por versão nativa (Android/iOS) com acessibilidade.</td>
+                    <td class="prioridade-baixa">🟢 Baixa</td>
+                    <td>Planejamento para fases posteriores.</td>
+                </tr>
+            </tbody>
+        </table>
+         <p style="font-size: 0.9em; text-align: center;"><em>Prioridades: 🔴 Essencial (Núcleo inicial), 🟠 Alta / 🟡 Média (Conforme crescimento), 🟢 Baixa (Expansões futuras).</em></p>
+
+        <div class="chamada">
+            <h3>🌈 Junte-se à construção do Reprograma-T / Orby Chat!</h3>
+            <p>Acreditamos em <strong>redes que acolhem</strong>, onde diversidade e tecnologia se encontram para criar conexões reais. Se você quer usar suas habilidades para transformar vidas, vem com a gente!</p>
+
+            <h4>🚀 Vagas em Destaque (Prioridade Essencial):</h4>
+            <ul>
+                <li>Desenvolvedor(a) Full Stack</li>
+                <li>Designer UX/UI Acessível</li>
+                <li>Psicólogo(a) Comunitário(a)</li>
+                <li>Moderador(a) com Escuta Ativa</li>
+                <li>Advogado(a) de Direitos Digitais</li>
+                <li>Gestor(a) de Produto/Comunidade</li>
+            </ul>
+             <p style="text-align: center; margin-top:1em;"><em>(Mas estamos abertes a conhecer talentos em todas as áreas listadas!)</em></p>
+
+            <h4>💜 Procuramos pessoas que:</h4>
+            <ul>
+                <li>Tenham vivência nas <strong>causas do projeto</strong> (comunidades trans, negra, indígena, neurodivergente, periférica, etc.);</li>
+                <li>Valorizem <strong>acolhimento</strong> tanto quanto habilidades técnicas;</li>
+                <li>Acreditem em <strong>colaboração horizontal</strong> e tecnologia ética.</li>
+            </ul>
+
+            <p class="remuneracao">💎 **Sobre Remuneração:** Somos um projeto emergente, buscando financiamento coletivo e editais. Atualmente, o trabalho é **voluntário**, com planos concretos de remuneração futura conforme captamos recursos.</p>
+        </div>
+
+        <form id="interestForm">
+            <h2>📋 Formulário de Interesse</h2>
+            <p>Preencha abaixo se você tem interesse em colaborar ou quer indicar alguém. Entraremos em contato!</p>
+
+            <div>
+                <label for="nomeCompleto">1. Nome completo:</label>
+                <input type="text" id="nomeCompleto" name="nomeCompleto" required>
+                <div class="error-message" id="nomeCompletoError">Este campo é obrigatório.</div>
+            </div>
+
+            <div>
+                <label for="nomeSocial">2. Nome social (opcional):</label>
+                <input type="text" id="nomeSocial" name="nomeSocial">
+            </div>
+
+            <div>
+                <label for="pronomes">3. Pronomes:</label>
+                <input type="text" id="pronomes" name="pronomes" placeholder="Ex: Ela/Dela, Ele/Dele, Elu/Delu, etc." required>
+                 <div class="error-message" id="pronomesError">Este campo é obrigatório.</div>
+            </div>
+
+            <div>
+                <label for="contato">4. E-mail ou WhatsApp para contato:</label>
+                <input type="text" id="contato" name="contato" required>
+                 <div class="error-message" id="contatoError">Este campo é obrigatório.</div>
+            </div>
+
+             <div class="checkbox-group">
+                <label>5. Área(s) de interesse/habilidade principal (selecione quantas quiser):</label>
+                <label><input type="checkbox" name="areaInteresse" value="Desenvolvimento Full Stack"> Desenvolvimento Full Stack</label>
+                <label><input type="checkbox" name="areaInteresse" value="UX/UI Design Inclusivo"> UX/UI Design Inclusivo</label>
+                <label><input type="checkbox" name="areaInteresse" value="Acessibilidade Web"> Acessibilidade Web</label>
+                <label><input type="checkbox" name="areaInteresse" value="Psicologia Comunitária/Social"> Psicologia Comunitária/Social</label>
+                <label><input type="checkbox" name="areaInteresse" value="CNV / Justiça Restaurativa"> CNV / Justiça Restaurativa</label>
+                <label><input type="checkbox" name="areaInteresse" value="Consultoria D&I"> Consultoria D&I</label>
+                <label><input type="checkbox" name="areaInteresse" value="Curadoria de Conteúdo"> Curadoria de Conteúdo</label>
+                <label><input type="checkbox" name="areaInteresse" value="Redação Inclusiva"> Redação Inclusiva</label>
+                <label><input type="checkbox" name="areaInteresse" value="Design Gráfico/Ilustração/Motion"> Design Gráfico/Ilustração/Motion</label>
+                <label><input type="checkbox" name="areaInteresse" value="Moderação/Mediação"> Moderação/Mediação</label>
+                <label><input type="checkbox" name="areaInteresse" value="Gestão de Produto/Comunidade"> Gestão de Produto/Comunidade</label>
+                <label><input type="checkbox" name="areaInteresse" value="Dados Éticos/Análise"> Dados Éticos/Análise</label>
+                <label><input type="checkbox" name="areaInteresse" value="Direito Digital/LGPD"> Direito Digital/LGPD</label>
+                <label><input type="checkbox" name="areaInteresse" value="Desenvolvimento Mobile"> Desenvolvimento Mobile (Futuro)</label>
+                <label><input type="checkbox" name="areaInteresse" value="Outra"> Outra (descreva abaixo)</label>
+                 <div class="error-message" id="areaInteresseError">Selecione ao menos uma área.</div>
+            </div>
+             <div>
+                <label for="outraArea">Se marcou "Outra" acima, por favor especifique:</label>
+                <input type="text" id="outraArea" name="outraArea">
+            </div>
+
+
+            <div>
+                <label for="motivacao">6. Conte um pouco sobre sua trajetória e motivação (por que quer participar?):</label>
+                <textarea id="motivacao" name="motivacao" required></textarea>
+                 <div class="error-message" id="motivacaoError">Este campo é obrigatório.</div>
+            </div>
+
+            <div>
+                <label for="identidades">7. Identidades relevantes para o projeto (se desejar compartilhar - ex: trans, negre, neurodivergente, etc.):</label>
+                <input type="text" id="identidades" name="identidades">
+            </div>
+
+            <div>
+                 <label for="disponibilidade">8. Qual sua disponibilidade aproximada para reuniões online e colaboração voluntária inicial?</label>
+                <select id="disponibilidade" name="disponibilidade" required>
+                    <option value="">Selecione...</option>
+                    <option value="Poucas horas por mês">Poucas horas por mês</option>
+                    <option value="Algumas horas por semana (2-5h)">Algumas horas por semana (2-5h)</option>
+                    <option value="Disponibilidade maior (5-10h/semana)">Disponibilidade maior (5-10h/semana)</option>
+                    <option value="Flexível / A discutir">Flexível / A discutir</option>
+                </select>
+                 <div class="error-message" id="disponibilidadeError">Selecione uma opção.</div>
+            </div>
+
+            <div>
+                <label for="portfolio">9. Link do seu portfólio, LinkedIn, GitHub ou outra rede social (opcional):</label>
+                <input type="text" id="portfolio" name="portfolio">
+            </div>
+
+            <div>
+                <label for="perguntas">10. Perguntas, comentários ou sugestões?</label>
+                <textarea id="perguntas" name="perguntas"></textarea>
+            </div>
+
+            <button type="submit">Enviar Interesse</button>
+        </form>
+
+        <p class="final-message">✨ Vamos juntes criar uma plataforma feita por nós, para nós! ✨</p>
+    </div>
+
+    <script>
+        const form = document.getElementById('interestForm');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+
+            // Validação simples (apenas campos obrigatórios)
+            let isValid = true;
+            const requiredFields = ['nomeCompleto', 'pronomes', 'contato', 'motivacao', 'disponibilidade'];
+            requiredFields.forEach(fieldId => {
+                const input = document.getElementById(fieldId);
+                const errorElement = document.getElementById(`${fieldId}Error`);
+                if (!input.value.trim()) {
+                    errorElement.style.display = 'block';
+                    isValid = false;
+                } else {
+                    errorElement.style.display = 'none';
+                }
+            });
+
+            // Validação do grupo de checkboxes
+            const checkboxes = document.querySelectorAll('input[name="areaInteresse"]:checked');
+            const areaErrorElement = document.getElementById('areaInteresseError');
+            if (checkboxes.length === 0) {
+                 areaErrorElement.style.display = 'block';
+                 isValid = false;
+            } else {
+                 areaErrorElement.style.display = 'none';
+            }
+
+            if (!isValid) {
+                alert("Por favor, preencha todos os campos obrigatórios e selecione ao menos uma área de interesse.");
+                return; // Interrompe o envio se inválido
+            }
+
+
+            // Coleta dos dados do formulário
+            const formData = new FormData(form);
+            let messageBody = `*Novo Interesse - Reprograma-T/Orby Chat* ✨\n\n`;
+
+            messageBody += `*Nome:* ${formData.get('nomeCompleto')}\n`;
+            if (formData.get('nomeSocial')) {
+                 messageBody += `*Nome Social:* ${formData.get('nomeSocial')}\n`;
+            }
+            messageBody += `*Pronomes:* ${formData.get('pronomes')}\n`;
+            messageBody += `*Contato:* ${formData.get('contato')}\n\n`;
+
+             const areas = Array.from(formData.getAll('areaInteresse')).join(', ');
+            messageBody += `*Área(s) de Interesse:* ${areas}\n`;
+             if (formData.get('outraArea')) {
+                 messageBody += `*Outra Área Específica:* ${formData.get('outraArea')}\n`;
+             }
+            messageBody += `\n*Motivação:* \n${formData.get('motivacao')}\n\n`;
+
+            if (formData.get('identidades')) {
+                messageBody += `*Identidades Compartilhadas:* ${formData.get('identidades')}\n`;
+            }
+             messageBody += `*Disponibilidade:* ${formData.get('disponibilidade')}\n`;
+
+            if (formData.get('portfolio')) {
+                 messageBody += `*Portfólio/Link:* ${formData.get('portfolio')}\n`;
+            }
+            if (formData.get('perguntas')) {
+                 messageBody += `\n*Perguntas/Sugestões:* \n${formData.get('perguntas')}\n`;
+            }
+
+            // Formata a mensagem para URL do WhatsApp
+            const whatsappNumber = '5512982572507'; // Número fornecido
+            const encodedMessage = encodeURIComponent(messageBody);
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+            // Redireciona o usuário para o WhatsApp
+            window.open(whatsappUrl, '_blank');
+
+            // Opcional: Limpar o formulário ou mostrar mensagem de sucesso
+             alert('Obrigado pelo seu interesse! Você será redirecionado(a) ao WhatsApp para enviar sua mensagem.');
+            // form.reset(); // Descomente para limpar o formulário após envio
+        });
+    </script>
+</body>
+</html>

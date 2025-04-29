@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <!-- Meta Tags Básicas -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Reprograma-T: Uma plataforma de tecnologia, humanidade e futuro, construída por mulheres trans.">
+    <meta name="keywords" content="Reprograma-T, travestis, tecnologia, inclusão, Luanny, Kelly, Larissa, diversidade, empreendedorismo LGBTQIA+, humanidade, CNV, rede social, impacto social">
+    <meta name="author" content="Reprograma-T">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://reprograma-t.github.io/briefing">
+    <meta property="og:title" content="Reprograma-T - A Pegada Que Deixaremos">
+    <meta property="og:description" content="Descubra a visão de Reprograma-T: tecnologia e humanidade unidas para um futuro mais inclusivo.">
+    <meta property="og:image" content="https://reprograma-t.github.io/logo.png">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://reprograma-t.github.io/briefing">
+    <meta name="twitter:title" content="Reprograma-T - A Pegada Que Deixaremos">
+    <meta name="twitter:description" content="Descubra a visão de Reprograma-T: tecnologia e humanidade unidas para um futuro mais inclusivo.">
+    <meta name="twitter:image" content="https://reprograma-t.github.io/logo.png">
+
+    <!-- Favicon e ícones -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://reprograma-t.github.io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://reprograma-t.github.io/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://reprograma-t.github.io/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Título otimizado -->
+    <title>Reprograma-T - A Pegada Que Deixaremos</title>
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Estilos CSS -->
+  <style>
+    :root {
+    --background-color-dark: #1a1a2e; /* Cor de fundo escura */
+    --background-color-light: #f0f0f0; /* Cor de fundo clara */
+    --text-color: #ffffff;             /* Cor do texto padrão (para fundo escuro) */
+    --accent-color: #e94560;           /* Cor de destaque */
+    --secondary-color: #4a249d;        /* Cor secundária */
+    --system-color: #34495e;           /* Cor para seção de sistema/problema */
+    --margin-color: #27ae60;           /* Cor para seção de margem/filosofia */
+    --glitch-color-1: #0ff;            /* Cor 1 para efeito glitch (ciano) */
+    --glitch-color-2: #f0f;            /* Cor 2 para efeito glitch (magenta) */
+    --transition-speed: 0.8s;          /* Velocidade da transição padrão */
+    --line-delay: 1.5s;                /* Tempo entre linhas consecutivas em uma seção (em segundos) */
+    --section-delay: 2s;               /* Tempo entre mostrar seções (em segundos) */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-color);
+    background-color: var(--background-color-dark);
+    overflow-y: auto; /* Permitir rolagem vertical em telas pequenas */
+    overflow-x: hidden; /* Esconder barra de rolagem horizontal */
+    transition: background-color var(--transition-speed) ease-in-out; /* Transição suave da cor de fundo */
+}
+
+/* Welcome Screen */
+#welcome-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--background-color-dark);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 100;
+    transition: opacity var(--transition-speed) ease-out, visibility var(--transition-speed) ease-out;
+    opacity: 1;
+    visibility: visible;
+    padding: 20px;
+}
+
+#welcome-screen h1 {
+     font-size: 3em;
+     margin-bottom: 30px;
+     color: var(--accent-color);
+}
+
+#welcome-screen button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--background-color-dark);
+    background-color: var(--accent-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 101; /* Ensure button is clickable above layers */
+}
+
+#welcome-screen button:hover {
+    background-color: #c0392b; /* Slightly darker red */
+}
+
+/* Main Manifesto Container */
+#manifesto-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.manifesto-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    opacity: 0; /* Inicialmente oculto */
+    visibility: hidden; /* Inicialmente oculto e fora do fluxo de acessibilidade */
+    transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+    background: var(--background-color-dark); /* Fundo padrão */
+}
+
+.manifesto-section.active {
+    opacity: 1;
+    visibility: visible; /* Torna visível quando ativo */
+    position: relative; /* Mudar para relative quando ativo para ocupar espaço e permitir rolagem se necessário */
+    min-height: 100vh; /* Garantir altura mínima mesmo em relative */
+}
+
+.line {
+    opacity: 0; /* Inicialmente oculto */
+    transform: translateY(20px); /* Começa ligeiramente abaixo */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Animação de fade-in e subida */
+    margin: 10px 0;
+    font-size: 1.5em; /* Tamanho de fonte base para as linhas */
+    max-width: 800px; /* Largura máxima para melhor legibilidade */
+    width: 100%; /* Garantir que ocupe a largura disponível (considerando padding) */
+    line-height: 1.4; /* Espaçamento entre linhas */
+    word-wrap: break-word; /* Quebra de linha para palavras longas */
+}
+
+.line.visible {
+    opacity: 1;
+    transform: translateY(0); /* Posição final */
+}
+
+/* Estilos Específicos da Seção & Animações */
+
+/* Abertura (Attention) */
+#attention {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), var(--background-color-dark));
+}
+#attention .line {
+    font-family: 'IBM Plex Mono', monospace;
+    text-align: center;
+}
+
+/* Problema (Interest - Problem) */
+#interest-problem {
+    background: var(--system-color);
+    position: relative;
+}
+#interest-problem .line {
+    position: relative;
+    z-index: 1;
+}
+ #interest-problem .line:nth-child(odd) { color: var(--text-color); }
+ #interest-problem .line:nth-child(even) { color: #bdc3c7; }
+
+.overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    font-size: 3em;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 1s ease-out, transform 1s ease-out;
+    text-align: center;
+    word-wrap: break-word;
+    max-width: 90%;
+}
+.overlay-text.visible {
+     opacity: 0.1;
+     transform: translate(-50%, -50%) scale(1);
+}
+
+/* Desejo (Reprograma-T) */
+#desire-reprograma-t {
+    background: linear-gradient(45deg, var(--background-color-dark), var(--secondary-color));
+}
+#desire-reprograma-t .names {
+     font-size: 2em;
+     font-weight: 700;
+     margin-bottom: 20px;
+}
+#desire-reprograma-t .project-intro {
+    font-size: 1.8em;
+    margin-top: 30px;
+}
+#desire-reprograma-t .reprograma-text {
+    color: var(--accent-color);
+    font-weight: 900;
+}
+.feature-list {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    max-width: 600px;
+    width: 100%;
+}
+.feature-item {
+    font-size: 1.3em;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    text-align: left;
+    width: 100%;
+    word-wrap: break-word;
+}
+.feature-item.visible {
+     opacity: 1;
+     transform: translateX(0);
+}
+.feature-item::before {
+    content: '• ';
+    color: var(--accent-color);
+    font-weight: 900;
+}
+
+/* Desejo (Filosofia) */
+#desire-philosophy {
+    background: linear-gradient(to top, #2a2a72, #009ffd);
+    position: relative;
+}
+ #desire-philosophy .line {
+    position: relative;
+    z-index: 1;
+ }
+.overlay-phrases-philosophy {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 2.5em;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+    z-index: 0;
+    padding: 20px;
+    overflow: hidden;
+}
+.overlay-phrase-philosophy {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+    word-wrap: break-word;
+    max-width: 100%;
+}
+.overlay-phrase-philosophy.visible {
+    opacity: 0.15;
+    transform: scale(1);
+}
+
+/* Ação (Call to Action) */
+#action {
+    background: var(--background-color-light);
+    color: var(--background-color-dark);
+}
+#action .line {
+     color: var(--background-color-dark);
+     font-size: 1.3em;
+}
+.cta-section {
+    margin-top: 30px;
+    width: 100%;
+    max-width: 700px;
+}
+.cta-title {
+     font-size: 1.8em;
+     font-weight: 700;
+     margin-bottom: 20px;
+     color: var(--secondary-color);
+     opacity: 0;
+     transform: translateY(20px);
+     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.cta-title.visible {
+     opacity: 1;
+     transform: translateY(0);
+}
+.cta-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+.cta-item {
+    font-weight: 400;
+    padding: 5px 10px;
+    border: 1px solid var(--background-color-dark);
+    border-radius: 3px;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+     color: var(--background-color-dark);
+}
+.cta-item.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+.link-placeholder {
+    margin-top: 40px;
+    font-size: 1.5em;
+    font-weight: 700;
+     color: var(--accent-color);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+ .link-placeholder.visible {
+     opacity: 1;
+     transform: translateY(0);
+ }
+
+/* Final */
+#final {
+    background: var(--background-color-dark);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+ #final .line {
+     font-size: 1.8em;
+     font-weight: 700;
+     margin: 20px 0;
+ }
+.final-logo-section {
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+}
+#reprograma-logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+    max-width: 80%;
+    height: auto;
+}
+#final.active #reprograma-logo {
+    opacity: 1;
+    transform: scale(1);
+}
+.final-words {
+    margin-top: 10px;
+    font-size: 1.5em;
+    font-weight: 900;
+    color: var(--accent-color);
+    text-align: center;
+}
+.final-word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Media Queries para Responsividade */
+@media (max-width: 768px) {
+    .line {
+        font-size: 1.2em; /* Reduzir tamanho de fonte base */
+        padding: 0 10px; /* Adicionar um pouco mais de padding horizontal */
+    }
+
+    #desire-reprograma-t .names {
+        font-size: 1.6em; /* Reduzir tamanho das fontes dos nomes */
+    }
+    #desire-reprograma-t .project-intro {
+        font-size: 1.4em; /* Reduzir tamanho do intro do projeto */
+    }
+
+    .feature-item {
+        font-size: 1.2em; /* Reduzir tamanho das fontes dos itens de recurso */
+    }
+
+    #desire-philosophy .line {
+         font-size: 1.4em; /* Reduzir tamanho das frases de determinação */
+         margin: 15px 0;
+    }
+
+    #action .line {
+        font-size: 1.2em; /* Reduzir tamanho das frases de transformação */
+    }
+
+    #final .line {
+        font-size: 1.4em; /* Reduzir tamanho das frases de transformação */
+    }
+
+    #reprograma-logo {
+         width: 120px; /* Reduzir tamanho do logo */
+         margin-bottom: 15px;
+         max-width: 70%; /* Limite maior para telas menores */
+    }
+    .final-words {
+        font-size: 1.2em; /* Reduzir tamanho da tagline */
+    }
+}
+
+@media (max-width: 480px) {
+    .line {
+        font-size: 1em; /* Reduzir ainda mais o tamanho base */
+        padding: 0 5px; /* Reduzir padding */
+    }
+    .manifesto-section {
+        padding: 15px; /* Reduzir padding geral da seção */
+    }
+
+    #desire-reprograma-t .names {
+        font-size: 1.4em;
+    }
+    #desire-reprograma-t .project-intro {
+        font-size: 1.2em;
+    }
+
+    .feature-item {
+        font-size: 1em; /* Reduzir tamanho das fontes dos itens de recurso */
+    }
+
+    #desire-philosophy .line {
+         font-size: 1.2em; /* Reduzir tamanho das frases de determinação */
+         margin: 10px 0;
+    }
+
+    #action .line {
+        font-size: 1em; /* Reduzir tamanho das frases de transformação */
+    }
+
+    #final .line {
+        font-size: 1.2em; /* Reduzir tamanho das frases de transformação */
+    }
+
+    #reprograma-logo {
+         width: 100px; /* Reduzir logo novamente */
+         margin-bottom: 10px;
+         max-width: 60%;
+    }
+    .final-words {
+        font-size: 1em;
+    }
+}
+  </style>
+    <script type="importmap">
+      {
+        "imports": {
+        }
+      }
+    </script>
+</head>
+<body>
+    <div id="welcome-screen">
+        <h1>Reprograma-T<br/>A Pegada Que Deixaremos</h1>
+        <button id="start-button">Começar</button>
+    </div>
+
+    <audio id="background-audio" src="https://reprograma-t.github.io/audio.mpeg" preload="auto"></audio>
+
+    <main id="manifesto-container" aria-label="Reprograma-T Briefing">
+
+        <section id="attention" class="manifesto-section" aria-labelledby="attention-line-1">
+            <p class="line" id="attention-line-1">“Qual será a pegada que deixaremos nesta existência? Uma pergunta que ecoa…”</p>
+            <p class="line">“Em tempos passados, a liberdade era inimaginável para muitos. Hoje, essa prisão é mais sutil, estrutural. Está no sistema que nos divide.”</p>
+        </section>
+
+        <section id="interest-problem" class="manifesto-section" aria-labelledby="problem-line-1">
+             <div class="overlay-text" aria-hidden="true">O Sistema Conforma. A Margem Questiona.</div>
+            <p class="line" id="problem-line-1">“Nos empurram para caixas: 'nós versus eles'.”</p>
+            <p class="line">“Direita, esquerda. O normal vira padrão, e o diferente... ameaça.”</p>
+            <p class="line">“É mais fácil se adequar ao sistema pronto do que questioná-lo.”</p>
+            <p class="line">“Mas e se a resposta não estiver nos extremos?”</p>
+            <p class="line">“E se essa divisão for a maior burrada que já fizemos?”</p>
+        </section>
+
+        <section id="desire-reprograma-t" class="manifesto-section" aria-labelledby="reprograma-t-intro">
+            <div class="names" aria-label="Fundadoras">
+                <p class="line name">Luanny.</p>
+                <p class="line name">Kelly.</p>
+                <p class="line name">Larissa.</p>
+            </div>
+            <p class="line project-intro" id="reprograma-t-intro">“Somos três. Três mulheres trans com histórias marcadas pela exclusão, mas unidas por uma visão: <span class="reprograma-text">Reprograma-T</span>.”</p>
+            <p class="line">“Não é só um projeto de tecnologia. É uma filosofia em ação. Uma plataforma que nasce da margem para reimaginar o centro.”</p>
+             <p class="line">“Estamos construindo:”</p>
+             <div class="feature-list" aria-label="Funcionalidades da plataforma">
+                 <p class="feature-item">Uma rede social onde a segurança e a inclusão não são opcionais.</p>
+                 <p class="feature-item">Um espaço para contar e ouvir histórias com a profundidade da Comunicação Não Violenta, transformando dor em dados para a empatia.</p>
+                 <p class="feature-item">Ferramentas que nascem de necessidades reais, como a segurança mapeada ou a fé que acolhe.</p>
+            </div>
+            <p class="line">“Nossa força? A visão estratégica que questiona. O coração comunitário que acolhe. A profundidade técnica que constrói.”</p>
+            <p class="line">“Não queremos apenas um lugar no sistema. Queremos ajudar a reprogramá-lo.”</p>
+        </section>
+
+        <section id="desire-philosophy" class="manifesto-section" aria-labelledby="philosophy-line-1">
+             <div class="overlay-phrases-philosophy" aria-hidden="true">
+                 <span class="overlay-phrase-philosophy">Poeira estelar</span>
+                 <span class="overlay-phrase-philosophy">Humanidade</span>
+                 <span class="overlay-phrase-philosophy">Semente</span>
+                 <span class="overlay-phrase-philosophy">Compaixão</span>
+                 <span class="overlay-phrase-philosophy">Pegada</span>
+            </div>
+            <p class="line" id="philosophy-line-1">“Porque no fundo, somos mais que rótulos políticos. Somos poeira estelar, parte de algo maior.”</p>
+            <p class="line">“Esquecemos disso na batalha diária. O desprezo mútuo não gera solução.”</p>
+            <p class="line">“E se a reencarnação existir? Que mundo queremos encontrar?”</p>
+            <p class="line">“Acreditando ou não, prevenir é melhor.”</p>
+            <p class="line">“Talvez não vejamos o mundo ideal que sonhamos</p>
+        </section>
+
+        <section id="action" class="manifesto-section" aria-labelledby="action-line-1">
+            <div class="cta-section">
+                <p class="cta-title" id="action-line-1">Junte-se a nós.</p>
+                <ul class="cta-list">
+                    <li class="cta-item">Aprenda mais sobre Reprograma-T</li>
+                    <li class="cta-item">Seja um dos fundadores</li>
+                    <li class="cta-item">Compartilhe nossa visão</li>
+                </ul>
+                <p class="link-placeholder">https://reprograma-t.github.io/</p>
+            </div>
+        </section>
+
+        <section id="final" class="manifesto-section" aria-labelledby="final-line-1">
+            <div class="final-logo-section">
+                <img id="reprograma-logo" src="https://reprograma-t.github.io/logo.png" alt="Reprograma-T Logo">
+                <div class="final-words">
+                    <span class="final-word">Reprograma</span>
+                    <span class="final-word">T</span>
+                    <span class="final-word">A</span>
+                    <span class="final-word">Pegada</span>
+                </div>
+            </div>
+            <p class="line" id="final-line-1">A pegada que deixaremos.</p>
+        </section>
+    </main>
+
+    <script>
+      const sections = document.querySelectorAll('.manifesto-section');
+const welcomeScreen = document.getElementById('welcome-screen');
+const startButton = document.getElementById('start-button');
+const backgroundAudio = document.getElementById('background-audio');
+let currentSectionIndex = 0;
+
+const computedStyle = getComputedStyle(document.documentElement);
+const lineDelay = parseFloat(computedStyle.getPropertyValue('--line-delay')) * 1000;
+const sectionDelay = parseFloat(computedStyle.getPropertyValue('--section-delay')) * 1000;
+const transitionSpeed = parseFloat(computedStyle.getPropertyValue('--transition-speed')) * 1000;
+
+function showSection(index) {
+    if (index >= sections.length) {
+        console.log('Fim do manifesto');
+        // Optional: Add logic for what happens after the last section
+        return;
+    }
+
+    const currentSection = sections[index];
+    const previousSection = sections[index - 1];
+
+    if (previousSection) {
+        previousSection.classList.remove('active');
+    }
+
+    currentSection.classList.add('active');
+
+    // --- Specific section animations/effects ---
+
+    // Problem section overlay text
+    if (currentSection.id === 'interest-problem') {
+        const overlayText = currentSection.querySelector('.overlay-text');
+        const linesInProblem = currentSection.querySelectorAll('.line');
+        // Delay overlay appearance slightly after lines start
+        const delayForOverlay = (linesInProblem.length > 0 ? linesInProblem.length * lineDelay : 0) + 500; // Adjust delay slightly
+        setTimeout(() => {
+            overlayText.classList.add('visible');
+        }, delayForOverlay);
+    }
+
+    // Reprograma-T section feature list
+    else if (currentSection.id === 'desire-reprograma-t') {
+        const featureItems = currentSection.querySelectorAll('.feature-item');
+        const linesInDesire = currentSection.querySelectorAll('.line');
+        const delayForFeatures = (linesInDesire.length > 0 ? linesInDesire.length * lineDelay : 0) + 500; // Adjust delay
+        featureItems.forEach((item, i) => {
+            setTimeout(() => item.classList.add('visible'), delayForFeatures + i * 300);
+        });
+    }
+
+    // Philosophy section overlay phrases
+    else if (currentSection.id === 'desire-philosophy') {
+        const overlayPhrases = currentSection.querySelectorAll('.overlay-phrase-philosophy');
+        const linesInPhilosophy = currentSection.querySelectorAll('.line');
+        const delayForOverlays = (linesInPhilosophy.length > 0 ? linesInPhilosophy.length * lineDelay : 0) + 500; // Adjust delay
+        overlayPhrases.forEach((phrase, i) => {
+            setTimeout(() => phrase.classList.add('visible'), delayForOverlays + i * 500);
+        });
+    }
+
+    // Action section CTA
+    else if (currentSection.id === 'action') {
+        const ctaTitle = currentSection.querySelector('.cta-title');
+        const ctaItems = currentSection.querySelectorAll('.cta-item');
+        const linkPlaceholder = currentSection.querySelector('.link-placeholder');
+        const linesInAction = currentSection.querySelectorAll('.line');
+        const delayForCTA = (linesInAction.length > 0 ? linesInAction.length * lineDelay : 0) + 500; // Adjust delay
+
+        setTimeout(() => ctaTitle.classList.add('visible'), delayForCTA);
+        ctaItems.forEach((item, i) => {
+            setTimeout(() => item.classList.add('visible'), delayForCTA + 500 + i * 300);
+        });
+        setTimeout(() => linkPlaceholder.classList.add('visible'), delayForCTA + 2000);
+    }
+
+    // Final section logo and words
+    else if (currentSection.id === 'final') {
+        const reprogramaLogo = currentSection.querySelector('#reprograma-logo');
+        const finalWords = currentSection.querySelectorAll('.final-word');
+        const linesInFinal = currentSection.querySelectorAll('.line');
+        const delayForFinal = (linesInFinal.length > 0 ? linesInFinal.length * lineDelay : 0) + 500; // Adjust delay
+
+        setTimeout(() => reprogramaLogo.classList.add('visible'), delayForFinal);
+        finalWords.forEach((word, i) => {
+            // Delays added in CSS for final words are relative to section becoming active
+            // Using JS delays here based on line timing + logo delay
+            const wordDelay = delayForFinal + 2000 + i * 300; // Start word animation after logo appears + some gap
+            setTimeout(() => word.classList.add('visible'), wordDelay);
+        });
+    }
+
+    // --- Animate lines for the current section ---
+    const lines = currentSection.querySelectorAll('.line');
+    let maxLineDelay = 0;
+
+    lines.forEach((line, i) => {
+        const delayForThisLine = i * lineDelay;
+        setTimeout(() => {
+            line.classList.add('visible');
+        }, delayForThisLine);
+        maxLineDelay = Math.max(maxLineDelay, delayForThisLine + transitionSpeed);
+    });
+
+    // --- Calculate total section duration ---
+    // Start with the time until the last line animation finishes
+    let sectionDuration = maxLineDelay;
+
+    // Add duration for specific element animations if they extend beyond lines
+    if (currentSection.id === 'desire-reprograma-t') {
+        const featureItems = currentSection.querySelectorAll('.feature-item');
+        if (featureItems.length > 0) {
+            const delayForFeaturesStart = (lines.length > 0 ? lines.length * lineDelay : 0) + 500;
+            const lastFeatureDelay = (featureItems.length - 1) * 300;
+            const featureAnimationDuration = 600;
+            const totalFeatureTime = delayForFeaturesStart + lastFeatureDelay + featureAnimationDuration;
+            sectionDuration = Math.max(sectionDuration, totalFeatureTime);
+        }
+    } else if (currentSection.id === 'desire-philosophy') {
+        const overlayPhrases = currentSection.querySelectorAll('.overlay-phrase-philosophy');
+        if (overlayPhrases.length > 0) {
+            const delayForOverlaysStart = (lines.length > 0 ? lines.length * lineDelay : 0) + 500;
+            const lastOverlayDelay = (overlayPhrases.length - 1) * 500;
+            const overlayAnimationDuration = 1000;
+            const totalOverlayTime = delayForOverlaysStart + lastOverlayDelay + overlayAnimationDuration;
+            sectionDuration = Math.max(sectionDuration, totalOverlayTime);
+        }
+    } else if (currentSection.id === 'action') {
+        // Action section has multiple staggered animations, hardcode a duration or calculate based on last animation
+        // Simple hardcoded duration for now based on observed animation timings
+        sectionDuration = Math.max(sectionDuration, (lines.length > 0 ? lines.length * lineDelay : 0) + 3000); // Ensure it waits for lines + CTA animations
+    } else if (currentSection.id === 'final') {
+        // Final section includes logo and word animations
+        sectionDuration = Math.max(sectionDuration, (lines.length > 0 ? lines.length * lineDelay : 0) + 4000); // Ensure it waits for lines + logo/word animations
+    }
+
+
+    // Schedule the next section
+    setTimeout(() => {
+        showSection(index + 1);
+    }, sectionDuration + sectionDelay);
+}
+
+// Event listener for the start button
+startButton.addEventListener('click', () => {
+    // Hide welcome screen with transition
+    welcomeScreen.style.opacity = '0';
+    welcomeScreen.style.visibility = 'hidden';
+    welcomeScreen.style.transition = `opacity ${transitionSpeed / 1000}s ease-out, visibility ${transitionSpeed / 1000}s ease-out`;
+
+    // Start audio
+    backgroundAudio.play().catch(error => {
+        console.error("Error playing audio:", error);
+        // Handle cases where autoplay is blocked, e.g., show a play button
+    });
+
+    // Start the manifesto sequence after the welcome screen starts fading
+    // Add a small delay to allow the transition to begin
+    setTimeout(() => {
+        showSection(0); // Start with the first section (index 0)
+    }, transitionSpeed + 100); // Wait for welcome screen transition + a small buffer
+});
+
+// Optional: Add event listener for when the welcome screen transition ends
+// This can be useful if you need to do something *after* it's fully hidden
+welcomeScreen.addEventListener('transitionend', () => {
+    if (welcomeScreen.style.opacity === '0') {
+        welcomeScreen.style.display = 'none'; // Remove from layout after transition
+    }
+});
+
+// The DOMContentLoaded listener is no longer needed to start the manifesto,
+// it's only needed to ensure elements exist before attaching listeners.
+// The script is loaded with 'defer' or 'module', so DOM is ready.
+// Keeping it ensures code runs after the DOM is fully parsed if not using defer/module.
+document.addEventListener('DOMContentLoaded', () => {
+    // Initial state: Welcome screen is visible, manifesto sections are hidden by CSS
+    // Add any necessary initial setup here if needed.
+});
+
+// Ensure audio playback happens after user interaction
+// Audio will be played when the start button is clicked.
+    </script>
+</body>
+</html>

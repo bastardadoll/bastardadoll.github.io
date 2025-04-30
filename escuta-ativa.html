@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversa Estruturada</title>
+    <style>
+        :root {
+            --preto: #000000;
+            --laranja-escuro: #CC5500;
+            --laranja-fogo: #FF4500;
+            --dourado: #D4AF37;
+            --branco: #FFFFFF;
+            --gradiente-laranja: linear-gradient(135deg, #FF8C00, #FF4500, #CC5500);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--preto);
+            color: var(--branco);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        h1 {
+            color: var(--dourado);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            background: var(--gradiente-laranja);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
+        }
+
+        h2 {
+            color: var(--laranja-fogo);
+            margin-top: 30px;
+            border-bottom: 1px solid var(--laranja-escuro);
+            padding-bottom: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dourado);
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--laranja-escuro);
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: var(--branco);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--laranja-fogo);
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+        }
+
+        .radio-group {
+            margin-bottom: 15px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .radio-option input {
+            margin-right: 10px;
+        }
+
+        .btn-submit {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--gradiente-laranja);
+            color: var(--branco);
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(255, 69, 0, 0.4);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 69, 0, 0.6);
+        }
+
+        .btn-submit:active {
+            transform: translateY(1px);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            color: var(--dourado);
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: var(--branco);
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 1px solid var(--laranja-escuro);
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .section-description {
+            background-color: rgba(212, 175, 55, 0.1);
+            padding: 15px;
+            border-left: 4px solid var(--dourado);
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Conversa Estruturada</h1>
+        <p style="text-align: center; margin-bottom: 30px; color: var(--dourado); font-style: italic;">
+            "Entender profundamente para construir conexões significativas"
+        </p>
+
+        <form id="conversationForm">
+            <div class="form-group">
+                <label for="name">Seu Nome</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Seu E-mail</label>
+                <input type="email" id="email" name="email">
+            </div>
+
+            <h2>Perguntas de Situação (S)</h2>
+            <div class="section-description">
+                <p>Vamos começar entendendo seu contexto atual. Estas perguntas nos ajudam a estabelecer um entendimento comum do cenário.</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="situation">Como têm sido as coisas ultimamente no seu trabalho/projeto/vida pessoal?</label>
+                <textarea id="situation" name="situation" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="responsibilities">Quais são suas principais responsabilidades/focos no momento?</label>
+                <textarea id="responsibilities" name="responsibilities" rows="3" required></textarea>
+            </div>
+
+            <h2>Perguntas de Problema (P)</h2>
+            <div class="section-description">
+                <p>Vamos identificar desafios, dificuldades ou áreas onde as coisas não estão ideais para você.</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="challenges">Quais são os maiores desafios que você está enfrentando atualmente?</label>
+                <textarea id="challenges" name="challenges" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="frustrations">Há algo nessa situação que te preocupa ou frustra particularmente?</label>
+                <textarea id="frustrations" name="frustrations" rows="3"></textarea>
+            </div>
+
+            <h2>Perguntas de Implicação (I)</h2>
+            <div class="section-description">
+                <p>Vamos explorar como esses desafios estão afetando outras áreas da sua vida ou trabalho.</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="impact">Como esses desafios afetam seu dia a dia, bem-estar ou relacionamentos?</label>
+                <textarea id="impact" name="impact" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="consequences">Se esses desafios continuarem, quais podem ser as consequências a médio/longo prazo?</label>
+                <textarea id="consequences" name="consequences" rows="3"></textarea>
+            </div>
+
+            <h2>Perguntas de Necessidade (N)</h2>
+            <div class="section-description">
+                <p>Finalmente, vamos imaginar como seria se esses desafios fossem resolvidos.</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="solution_benefits">Como seria útil para você se esses desafios fossem resolvidos? O que isso permitiria?</label>
+                <textarea id="solution_benefits" name="solution_benefits" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="importance">Em uma escala de 1 a 10, quão importante é para você encontrar uma solução para esses desafios?</label>
+                <select id="importance" name="importance" required>
+                    <option value="">Selecione...</option>
+                    <option value="1">1 - Pouco importante</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5 - Moderadamente importante</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10 - Extremamente importante</option>
+                </select>
+            </div>
+
+            <div style="text-align: center;">
+                <button type="button" class="btn-submit" onclick="submitForm()">Enviar Conversa</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function submitForm() {
+            const form = document.getElementById('conversationForm');
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const situation = document.getElementById('situation').value;
+            const responsibilities = document.getElementById('responsibilities').value;
+            const challenges = document.getElementById('challenges').value;
+            const frustrations = document.getElementById('frustrations').value;
+            const impact = document.getElementById('impact').value;
+            const consequences = document.getElementById('consequences').value;
+            const solution_benefits = document.getElementById('solution_benefits').value;
+            const importance = document.getElementById('importance').value;
+
+            // Validação básica
+            if (!name || !situation || !responsibilities || !challenges || !impact || !solution_benefits || !importance) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+
+            // Construir mensagem para WhatsApp
+            let message = `*Nova Conversa Estruturada*%0A%0A`;
+            message += `*Nome:* ${name}%0A`;
+            if (email) message += `*E-mail:* ${email}%0A%0A`;
+            
+            message += `*📌 Situação Atual:*%0A${situation}%0A%0A`;
+            message += `*🔍 Responsabilidades/Focos:*%0A${responsibilities}%0A%0A`;
+            message += `*⚠️ Desafios Identificados:*%0A${challenges}%0A`;
+            if (frustrations) message += `%0A*😟 Frustrações/Preocupações:*%0A${frustrations}%0A%0A`;
+            else message += `%0A`;
+            
+            message += `*💥 Impactos/Consequências:*%0A${impact}%0A`;
+            if (consequences) message += `%0A*⏳ Consequências Futuras:*%0A${consequences}%0A%0A`;
+            else message += `%0A`;
+            
+            message += `*✨ Benefícios de uma Solução:*%0A${solution_benefits}%0A%0A`;
+            message += `*🔢 Importância da Solução:* ${importance}/10`;
+
+            // Codificar a mensagem para URL
+            const encodedMessage = encodeURIComponent(message).replace(/'/g, "%27").replace(/"/g, "%22");
+            
+            // Redirecionar para WhatsApp com a mensagem
+            window.open(`https://wa.me/5512982572507?text=${encodedMessage}`, '_blank');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionário Reflexivo Reprograma-T</title>
+    <style>
+        /* Paleta de Cores Consistente */
+        :root {
+            --preto: #1a1a1a;
+            --laranja-escuro: #994D00;
+            --laranja-fogo: #FF5B22;
+            --dourado: #D4AF37;
+            --branco: #f0f0f0;
+            --background-container: rgba(0, 0, 0, 0.4);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --input-border: var(--laranja-escuro);
+            --input-focus-border: var(--laranja-fogo);
+            --input-focus-shadow: rgba(255, 91, 34, 0.3);
+            --label-color: var(--dourado);
+            --text-color: var(--branco);
+            --button-bg-start: var(--laranja-fogo);
+            --button-bg-end: var(--laranja-escuro);
+            --button-hover-bg-start: var(--laranja-escuro);
+            --button-hover-bg-end: var(--laranja-fogo);
+            --button-text-color: var(--preto);
+            --link-color: var(--dourado);
+            --link-hover-color: var(--laranja-fogo);
+            --error-color: #FF6347; /* Tomato */
+            --intro-text-color: rgba(240, 240, 240, 0.9);
+            --question-group-border: rgba(212, 175, 55, 0.2); /* Borda dourada transparente */
+        }
+
+        /* Estilos Gerais */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            padding: 30px 20px; /* Mais padding vertical */
+            background-color: var(--preto);
+            color: var(--text-color);
+        }
+
+        /* Container Principal */
+        .container {
+            max-width: 800px; /* Mais largo para melhor leitura */
+            margin: auto;
+            background-color: var(--background-container);
+            border: 1px solid var(--input-border);
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Títulos e Textos Introdutórios */
+        h1, h2 {
+            color: var(--dourado);
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+        }
+        h1 { font-size: 2.2em; }
+        h2 { font-size: 1.6em; margin-top: 30px; border-top: 1px solid var(--question-group-border); padding-top: 25px;}
+
+        .intro-text, .section-intro {
+            font-size: 1.05em;
+            color: var(--intro-text-color);
+            text-align: justify; /* Justificar para melhor leitura */
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        .intro-text strong, .section-intro strong {
+            color: var(--laranja-fogo);
+            font-weight: 600;
+        }
+
+        /* Grupo de Perguntas */
+        .question-group {
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--question-group-border);
+        }
+         .question-group:last-of-type {
+             border-bottom: none; /* Remove borda do último grupo */
+             margin-bottom: 25px;
+         }
+
+
+        /* Rótulos (Labels) das Perguntas */
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--label-color);
+            font-size: 1.1em; /* Um pouco maior para destaque */
+        }
+
+        /* Campos de Entrada (Inputs e Textarea) */
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1em;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="text"]::placeholder,
+        input[type="email"]::placeholder,
+        textarea::placeholder {
+            color: rgba(240, 240, 240, 0.5);
+            opacity: 1;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            border-color: var(--focus-color);
+            box-shadow: 0 0 8px var(--input-focus-shadow);
+            outline: none;
+        }
+        textarea {
+            min-height: 120px; /* Mínimo maior para respostas reflexivas */
+            resize: vertical;
+        }
+
+        /* Mensagem de Erro */
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.9em;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+            font-weight: 500;
+        }
+
+        /* Botão Enviar */
+        button {
+            background-image: linear-gradient(to bottom right, var(--button-bg-start), var(--button-bg-end));
+            color: var(--button-text-color);
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%; /* Ocupar largura total */
+            margin-top: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+        button:hover {
+            background-image: linear-gradient(to bottom right, var(--button-hover-bg-start), var(--button-hover-bg-end));
+            box-shadow: 0 6px 15px rgba(255, 91, 34, 0.3);
+            transform: translateY(-3px);
+        }
+        button:active {
+            transform: translateY(0px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Mensagem de Sucesso */
+        #successMessage {
+            color: var(--dourado);
+            text-align: center;
+            margin-top: 25px;
+            font-weight: bold;
+            display: none;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Reprograma-T: Convocatória Reflexiva</h1>
+        <p class="intro-text">
+            Olá! Este não é um formulário comum. É um convite para um diálogo profundo sobre a rede social que estamos co-criando no ecossistema Reprograma-T. Queremos ir além do superficial, entender suas perspectivas e alinhar nossos próximos passos com valores compartilhados. Suas respostas sinceras são a base para construirmos algo <strong>verdadeiramente humano e transformador</strong>, que desafia a lógica vazia das plataformas atuais. Agradecemos por dedicar seu tempo e sua mente a esta reflexão.
+        </p>
+
+        <form id="reflexiveForm">
+
+            <!-- Informações Básicas -->
+            <div class="question-group">
+                <h2>Informações Essenciais</h2>
+                <div>
+                    <label for="nome">Nome / Apelido (Como prefere ser chamado/a/e):</label>
+                    <input type="text" id="nome" name="nome" required>
+                    <div class="error-message" id="nomeError">Campo obrigatório.</div>
+                </div>
+                <div>
+                    <label for="contato">Seu WhatsApp (para envio das respostas e contato):</label>
+                    <input type="text" id="contato" name="contato" required placeholder="Inclua o DDD">
+                    <div class="error-message" id="contatoError">Campo obrigatório.</div>
+                </div>
+                <div>
+                    <label for="identidade">Identidade(s) (Opcional, mas valioso para nós):</label>
+                    <input type="text" id="identidade" name="identidade" placeholder="Ex: Mulher trans, Pessoa não-binária, Neurodivergente (Autista, TDAH...), etc.">
+                </div>
+            </div>
+
+            <!-- Filosofia e Crítica -->
+            <div class="question-group">
+                <h2>Visão Crítica e Filosofia</h2>
+                <p class="section-intro">Nossa maior crítica é aos algoritmos que promovem conteúdo superficial por likes. Queremos construir diferente, valorizando a autenticidade.</p>
+                <div>
+                    <label for="q_likes_performance">(Vulnerabilidade vs. Performance - Foco Anti-Like) Em que situações você já se sentiu pressionado(a/e) a criar/postar algo *especificamente* para ganhar likes/visualizações, mesmo que não fosse totalmente autêntico? Como a ausência de 'likes' e a presença de reconhecimentos como "Te Entendo" ou "Me Inspirou" mudaria sua forma de se expressar online?</label>
+                    <textarea id="q_likes_performance" name="q_likes_performance" required></textarea>
+                    <div class="error-message" id="q_likes_performanceError">Sua reflexão é importante.</div>
+                </div>
+                 <div>
+                    <label for="q_algoritmo_etica">(Ética do Algoritmo Alternativo - Foco Anti-Like) Se o objetivo NÃO é maximizar o tempo na tela ou a viralidade, mas sim a "conexão significativa" ou o "apoio mútuo", que *sinais* ou *interações* (além das reações simbólicas) poderíamos usar para identificar e talvez destacar conteúdos e perfis que promovem isso? Como evitar que isso também se torne um jogo a ser manipulado?</label>
+                    <textarea id="q_algoritmo_etica" name="q_algoritmo_etica" required></textarea>
+                    <div class="error-message" id="q_algoritmo_eticaError">Sua perspectiva é valiosa.</div>
+                </div>
+                <div>
+                    <label for="q_reset_metrica">(Pergunta Radical "Reset" - Foco Anti-Like) Se você pudesse banir *uma única métrica* de todas as redes sociais para sempre, qual seria e por quê? Como você substituiria a função social (ou de feedback) que ela supostamente cumpre?</label>
+                    <textarea id="q_reset_metrica" name="q_reset_metrica" required></textarea>
+                     <div class="error-message" id="q_reset_metricaError">O que você eliminaria?</div>
+                </div>
+            </div>
+
+            <!-- Propósito e Resiliência -->
+            <div class="question-group">
+                 <h2>Propósito e Resiliência (Ikigai + Kintsugi)</h2>
+                 <p class="section-intro">Acreditamos que nosso propósito muitas vezes se revela em nossas jornadas de superação, e que nossas "cicatrizes" carregam beleza e força.</p>
+                <div>
+                    <label for="q_ikigai_kintsugi">(Ikigai + Kintsugi) Qual foi um momento em que você sentiu que sua “cicatriz” pessoal (uma dor, um desafio superado) se tornou inesperadamente uma fonte de força ou inspiração para você ou outros? Como essa alquimia poderia ser nutrida em nossa plataforma?</label>
+                    <textarea id="q_ikigai_kintsugi" name="q_ikigai_kintsugi" required></textarea>
+                    <div class="error-message" id="q_ikigai_kintsugiError">Compartilhe um pouco dessa força.</div>
+                </div>
+            </div>
+
+             <!-- Inclusão e Design -->
+            <div class="question-group">
+                 <h2>Inclusão e Design (Wabi-Sabi)</h2>
+                 <p class="section-intro">Buscamos um design que acolha a imperfeição humana, em vez de exigir uma performance constante de perfeição.</p>
+                <div>
+                    <label for="q_wabisabi_inclusao">(Wabi-Sabi na Inclusão) Muitas plataformas buscam uma "experiência perfeita" e acabam excluindo quem não se encaixa. Onde você vê a beleza ou a força na "imperfeição" das interações humanas online? Como nosso design pode celebrar essa autenticidade crua e acolher diferentes necessidades (inclusive neurodivergentes)?</label>
+                    <textarea id="q_wabisabi_inclusao" name="q_wabisabi_inclusao" required></textarea>
+                     <div class="error-message" id="q_wabisabi_inclusaoError">Como podemos ser autenticamente inclusivos?</div>
+                </div>
+            </div>
+
+            <!-- Co-criação e Valores -->
+             <div class="question-group">
+                 <h2>Co-criação e Valores</h2>
+                 <p class="section-intro">Queremos construir isso *com* você. Sua voz tem poder aqui.</p>
+                 <div>
+                    <label for="q_cocriacao_poder">(Co-criação e Poder) Imagine que você tem o poder de definir *uma única regra inquebrável* para a comunidade Orby Chat / Reprograma-T. Qual seria e qual necessidade fundamental ela estaria protegendo?</label>
+                    <textarea id="q_cocriacao_poder" name="q_cocriacao_poder" required></textarea>
+                     <div class="error-message" id="q_cocriacao_poderError">Qual sua regra de ouro?</div>
+                 </div>
+                 <div>
+                    <label for="q_sustentabilidade_valores">(Sustentabilidade e Valores) Como podemos equilibrar a necessidade de tornar o projeto financeiramente viável (e remunerar a equipe no futuro) com o compromisso de não excluir pessoas justamente por questões financeiras, especialmente aquelas que mais precisam do espaço?</label>
+                    <textarea id="q_sustentabilidade_valores" name="q_sustentabilidade_valores" required></textarea>
+                     <div class="error-message" id="q_sustentabilidade_valoresError">Como podemos ser justos e sustentáveis?</div>
+                 </div>
+             </div>
+
+             <!-- Mensagem Final / Contribuição -->
+             <div class="question-group">
+                 <h2>Sua Contribuição e Expectativas</h2>
+                 <div>
+                     <label for="contribuicao_expectativa">Pensando em suas habilidades, paixões e no que você ouviu sobre o Reprograma-T, como você se vê contribuindo inicialmente? E o que você esperaria ou precisaria deste projeto para se sentir engajado(a/e) e valorizado(a/e)?</label>
+                     <textarea id="contribuicao_expectativa" name="contribuicao_expectativa" required></textarea>
+                      <div class="error-message" id="contribuicao_expectativaError">Como podemos colaborar?</div>
+                 </div>
+             </div>
+
+
+            <button type="submit">Enviar Reflexões para Luanny via WhatsApp</button>
+            <div id="successMessage">Preparando sua jornada de reflexão para envio...</div>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('reflexiveForm');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // --- Validação ---
+            let isValid = true;
+            const requiredFields = form.querySelectorAll('[required]');
+
+            requiredFields.forEach(input => {
+                const errorElement = document.getElementById(`${input.id}Error`);
+                if (!input.value.trim()) {
+                    if (errorElement) errorElement.style.display = 'block';
+                    input.style.borderColor = 'var(--error-color)';
+                    isValid = false;
+                } else {
+                    if (errorElement) errorElement.style.display = 'none';
+                    input.style.borderColor = 'var(--input-border)';
+                }
+            });
+
+            if (!isValid) {
+                alert('Por favor, preencha todas as perguntas para compartilhar sua reflexão completa.');
+                const firstInvalidField = form.querySelector('[required]:invalid, textarea[required]:invalid');
+                if (firstInvalidField) {
+                     firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                     firstInvalidField.focus();
+                 }
+                return;
+            }
+
+            // --- Coleta e Formatação ---
+            const formData = new FormData(form);
+            let messageBody = `*Reflexões Reprograma-T de ${formData.get('nome')}*\n\n`;
+            messageBody += `*Contato:* ${formData.get('contato')}\n`;
+            if(formData.get('identidade')) {
+                messageBody += `*Identidade(s):* ${formData.get('identidade')}\n`;
+            }
+            messageBody += `-------------------------------------\n\n`;
+
+            messageBody += `*VISÃO CRÍTICA E FILOSOFIA*\n`;
+            messageBody += `*1. Vulnerabilidade vs. Performance:*\n${formData.get('q_likes_performance')}\n\n`;
+            messageBody += `*2. Ética do Algoritmo Alternativo:*\n${formData.get('q_algoritmo_etica')}\n\n`;
+            messageBody += `*3. Reset da Métrica:*\n${formData.get('q_reset_metrica')}\n\n`;
+
+            messageBody += `*PROPÓSITO E RESILIÊNCIA*\n`;
+            messageBody += `*4. Ikigai + Kintsugi:*\n${formData.get('q_ikigai_kintsugi')}\n\n`;
+
+            messageBody += `*INCLUSÃO E DESIGN*\n`;
+            messageBody += `*5. Wabi-Sabi na Inclusão:*\n${formData.get('q_wabisabi_inclusao')}\n\n`;
+
+            messageBody += `*CO-CRIAÇÃO E VALORES*\n`;
+            messageBody += `*6. Regra Inquebrável:*\n${formData.get('q_cocriacao_poder')}\n\n`;
+            messageBody += `*7. Sustentabilidade e Justiça:*\n${formData.get('q_sustentabilidade_valores')}\n\n`;
+
+            messageBody += `*CONTRIBUIÇÃO E EXPECTATIVAS*\n`;
+            messageBody += `*8. Como posso contribuir/O que preciso:*\n${formData.get('contribuicao_expectativa')}\n\n`;
+
+             messageBody += `-------------------------------------\n`;
+             messageBody += `Enviado em: ${new Date().toLocaleString('pt-BR')}`;
+
+
+            // --- Geração da URL e Redirecionamento ---
+            const whatsappNumber = '5512982572507'; // Número da Luanny
+            const encodedMessage = encodeURIComponent(messageBody);
+            // Limitar o tamanho da mensagem se necessário (WhatsApp tem limites)
+             const maxLen = 1800; // Limite seguro aproximado para URL
+             const truncatedEncodedMessage = encodedMessage.length > maxLen ? encodedMessage.substring(0, maxLen) + '...' : encodedMessage;
+
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${truncatedEncodedMessage}`;
+
+             successMessage.style.display = 'block';
+             form.style.display = 'none';
+
+            setTimeout(() => {
+                window.open(whatsappUrl, '_blank');
+                // Poderia adicionar um agradecimento ou instrução aqui na página
+                successMessage.innerHTML = "Obrigado por compartilhar! Abra o WhatsApp para enviar sua mensagem.";
+            }, 1500);
+        });
+
+         // Remove erro ao digitar
+         form.querySelectorAll('[required]').forEach(input => {
+             input.addEventListener('input', () => {
+                 const errorElement = document.getElementById(`${input.id}Error`);
+                 if (input.value.trim()) {
+                     if (errorElement) errorElement.style.display = 'none';
+                     input.style.borderColor = 'var(--input-border)';
+                 }
+             });
+         });
+    </script>
+
+</body>
+</html>

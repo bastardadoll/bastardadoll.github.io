@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Reconhecimento Simbólico</title>
+    <style>
+        :root {
+            --preto: #000000;
+            --laranja-escuro: #994D00;
+            --laranja-fogo: #FF5B22;
+            --dourado: #D4AF37;
+            --branco: #FFFFFF;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--preto);
+            color: var(--branco);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: linear-gradient(135deg, var(--laranja-escuro), var(--laranja-fogo));
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .post {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .post-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 2px solid var(--dourado);
+        }
+        
+        .post-text {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: var(--branco);
+        }
+        
+        .reactions-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .reaction-btn {
+            background: linear-gradient(to right, var(--laranja-escuro), var(--laranja-fogo));
+            color: var(--branco);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .reaction-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 91, 34, 0.4);
+        }
+        
+        .reaction-btn.active {
+            background: var(--dourado);
+            color: var(--preto);
+        }
+        
+        .reaction-count {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+        }
+        
+        .post-author {
+            margin-top: 15px;
+            font-style: italic;
+            color: var(--dourado);
+            text-align: right;
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--dourado);
+            margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .highlight {
+            color: var(--dourado);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Reconhecimento Simbólico</h1>
+        
+        <div class="post">
+            <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Xícara quebrada" class="post-image">
+            
+            <p class="post-text">
+                "A <span class="highlight">xícara quebrada</span> não perdeu sua utilidade - ela apenas ganhou uma nova forma de ser. Assim somos nós quando achamos que tudo está perdido: apenas em transformação."
+            </p>
+            
+            <p class="post-author">— Reflexões Cotidianas</p>
+            
+            <div class="reactions-container">
+                <button class="reaction-btn" data-reaction="thank">
+                    <span>🙏</span> Agradecer
+                    <span class="reaction-count">0</span>
+                </button>
+                
+                <button class="reaction-btn" data-reaction="connect">
+                    <span>🤝</span> Se conectar
+                    <span class="reaction-count">0</span>
+                </button>
+                
+                <button class="reaction-btn" data-reaction="understand">
+                    <span>💡</span> Te entendo
+                    <span class="reaction-count">0</span>
+                </button>
+                
+                <button class="reaction-btn" data-reaction="inspire">
+                    <span>✨</span> Me inspirou
+                    <span class="reaction-count">0</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const reactionButtons = document.querySelectorAll('.reaction-btn');
+            
+            // Inicializa contadores
+            reactionButtons.forEach(button => {
+                const reactionType = button.getAttribute('data-reaction');
+                const countElement = button.querySelector('.reaction-count');
+                
+                // Carrega do localStorage ou define como 0
+                const count = localStorage.getItem(reactionType) || 0;
+                countElement.textContent = count;
+                
+                // Verifica se o usuário já reagiu
+                if (localStorage.getItem(`user_${reactionType}`) {
+                    button.classList.add('active');
+                }
+            });
+            
+            // Adiciona eventos de clique
+            reactionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const reactionType = this.getAttribute('data-reaction');
+                    const countElement = this.querySelector('.reaction-count');
+                    let count = parseInt(countElement.textContent);
+                    
+                    // Verifica se já reagiu
+                    const alreadyReacted = localStorage.getItem(`user_${reactionType}`);
+                    
+                    if (alreadyReacted) {
+                        // Remove a reação
+                        count--;
+                        countElement.textContent = count;
+                        localStorage.removeItem(`user_${reactionType}`);
+                        this.classList.remove('active');
+                    } else {
+                        // Adiciona a reação
+                        count++;
+                        countElement.textContent = count;
+                        localStorage.setItem(`user_${reactionType}`, 'true');
+                        this.classList.add('active');
+                        
+                        // Remove reações de outros tipos (para permitir apenas uma por usuário)
+                        reactionButtons.forEach(btn => {
+                            if (btn !== button) {
+                                const otherReaction = btn.getAttribute('data-reaction');
+                                if (localStorage.getItem(`user_${otherReaction}`)) {
+                                    const otherCount = btn.querySelector('.reaction-count');
+                                    otherCount.textContent = parseInt(otherCount.textContent) - 1;
+                                    localStorage.removeItem(`user_${otherReaction}`);
+                                    btn.classList.remove('active');
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Atualiza no localStorage
+                    localStorage.setItem(reactionType, count);
+                    
+                    // Efeito visual
+                    this.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 300);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

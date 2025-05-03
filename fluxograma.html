@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estrutura Modular - Reprograma-T / Orby Chat</title>
+  <style>
+    body {
+    /* Futuristic background gradient */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Slightly more futuristic font */
+    line-height: 1.7; /* Improved readability */
+    margin: 0;
+    padding: 40px 20px; /* Increased padding */
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); /* Black to Dark Grey Gradient */
+    color: #ffffff; /* White for general text */
+    min-height: 100vh; /* Ensure gradient covers full height */
+    box-sizing: border-box;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #ffaa00; /* Orange */
+    margin-bottom: 30px; /* Increased margin */
+    text-shadow: 0 0 8px rgba(255, 170, 0, 0.5); /* Subtle glow */
+    font-weight: lighter;
+}
+
+h1 {
+    font-size: 2.5em;
+}
+
+h2 {
+    font-size: 1.8em;
+    margin-top: 40px;
+    text-align: center; /* Ensure this h2 is also centered */
+}
+
+.diagram-container, .structure-details {
+    width: 95%; /* Increased width */
+    max-width: 1000px; /* Increased max-width */
+    margin: 30px auto; /* Adjusted margin */
+    /* Removed background and box-shadow from the main container */
+    padding: 0; /* Removed padding from main container */
+    border-radius: 0; /* Removed border-radius from main container */
+    box-shadow: none; /* Removed box-shadow from main container */
+    border: none; /* Removed border from main container */
+    background: none; /* Removed background from main container */
+
+    text-align: left; /* Align text left */
+
+    /* Inclusive Animation: Fade In - Apply to individual blocks instead */
+    opacity: 1; /* Set to 1 as animation is on child blocks */
+    transform: translateY(0); /* Set to 0 as animation is on child blocks */
+    animation: none; /* Remove animation from parent */
+}
+
+.diagram-container {
+     text-align: center; /* Center image */
+     margin-bottom: 40px; /* Add space below the diagram */
+}
+
+
+/* Inclusive Animation Keyframes */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.diagram-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+    /* Inclusive Animation: Subtle Hover Effect */
+    transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+}
+
+.diagram-container img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 25px rgba(255, 170, 0, 0.6); /* Glow on hover */
+}
+
+.structure-details h2 {
+    margin-bottom: 30px; /* Space below the "Detalhes da Estrutura" heading */
+}
+
+.structure-details .module-block {
+    background-color: #cc5500; /* Dark Orange for boxes */
+    background: linear-gradient(160deg, #cc5500 0%, #a34500 100%); /* Subtle Dark Orange Gradient */
+    padding: 25px; /* Padding for each module block */
+    border-radius: 12px; /* More rounded corners */
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4), 0 0 15px rgba(255, 170, 0, 0.2); /* Enhanced shadow with glow */
+    margin-bottom: 25px; /* Space between module blocks */
+    border: 1px solid #ffaa00; /* Orange border */
+
+    /* Apply Fade In animation to each block */
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Stagger the animation for each block */
+.structure-details .module-block:nth-child(2) { animation-delay: 0.1s; } /* Start after the main heading */
+.structure-details .module-block:nth-child(3) { animation-delay: 0.3s; }
+.structure-details .module-block:nth-child(4) { animation-delay: 0.5s; }
+.structure-details .module-block:nth-child(5) { animation-delay: 0.7s; }
+.structure-details .module-block:nth-child(6) { animation-delay: 0.9s; }
+.structure-details .module-block:nth-child(7) { animation-delay: 1.1s; }
+.structure-details .module-block:nth-child(8) { animation-delay: 1.3s; }
+.structure-details .module-block:nth-child(9) { animation-delay: 1.5s; }
+.structure-details .module-block:nth-child(10) { animation-delay: 1.7s; }
+.structure-details .module-block:nth-child(11) { animation-delay: 1.9s; }
+.structure-details .module-block:nth-child(12) { animation-delay: 2.1s; }
+.structure-details .module-block:nth-child(13) { animation-delay: 2.3s; }
+.structure-details .module-block:nth-child(14) { animation-delay: 2.5s; }
+.structure-details .module-block:nth-child(15) { animation-delay: 2.7s; } /* For the last module */
+
+
+.structure-details .module-block h3 {
+    color: #ffffff; /* White for module titles */
+    margin-top: 0; /* Remove top margin */
+    margin-bottom: 15px; /* Space below the module title */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Subtle separator */
+    padding-bottom: 8px; /* Padding below the separator */
+    font-size: 1.4em; /* Slightly smaller than h2 */
+    font-weight: normal; /* Less bold */
+}
+
+.structure-details .module-block p {
+    margin-bottom: 8px; /* Reduced margin between paragraphs in a block */
+    color: #cccccc; /* Silver text for details */
+}
+
+.structure-details .module-block p strong {
+    color: #ffffff; /* White for strong labels */
+    font-weight: bold;
+}
+
+/* Style for the final paragraph outside blocks */
+.structure-details > p:last-child {
+    margin-top: 30px;
+    text-align: center;
+    font-style: italic;
+    color: #999999; /* Slightly darker grey */
+}
+
+
+/* Improve link appearance if any were present */
+a {
+    color: #ffaa00; /* Orange links */
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+a:hover {
+    color: #ffffff; /* White on hover */
+    text-decoration: underline;
+}
+
+/* Basic responsiveness */
+@media (max-width: 768px) {
+    body {
+        padding: 20px 10px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    .structure-details .module-block {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+     .structure-details .module-block h3 {
+        font-size: 1.2em;
+     }
+}
+  </style>
+</head>
+<body>
+    <h1>Estrutura Modular da Rede Social Reprograma-T / Orby Chat</h1>
+
+    <p>Este documento apresenta uma estrutura modular e didática para a rede social, detalhando suas principais páginas, componentes e fluxos. O objetivo é fornecer uma visão clara de como as diferentes partes da plataforma se interconectam, servindo como um guia para entendimento e desenvolvimento, sem ser um diagrama técnico exaustivo.</p>
+
+    <div class="diagram-container">
+        <h2>Representação Visual da Estrutura Modular</h2>
+        <img src="structure_diagram.png" alt="Diagrama da Estrutura Modular da Rede Social">
+    </div>
+
+    <div class="structure-details">
+        <h2>Detalhes da Estrutura</h2>
+
+        <div class="module-block">
+            <h3>I. Estrutura Geral / Layout Base</h3>
+            <p><strong>Componente:</strong> LayoutPrincipal</p>
+            <p><strong>Função:</strong> Define a estrutura visual comum a quase todas as páginas após o login.</p>
+            <p><strong>Módulos Internos:</strong> Header/BarraSuperior, Sidebar/MenuLateral, AreaConteudoPrincipal, SidebarDireita (Opcional).</p>
+            <p><strong>Dados:</strong> Informações do usuário logado.</p>
+            <p><strong>Ações:</strong> Navegação entre módulos/páginas.</p>
+        </div>
+
+        <div class="module-block">
+            <h3>II. Módulo: Autenticação e Onboarding</h3>
+            <p><strong>Página:</strong> PaginaLogin</p>
+            <p><strong>Função:</strong> Permitir que usuários existentes acessem suas contas.</p>
+            <p><strong>Componentes:</strong> FormularioLogin, BotoesLoginSocial, Link para Cadastro, Link para Recuperação de Senha.</p>
+            <p><strong>Dados:</strong> Interage com a tabela usuarios.</p>
+            <p><strong>Ações:</strong> Validar credenciais, redirecionar para Feed/Dashboard.</p>
+            <p><strong>Página:</strong> PaginaCadastro</p>
+            <p><strong>Função:</strong> Permitir que novos usuários criem contas.</p>
+            <p><strong>Componentes:</strong> FormularioCadastro, BotoesLoginSocial, Link para Login.</p>
+            <p><strong>Dados:</strong> Cria novo registro na tabela usuarios.</p>
+            <p><strong>Ações:</strong> Validar dados, criar conta, redirecionar para Onboarding ou Feed.</p>
+            <p><strong>Página:</strong> PaginaRecuperacaoSenha</p>
+            <p><strong>Função:</strong> Guiar o usuário no processo de redefinição de senha.</p>
+            <p><strong>Componentes:</strong> Formulário de Email, Formulário Nova Senha (após validação por token).</p>
+            <p><strong>Dados:</strong> Interage com usuarios, sistema de tokens de recuperação.</p>
+            <p><strong>Ações:</strong> Enviar email com link, validar token, atualizar senha.</p>
+            <p><strong>Fluxo:</strong> OnboardingInicial</p>
+            <p><strong>Função:</strong> Apresentar a plataforma, coletar interesses iniciais, sugerir conexões/grupos, explicar funcionalidades únicas.</p>
+            <p><strong>Componentes:</strong> PassoBoasVindas, SeletorInteresses, SugestoesIniciais, TutorialGuiado.</p>
+            <p><strong>Dados:</strong> Atualiza usuarios, busca sugestões.</p>
+            <p><strong>Ações:</strong> Guiar o usuário, coletar preferências.</p>
+        </div>
+
+        <div class="module-block">
+            <h3>III. Módulo: Feed e Interações Sociais</h3>
+            <p><strong>Página:</strong> PaginaFeedPrincipal</p>
+            <p><strong>Função:</strong> Exibir o fluxo principal de atualizações e publicações.</p>
+            <p><strong>Componentes:</strong> CaixaCriarPublicacao, ListaPublicacoes (Componente: PublicacaoItem).</p>
+            <p><strong>Dados:</strong> Busca publicações, interage com tabelas: publicacoes, usuarios, amizades, grupos_membros, curtidas, comentarios.</p>
+            <p><strong>Ações:</strong> Criar nova publicação, curtir, comentar, compartilhar, ver detalhes.</p>
+            <p><strong>Componente:</strong> PublicacaoItem</p>
+            <p><strong>Função:</strong> Renderizar uma única publicação no feed.</p>
+            <p><strong>Módulos Internos:</strong> Cabeçalho, Conteúdo (Texto, Imagem, Vídeo, etc.), Ações, Seção de Comentários.</p>
+            <p><strong>Dados:</strong> Dados de uma publicação específica, comentários associados.</p>
+            <p><strong>Ações:</strong> Disparar ações de curtir, comentar, compartilhar.</p>
+            <p><strong>Página:</strong> PaginaPublicacaoDetalhada</p>
+            <p><strong>Função:</strong> Exibir uma única publicação com todos os comentários e interações.</p>
+            <p><strong>Componentes:</strong> PublicacaoItem (completo), ListaComentariosCompleta, FormularioComentario.</p>
+            <p><strong>Dados:</strong> Dados da publicação, todos os comentários.</p>
+            <p><strong>Ações:</strong> Comentar, responder a comentários.</p>
+        </div>
+
+        <div class="module-block">
+            <h3>IV. Módulo: Perfis de Usuário</h3>
+            <p><strong>Página:</strong> PaginaPerfilUsuario</p>
+            <p><strong>Função:</strong> Exibir informações e atividades de um usuário.</p>
+            <p><strong>Componentes:</strong> CabecalhoPerfil, NavegacaoAbasPerfil, ConteudoAbaSelecionada, TermometroEmocionalWidget (Opcional).</p>
+            <p><strong>Dados:</strong> Dados das tabelas: usuarios, publicacoes, amizades, selos_usuario, checkin_emocional.</p>
+            <p><strong>Ações:</strong> Varia conforme visualiza o próprio perfil ou o de outro.</p>
+        </div>
+
+        <div class="module-block">
+            <h3>V. Módulo: Amizades e Conexões</h3>
+            <p><strong>Página:</strong> PaginaAmigos</p>
+            <p><strong>Função:</strong> Listar amigos do usuário.</p>
+            <p><strong>Componentes:</strong> ListaAmigos (Componente: AmigoItem), Filtros/Busca.</p>
+            <p><strong>Dados:</strong> Tabelas: amizades, usuarios.</p>
+            <p><strong>Ações:</strong> Ver perfil do amigo, enviar mensagem, remover amizade.</p>
+            <p><strong>Página:</strong> PaginaSolicitacoesAmizade</p>
+            <p><strong>Função:</strong> Gerenciar solicitações de amizade recebidas e enviadas.</p>
+            <p><strong>Componentes:</strong> ListaSolicitacoesRecebidas, ListaSolicitacoesEnviadas.</p>
+            <p><strong>Dados:</strong> Tabelas: solicitacoes, usuarios.</p>
+            <p><strong>Ações:</strong> Aceitar, recusar, cancelar solicitação.</p>
+            <p><strong>Página:</strong> PaginaExplorarPessoas</p>
+            <p><strong>Função:</strong> Descobrir outros usuários.</p>
+            <p><strong>Componentes:</strong> GridPerfisSugeridos, Filtros de Busca Avançada.</p>
+            <p><strong>Dados:</strong> Tabelas: usuarios, interesses, selos_usuario.</p>
+            <p><strong>Ações:</strong> Visualizar perfil, enviar solicitação de amizade.</p>
+        </div>
+
+        <div class="module-block">
+            <h3>VI. Módulo: Mensagens (Chat)</h3>
+            <p><strong>Página/Componente:</strong> InterfaceChat</p>
+            <p><strong>Função:</strong> Permitir comunicação privada síncrona/assíncrona.</p>
+            <p><strong>Componentes:</strong> ListaConversas, JanelaChatAtiva (Componente: BalaoMensagem), CaixaInputMensagem.</p>
+            <p><strong>Dados:</strong> Tabelas: mensagens (ou chat_mensagens_temp), usuarios, amizades.</p>
+            <p><strong>Ações:</strong> Enviar/receber mensagens, visualizar status, iniciar novas conversas.</p>
+        </div>
+
+        <div class="module-block">
+            <h3>VII. Módulo: K-Play (Música)</h3>
+            <p><strong>Página:</strong> PaginaKPlayDashboard</p>
+            <p><strong>Função:</strong> Hub central para atividades musicais.</p>
+            <p><strong>Componentes:</strong> Acessos rápidos para BibliotecaPessoal, ModoAprendizado, DesafiosAtuais, RankingSemanal, ComunidadeMusical.</p>
+            <p><strong>Página:</strong> PaginaBibliotecaKPlay</p>
+            <p><strong>Função:</strong> Gerenciar músicas do usuário.</p>
+            <p><strong>Componentes:</strong> ListaMusicasUsuario, BotaoUploadMusica.</p>
+            <p><strong>Dados:</strong> Tabela: musicas (filtrada por usuário).</p>
+            <p><strong>Ações:</strong> Upload, tocar, editar detalhes, remover música.</p>
+            <p><strong>Página/Modal:</strong> PlayerKPlayInterativo</p>
+            <p><strong>Função:</strong> Tocar música com letra e acordes sincronizados.</p>
+            <p><strong>Componentes:</strong> VisualizadorLetraAcorde, Controles de Playback, DiagramaAcorde.</p>
+            <p><strong>Dados:</strong> Dados da música selecionada.</p>
+            <p><strong>Ações:</strong> Interagir com o player.</p>
+        </div>
+
+        <div class="module-block">
+            <h3>VIII. Módulo: Livro Conexão (Histórias CNV)</h3>
+            <p><strong>Página:</strong> PaginaLivroConexaoPrincipal</p>
+            <p><strong>Função:</strong> Introduzir o conceito, permitir navegação/criação.</p>
+            <p><strong>Componentes:</strong> ListaPaginasRecentes ou NavegacaoTematica, BotaoCriarPagina.</p>
+            <p><strong>Página:</strong> PaginaLeituraCard</p>
+            <p><strong>Função:</strong> Exibir o conteúdo de uma página/história.</p>
+            <p><strong>Componentes:</strong> CardVisualA5, QuestionarioInterativoCNV.</p>
+            <p><strong>Dados:</strong> Conteúdo da página (livro_paginas).</p>
+            <p><strong>Ações:</strong> Ler, responder questionário, navegar.</p>
+        </div>
+
+        <div class="module-block">
+            <h3>IX. Módulo: Igreja Inclusiva</h3>
+            <p><strong>Página:</strong> PaginaIgrejaPrincipal</p>
+            <p><strong>Função:</strong> Apresentar a comunidade, agenda e recursos.</p>
+            <p><strong>Componentes:</strong> BannerBoasVindas, AgendaCultos, LinksRecursos, AcessoComunidade.</p>
+            <p><strong>Página:</strong> PaginaCulto</p>
+            <p><strong>Função:</strong> Permitir participação/visualização dos cultos.</p>
+            <p><strong>Componentes:</strong> PlayerVideo, ChatAoVivo (se aplicável), AreaTextoLiturgia.</p>
+            <p><strong>Dados:</strong> Stream/vídeo do culto, mensagens do chat.</p>
+            <p><strong>Ações:</strong> Assistir, interagir no chat.</p>
+        </div>
+
+        <div class="module-block">
+            <h3>X. Módulo: Cursos/Aprendizado</h3>
+            <p><strong>Página:</strong> PaginaCatalogoCursos</p>
+            <p><strong>Função:</strong> Listar cursos disponíveis.</p>
+            <p><strong>Componentes:</strong> GridCursos (Componente: CardCurso), Filtros.</p>
+            <p><strong>Dados:</strong> Tabela: cursos.</p>
+            <p><strong>Ações:</strong> Visualizar detalhes, inscrever-se.</p>
+            <p><strong>Página:</strong> PaginaCursoDetalhes</p>
+            <p><strong>Função:</strong> Exibir informações, módulos e progresso de um curso.</p>
+            <p><strong>Componentes:</strong> DescricaoCurso, ListaModulos, BarraProgresso, AreaDiscussaoCurso.</p>
+            <p><strong>Dados:</strong> Dados do curso, modulos, aulas, inscricoes_cursos.</p>
+            <p><strong>Ações:</strong> Iniciar/continuar curso, participar de discussões.</p>
+        </div>
+
+        <div class="module-block">
+            <h3>XI. Módulo: Biblioteca Colaborativa</h3>
+            <p><strong>Página:</strong> PaginaBibliotecaPrincipal</p>
+            <p><strong>Função:</strong> Buscar e acessar recursos compartilhados.</p>
+            <p><strong>Componentes:</strong> BarraBuscaBiblioteca, ListaRecursos, Filtros.</p>
+            <p><strong>Dados:</strong> Tabela: biblioteca_recursos.</p>
+            <p><strong>Ações:</strong> Buscar, filtrar, visualizar recurso.</p>
+        </div>
+
+        <div class="module-block">
+            <h3>XII. Módulo: Segurança e Moderação</h3>
+            <p><strong>Componente:</strong> BotaoDenunciar</p>
+            <p><strong>Função:</strong> Permitir que usuários reportem conteúdo/comportamento inadequado.</p>
+            <p><strong>Ações:</strong> Abre modal FormularioDenuncia, envia dados para moderação (tabela denuncias).</p>
+            <p><strong>Componente:</strong> BotaoBloquear</p>
+            <p><strong>Função:</strong> Impedir interação com um usuário específico.</p>
+            <p><strong>Ações:</strong> Adiciona registro na tabela bloqueados.</p>
+            <p><strong>Página:</strong> PaginaMapaVioleta</p>
+            <p><strong>Função:</strong> Visualizar e contribuir com mapeamento de segurança.</p>
+            <p><strong>Componentes:</strong> MapaInterativo, FormularioRelatoLocal.</p>
+            <p><strong>Dados:</strong> Tabela: mapa_violeta_pontos.</p>
+            <p><strong>Ações:</strong> Navegar no mapa, adicionar/avaliar ponto.</p>
+        </div>
+
+        <div class="module-block">
+            <h3>XIII. Módulo: Configurações</h3>
+            <p><strong>Página:</strong> PaginaConfiguracoes</p>
+            <p><strong>Função:</strong> Centralizar todas as opções de personalização e gerenciamento da conta.</p>
+            <p><strong>Componentes:</strong> MenuLateralConfiguracoes, FormularioConfiguracaoAtiva.</p>
+            <p><strong>Dados:</strong> Tabela: usuarios e outras tabelas de configuração.</p>
+            <p><strong>Ações:</strong> Salvar alterações nas configurações.</p>
+        </div>
+
+        <div class="module-block">
+            <h3>XIV. Elementos Transversais</h3>
+            <p><strong>Notificações</strong></p>
+            <p><strong>Componente:</strong> ListaNotificacoes. Sistema para informar sobre novas amizades, mensagens, interações, etc.</p>
+            <p><strong>Dados:</strong> Tabela: notificacoes.</p>
+            <p><strong>Busca Global</strong></p>
+            <p><strong>Componente:</strong> no Header para buscar usuários, grupos, conteúdo, etc.</p>
+            <p><strong>Termômetro Emocional</strong></p>
+            <p><strong>Widget (Componente:</strong> SeletorEmocional) para check-in rápido.</p>
+            <p><strong>Dados:</strong> Tabela: checkin_emocional.</p>
+            <p><strong>Modo Foco Silencioso</strong></p>
+            <p><strong>Opção:</strong> Uma opção nas configurações ou um toggle rápido para ativar a interface de baixa estimulação.</p>
+        </div>
+
+        <p>Esta estrutura detalhada e modular visa organizar o desenvolvimento, permitir a reutilização de componentes e facilitar a manutenção e evolução da plataforma Reprograma-T / Orby Chat.</p>
+    </div>
+
+</body>
+</html>

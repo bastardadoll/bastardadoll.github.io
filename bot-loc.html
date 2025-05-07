@@ -1,0 +1,1798 @@
+
+<script id="tour-data-script">
+  // 💬 Definição da árvore de diálogo (os passos do tour)
+  // Esta variável será lida e utilizada pelo script principal.
+  const tourStepsDefinition = {
+    // --- Passo 0: Boas-vindas ---
+    'step_0_welcome': {
+        id: 'step_0_welcome',
+        text: "Olá! 👋 Sou seu guia neste Simulador de Guitarra. Vamos dar uma olhada rápida nas funcionalidades? Clique em 'Próximo' para começar!",
+        robotImage: 'https://bastardadoll.github.io/bot-happy.png', // 🤖 Feliz
+        robotPosition: 'center-screen',
+        nextStepId: 'step_1_main_interaction',
+        prevStepId: null,
+        isSkippable: true, // 💡 Poderia ter um botão "Pular Tour"
+    },
+
+    // --- Passo 1: Área Principal de Interação ---
+    'step_1_main_interaction': {
+        id: 'step_1_main_interaction',
+        text: "Esta é a área principal! 🎸 Aqui você vê o braço da guitarra e as cordas. Clique e arraste sobre as cordas para tocá-las!",
+        robotImage: 'https://bastardadoll.github.io/bot-idle.png',
+        targetElementId: 'strings',
+        highlightStyle: 'border: 3px dashed #00FF00; box-shadow: 0 0 15px #00FF00; border-radius: 5px;',
+        robotPosition: 'above-element',
+        nextStepId: 'step_2_side_panel',
+        prevStepId: 'step_0_welcome',
+        onEnter: function(targetElement) {
+            if (targetElement) targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    },
+
+    // --- Passo 2: Painel Lateral de Controles ---
+    'step_2_side_panel': {
+        id: 'step_2_side_panel',
+        text: "À direita, temos o painel de controles. ⚙️ Você pode expandi-lo ou minimizá-lo usando este botão.",
+        robotImage: 'https://bastardadoll.github.io/bot-thinking.png',
+        targetElementId: 'collapse-side-btn',
+        highlightStyle: 'border: 3px solid orange; border-radius: 10px 0 0 10px; padding: 2px; box-shadow: 0 0 10px orange;',
+        robotPosition: 'left-of-element',
+        nextStepId: 'step_3_upload_controls',
+        prevStepId: 'step_1_main_interaction',
+        onEnter: function(targetElement) {
+            const controlsContainer = document.getElementById('controls-container');
+            if (controlsContainer && controlsContainer.classList.contains('collapsed')) {
+                targetElement.click(); // Clica para expandir
+            }
+            if (targetElement) targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    },
+
+    // --- Passo 3: Controles de Upload no Painel Lateral ---
+    'step_3_upload_controls': {
+        id: 'step_3_upload_controls',
+        text: "Aqui em cima no painel, você pode carregar seus próprios sons para as cordas ou um som padrão global. 🎶 Também é possível limpar os sons carregados ou definir como eles são usados.",
+        robotImage: 'https://bastardadoll.github.io/bot-idle.png',
+        targetElementId: 'controls-container', // O container geral
+        highlightSelector: '.upload-controls', // Seletor CSS para o destaque real
+        highlightStyle: 'outline: 3px dotted #FFFF00; padding:5px; background-color: rgba(255,255,0,0.1); border-radius: 5px;',
+        robotPosition: 'left-of-element',
+        nextStepId: 'step_4_tuning_controls_area',
+        prevStepId: 'step_2_side_panel',
+        onEnter: function() {
+            const controlsContainer = document.getElementById('controls-container');
+            if (controlsContainer && controlsContainer.classList.contains('collapsed')) {
+                document.getElementById('collapse-side-btn').click();
+            }
+            if (controlsContainer) controlsContainer.scrollTop = 0; // Scroll para o topo do painel
+        }
+    },
+
+    // --- Passo 4: Área dos Controles de Afinação (Geral) ---
+    'step_4_tuning_controls_area': {
+        id: 'step_4_tuning_controls_area',
+        text: "Mais abaixo neste painel, você encontrará os controles de afinação para cada corda e botões para carregar sons individuais por corda. 🎼",
+        robotImage: 'https://bastardadoll.github.io/bot-happy.png',
+        targetElementId: 'controls-container',
+        highlightSelector: '.tuning-control', // Irá destacar todos os .tuning-control
+        highlightStyle: 'background-color: rgba(0, 128, 255, 0.2); border: 1px dashed #0080FF; padding: 3px; border-radius: 5px;',
+        robotPosition: 'center-left-of-element',
+        nextStepId: 'step_5_keybindings',
+        prevStepId: 'step_3_upload_controls',
+        onEnter: function() {
+            const controlsContainer = document.getElementById('controls-container');
+            if (controlsContainer && controlsContainer.classList.contains('collapsed')) {
+                document.getElementById('collapse-side-btn').click();
+            }
+            const firstTuningControl = controlsContainer ? controlsContainer.querySelector('.tuning-control') : null;
+            if (firstTuningControl) {
+                firstTuningControl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if(controlsContainer) {
+                controlsContainer.scrollTop = controlsContainer.scrollHeight / 3;
+            }
+        }
+    },
+
+    // --- Passo 5: Botão de Atalhos ---
+    'step_5_keybindings': {
+        id: 'step_5_keybindings',
+        text: "Quer personalizar os atalhos de teclado para tocar as cordas? Clique neste botão! ⌨️",
+        robotImage: 'https://bastardadoll.github.io/bot-thinking.png',
+        targetElementId: 'keybindings-button',
+        highlightStyle: 'transform: scale(1.1); box-shadow: 0 0 10px blue; border-radius: 3px;',
+        robotPosition: 'bottom-of-element',
+        nextStepId: 'step_6_bottom_panel',
+        prevStepId: 'step_4_tuning_controls_area',
+        onEnter: function(targetElement) {
+            const controlsContainer = document.getElementById('controls-container');
+            if (controlsContainer && controlsContainer.classList.contains('collapsed')) {
+                document.getElementById('collapse-side-btn').click();
+            }
+            if (targetElement) targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    },
+
+    // --- Passo 6: Painel Inferior de Efeitos ---
+    'step_6_bottom_panel': {
+        id: 'step_6_bottom_panel',
+        text: "Aqui embaixo temos o painel de efeitos! 🔊 Use este botão para mostrá-lo ou escondê-lo.",
+        robotImage: 'https://bastardadoll.github.io/bot-idle.png',
+        targetElementId: 'collapse-bottom-btn',
+        highlightStyle: 'border: 3px solid hotpink; border-radius: 10px 10px 0 0; padding: 2px; box-shadow: 0 0 10px hotpink;',
+        robotPosition: 'above-element',
+        nextStepId: 'step_7_effects_pedals',
+        prevStepId: 'step_5_keybindings',
+        onEnter: function(targetElement) {
+            const bottomControls = document.getElementById('bottom-controls-container');
+            if (bottomControls && bottomControls.classList.contains('collapsed')) {
+                targetElement.click(); // Clica para expandir
+            }
+            if (targetElement) targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    },
+
+    // --- Passo 7: Pedais de Efeito ---
+    'step_7_effects_pedals': {
+        id: 'step_7_effects_pedals',
+        text: "Com o painel aberto, você verá vários 'pedais' de efeito como Distorção, Overdrive, Reverb e mais! Gire os knobs para modelar seu som. 🎛️",
+        robotImage: 'https://bastardadoll.github.io/bot-happy.png',
+        targetElementId: 'bottom-controls-container',
+        highlightSelector: '.control-group', // Irá destacar todos os grupos de controle
+        highlightStyle: 'background-color: rgba(128, 0, 128, 0.1); border: 1px dashed purple; padding:3px; border-radius: 5px;',
+        robotPosition: 'center-above-element',
+        nextStepId: 'step_8_warning_message',
+        prevStepId: 'step_6_bottom_panel',
+        onEnter: function(targetElement) {
+            const bottomControls = document.getElementById('bottom-controls-container');
+            if (bottomControls && bottomControls.classList.contains('collapsed')) {
+                document.getElementById('collapse-bottom-btn').click();
+            }
+            if (targetElement) targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    },
+
+    // --- Passo 8: Mensagem de Aviso ---
+    'step_8_warning_message': {
+        id: 'step_8_warning_message',
+        text: "Ah, e muito importante! 📢 Níveis altos de distorção podem gerar sons bem altos. Fique de olho no seu volume! Você pode dispensar este aviso clicando em 'Understood'.",
+        robotImage: 'https://bastardadoll.github.io/bot-alert.png',
+        targetElementId: 'warning-message',
+        highlightStyle: 'border: 3px solid red; padding: 5px; box-shadow: 0 0 10px red;',
+        robotPosition: 'above-element',
+        nextStepId: 'step_9_final',
+        prevStepId: 'step_7_effects_pedals',
+        onEnter: function(targetElement) {
+            if (targetElement && targetElement.style.display === 'none') {
+                targetElement.style.display = 'flex';
+            }
+            if (targetElement) targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    },
+
+    // --- Passo 9: Finalização ---
+    'step_9_final': {
+        id: 'step_9_final',
+        text: "É isso! 🎉 Agora você conhece as principais áreas. Divirta-se explorando e criando seus sons! Se precisar de ajuda novamente, pode clicar no botão '🤖 Tour Guiado!' a qualquer momento.",
+        robotImage: 'https://bastardadoll.github.io/bot-celebrate.png',
+        robotPosition: 'center-screen',
+        nextStepId: null,
+        prevStepId: 'step_8_warning_message',
+        onEnter: function() {
+            // A função clearAllHighlights() será chamada automaticamente ao finalizar o tour.
+        }
+    }
+  };
+</script>
+```
+
+---
+
+**Conteúdo de `index.html` (Seu arquivo principal):**
+
+```html
+<!DOCTYPE html>
+<html lang="pt-br">
+<head> <!-- 💡 Adicionei a tag <head> que estava faltando -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ♻️ Configura a viewport para responsividade em dispositivos móveis. -->
+  <title>Guitar String Simulator</title> <!-- 📝 Título da página exibido na aba do navegador. -->
+  <style>
+    /* --- ESTILOS GERAIS --- */
+    html, body {
+      height: 100%; /* 📏 Garante que o HTML e o corpo ocupem toda a altura da viewport. */
+      margin: 0; /* 🚫 Remove margens padrão do navegador. */
+      overflow: hidden; /* 👁️ Esconde barras de rolagem para um visual de aplicativo. */
+      touch-action: none; /* 👆 Desabilita ações de toque padrão do navegador (como zoom) para melhor interação com o canvas. */
+      background: #222; /* 🎨 Cor de fundo escura para a página. */
+      position: relative; /* 📐 Necessário para posicionamento absoluto de elementos filhos. */
+      box-sizing: border-box; /* 📦 Modelo de caixa: padding e border não aumentam o tamanho total do elemento. */
+      font-family: sans-serif; /* 🔡 Fonte padrão para consistência */
+    }
+
+    /* --- LINK EXTERNO --- */
+    #cinder-link { /* 🔗 Se for usar, descomente e adicione ao body */
+      /* position: absolute;
+      top: 5px; left: 10px; z-index: 10; font-size: 13px; color: #ffd38c;
+      background: rgba(70, 30, 0, 0.92); border-radius: 6px; text-decoration: none;
+      padding: 5px 12px 4px 9px; transition: background 0.18s, color 0.18s, top 0.3s, left 0.3s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.10); border: 1px solid #a26927; pointer-events: auto; */
+    }
+    /* #cinder-link:hover { background: #ffe7b8; color: #935e0f; text-decoration: underline; } */
+
+    /* --- MENSAGEM DE AVISO --- */
+    #warning-message {
+      position: absolute; /* 📍 Posicionamento fixo. */
+      left: 0; right: 0; width: 100%; background-color: #ff8c00; /* 🎨 Cor de fundo laranja para aviso. */
+      color: white; text-align: center; padding: 6px 10px; font-size: 13px;
+      z-index: 300; /* 🔝 Fica bem acima de outros elementos. */
+      box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid #cc7000; border-top: 1px solid #cc7000; pointer-events: auto;
+      border-radius: 0; min-height: 36px;
+      transition: bottom 0.35s cubic-bezier(.53,0,.3,1); /* ✨ Animação suave para a propriedade 'bottom'. */
+      will-change: bottom; /* 🚀 Otimização de performance para a animação de 'bottom'. */
+    }
+    #warning-message span { flex-grow: 1; text-align: center; margin-right: 10px; }
+    #warning-understood-button {
+      padding: 4px 8px; background-color: #e67e00; color: white; border: 1px solid #cc7000;
+      border-radius: 3px; cursor: pointer; font-size: 11px; flex-shrink: 0;
+    }
+    #warning-understood-button:hover { background-color: #d35400; }
+
+    /* --- CANVAS DAS CORDAS --- */
+    canvas#strings { /* Especificidade para o canvas das cordas */
+      display: block; height: 100%; box-sizing: border-box; position: absolute;
+      top: 0; left: 0; z-index: 1; background-color: transparent;
+      transition: width 0.35s cubic-bezier(.53,0,.3,1);
+    }
+
+    /* --- BRAÇO DA GUITARRA (VISUAL) --- */
+    #guitar-neck {
+      position: absolute; left: 0; z-index: 0; overflow: hidden;
+      transition: width 0.35s cubic-bezier(.53,0,.3,1);
+    }
+    #neck-svg { display: block; }
+    #neck-rect { width: 100%; height: 100%; }
+
+    /* --- CONTÊINER DE CONTROLES LATERAIS --- */
+    .controls-container {
+      position: absolute; right: 0; top: 0; width: 150px; pointer-events: none;
+      background: linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, #8B4513, #A0522D 20%, #CD853F 50%, #DEB887 52%, #CD853F 54%, #A0522D 80%, #8B4513);
+      background-size: 5px 100%, 100% 100%; box-shadow: inset 2px 0 5px rgba(0, 0, 0, 0.4);
+      overflow-y: auto; overflow-x: hidden; padding: 10px; box-sizing: border-box;
+      transition: right 0.35s cubic-bezier(.53,0,.3,1), width 0.35s cubic-bezier(.53,0,.3,1), opacity 0.22s, transform 0.35s cubic-bezier(.53,0,.3,1);
+      will-change: right, width, opacity, transform;
+    }
+    .controls-container.collapsed {
+      right: -145px; width: 5px !important; opacity: 0.06; pointer-events: none; transform: translateX(0);
+    }
+    .controls-container:not(.collapsed) > * { opacity: 1; pointer-events: auto; transition: opacity 0.25s; }
+
+    /* --- CONTROLES DE UPLOAD DE ÁUDIO --- */
+    .upload-controls {
+      position: relative; margin-bottom: 10px; width: 100%; text-align: center;
+      pointer-events: auto; box-sizing: border-box;
+    }
+    .upload-button {
+      padding: 6px 8px; background-color: #654321; color: #f0e6d2; border: 1px solid #4d3319;
+      border-radius: 3px; cursor: pointer; font-family: sans-serif; font-size: 11px;
+      display: block; width: calc(100% - 10px); margin-left: auto; margin-right: auto;
+      box-sizing: border-box; text-align: center; margin-bottom: 15px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .upload-button:hover { background-color: #7b5833; }
+    .upload-button.sound-loaded { background-color: #8f6d4c; border-color: #684e30; }
+
+    /* --- GRUPO DE CONTROLES (EX: DISTORTION, VOLUME) --- */
+    /* .controls-container .control-group { ... }  Estilo já aplicado pelos seletores mais específicos */
+
+    /* Estilos comuns para cada controle de efeito (knob + input) */
+    .distortion-control, .overdrive-control, .boost-control, .treble-control, .bass-control,
+    .volume-control, .limiter-control, .gain-control, .mid-control, .reverb-control,
+    .chorus-control, .delay-control {
+      margin-bottom: 10px; z-index: 10; width: 100%; max-width: 130px; text-align: center;
+      pointer-events: auto; box-sizing: border-box; background: rgba(50, 20, 0, 0.6);
+      padding: 8px 5px; border-radius: 4px; border: 1px solid rgba(255, 255, 255, 0.1);
+      display: grid; grid-template-columns: 1fr 45px; grid-template-rows: auto auto;
+      gap: 4px 5px; align-items: center; color: #f0e6d2; font-size: 9px;
+    }
+    /* Labels dos controles de efeito */
+    .distortion-control label, .overdrive-control label, .boost-control label, .treble-control label,
+    .bass-control label, .volume-control label, .limiter-control label, .gain-control label,
+    .mid-control label, .reverb-control label, .chorus-control label, .delay-control label {
+      grid-column: 1 / -1; font-family: sans-serif; font-size: 10px; color: #f0e6d2;
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.5); text-align: left;
+    }
+    /* Knob (dial) visual */
+    .control-dial {
+      grid-column: 1 / 2; grid-row: 2 / 3; width: 40px; height: 40px;
+      background: linear-gradient(145deg, #a0522d, #654321); border-radius: 50%;
+      border: 1px solid #4d3319; box-shadow: inset 0 0 5px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.4);
+      position: relative; cursor: ns-resize; justify-self: center; touch-action: none; user-select: none;
+      -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
+    }
+    .dial-indicator {
+      position: absolute; top: 2px; left: 50%; width: 2px; height: 8px; background-color: #f0e6d2;
+      transform-origin: 50% 18px; transform: translateX(-50%); border-radius: 1px; pointer-events: none;
+    }
+    /* Input numérico ao lado do knob */
+    .control-value-input {
+      width: 45px; padding: 1px 3px; font-family: sans-serif; font-size: 9px; color: #f0e6d2;
+      background-color: rgba(0,0,0,0.3); border: 1px solid #654321; border-radius: 2px;
+      text-align: right; -moz-appearance: textfield; grid-column: 2 / 3; grid-row: 2 / 3;
+      box-sizing: border-box; align-self: center;
+    }
+    .control-value-input::-webkit-outer-spin-button,
+    .control-value-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+    /* --- CONTROLE DE AFINAÇÃO INDIVIDUAL POR CORDA --- */
+    .tuning-control {
+      position: absolute; display: grid; grid-template-columns: 1fr auto auto;
+      grid-template-rows: auto auto; gap: 3px 5px; align-items: center; z-index: 5;
+      transform: translateY(-50%); pointer-events: auto; background: rgba(50, 20, 0, 0.6);
+      padding: 5px; border-radius: 4px; box-sizing: border-box; border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .tuning-control label {
+      font-family: sans-serif; font-size: 9px; color: #f0e6d2; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis; max-width: 100%; text-align: left;
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.5); grid-column: 1 / 2; grid-row: 1 / 2;
+    }
+    .tuning-control input[type="range"] {
+      cursor: pointer; margin: 0; height: 15px; grid-column: 1 / 2; grid-row: 2 / 3; width: 100%;
+    }
+    .tuning-value-input { /* Classe já definida, aqui mais específica para tuning */
+       width: 50px; font-size: 8px; grid-column: 2 / 3; grid-row: 2 / 3;
+       /* Estilos restantes são herdados ou já definidos em .control-value-input */
+    }
+    .tuning-control .string-upload-button {
+       font-size: 9px; padding: 2px 4px; margin-bottom: 0; white-space: nowrap;
+       display: inline-block; width: auto; grid-column: 2 / 4; grid-row: 1 / 2;
+       align-self: center; justify-self: end;
+    }
+
+    /* --- ESTILIZAÇÃO DE INPUTS DO TIPO RANGE (SLIDERS) --- */
+    input[type=range] {
+      -webkit-appearance: none; appearance: none; height: 3px; background: #a0522d;
+      border-radius: 3px; border: 1px solid #654321;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none; width: 12px; height: 12px; background: #DEB887;
+      border-radius: 50%; cursor: pointer; border: 1px solid #8B4513; box-shadow: 0 0 2px rgba(0,0,0,0.5);
+    }
+    input[type=range]::-moz-range-thumb {
+      width: 12px; height: 12px; background: #DEB887; border-radius: 50%;
+      cursor: pointer; border: 1px solid #8B4513; box-shadow: 0 0 2px rgba(0,0,0,0.5);
+    }
+
+    /* --- (REMOVIDO) .bottom-controls --- */
+
+    /* --- TOGGLE PARA CAMADAS DE SOM PERSONALIZADO --- */
+    .custom-sound-toggle {
+      margin-bottom: 10px; text-align: left; font-family: sans-serif; font-size: 12px;
+      color: #f0e6d2; background: none; padding: 0; display: block; width: 100%; box-sizing: border-box;
+    }
+    .custom-sound-toggle label { cursor: pointer; font-weight: normal; }
+    .custom-sound-toggle input[type="checkbox"] { vertical-align: middle; margin-right: 4px; }
+    #customSoundLayeringLabel { vertical-align: middle; }
+
+    /* --- OVERLAY DE CONFIGURAÇÃO DE ATALHOS DE TECLADO --- */
+    #keybinding-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7);
+      display: flex; align-items: center; justify-content: center; z-index: 1000; /* Z-index maior para o overlay */
+      pointer-events: auto;
+    }
+    #keybinding-overlay.hidden { display: none; }
+    #keybinding-overlay .overlay-content {
+      background: #333; padding: 20px; border-radius: 8px; width: 300px;
+      max-width: 90%; box-sizing: border-box;
+    }
+    #keybinding-overlay h2 {
+      margin: 0 0 10px 0; color: #f0e6d2; font-family: sans-serif; font-size: 16px; text-align: center;
+    }
+    #keybinding-instructions { color: #f0e6d2; text-align: center; margin: 10px 0; min-height: 18px; }
+    #keybindings-list { list-style: none; padding: 0; margin: 0; }
+    #keybindings-list li {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+      color: #f0e6d2; font-family: sans-serif; font-size: 14px;
+    }
+    #keybindings-list li .key-name { font-weight: bold; min-width: 40px; text-align: center; }
+    #keybindings-list li button { padding: 4px 8px; font-size: 12px; }
+
+    /* --- BOTÃO PARA ABRIR CONFIGURAÇÕES DE ATALHOS --- */
+    #keybindings-button {
+      z-index: 10; /* Z-index relativo ao pai (.controls-container) */
+      pointer-events: auto; position: relative; background-color: #654321; color: #f0e6d2;
+      border: 1px solid #4d3319; border-radius: 3px; font-size: 11px; font-family: sans-serif;
+      margin: 10px auto 5px auto; padding: 6px 8px; cursor: pointer; transition: background 0.18s, color 0.18s;
+      width: calc(100% - 10px); display: block;
+    }
+    #keybindings-button:hover { background-color: #7b5833; color: #ffd38c; }
+
+    /* --- BOTÕES DE COLAPSAR/EXPANDIR PAINÉIS --- */
+    .collapse-btn {
+      position: absolute; background: #8B4513; color: #ffd38c; border: none;
+      font-size: 17px; font-family: sans-serif; width: 32px; height: 32px;
+      z-index: 200; /* Elevado para ficar sobre os painéis */
+      cursor: pointer; box-shadow: 1px 2px 6px rgba(0,0,0,0.20); opacity: 1;
+      transition: background 0.22s, color 0.22s, opacity 0.25s, right 0.35s cubic-bezier(.53,0,.3,1), bottom 0.35s cubic-bezier(.53,0,.3,1), transform 0.35s cubic-bezier(.53,0,.3,1), top 0.35s cubic-bezier(.53,0,.3,1);
+      display: flex; align-items: center; justify-content: center; user-select: none; pointer-events: auto !important;
+    }
+    .collapse-btn-side { border-radius: 10px 0 0 10px; }
+    .collapse-btn-side.collapsed { right: 0 !important; opacity: 0.55; }
+    .collapse-btn-bottom {
+      left: 50%; transform: translateX(-50%); border-radius: 10px 10px 0 0; width: 40px;
+    }
+    .collapse-btn-bottom.collapsed { opacity: 0.55; }
+    /* #collapse-side-btn, #collapse-bottom-btn já tem .collapse-btn, z-index 200 é suficiente */
+    .collapse-btn:hover { background: #DEB887; color: #935e0f; }
+
+    /* --- CONTÊINER DE CONTROLES INFERIORES (EFEITOS) --- */
+    #bottom-controls-container {
+      position: absolute; bottom: 0; left: 0; width: 100%; min-height: 60px; height: auto;
+      background: linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, #8B4513, #A0522D 20%, #CD853F 50%, #DEB887 52%, #CD853F 54%, #A0522D 80%, #8B4513);
+      background-size: 5px 100%, 100% 100%; border-top: 2px solid #5a381a; box-sizing: border-box;
+      z-index: 15; padding: 10px; display: flex; flex-wrap: wrap; align-items: flex-start;
+      justify-content: center; gap: 10px; overflow-y: auto; transform-origin: bottom center;
+      transition: transform 0.35s cubic-bezier(.53,0,.3,1), opacity 0.22s, height 0.30s, min-height 0.30s;
+      will-change: transform, opacity, height, min-height;
+    }
+    #bottom-controls-container.collapsed {
+      transform: translateY(calc(100% - 15px)); opacity: 0.11; pointer-events: none;
+      min-height: 15px !important; height: 15px !important; overflow: hidden;
+    }
+    #bottom-controls-container.collapsed > * { opacity: 0 !important; pointer-events: none !important; transition: opacity 0.25s; }
+    #bottom-controls-container:not(.collapsed) > * { opacity: 1; transition: opacity 0.21s; }
+
+    /* --- ESTILOS DO ROBÔ GUIA --- */
+    #tour-bot-container {
+        display: none; /* 🤖 Começa escondido */
+        position: fixed; /* 📍 Fixo na tela */
+        z-index: 10001; /* 🔝 Acima de tudo, até do overlay de keybindings */
+        padding: 10px;
+        background-color: rgba(40, 40, 40, 0.85); /* Fundo semitransparente para o contêiner */
+        border: 1px solid #DEB887;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        max-width: 300px; /* Largura máxima para o diálogo */
+        color: #f0e6d2;
+        transition: top 0.3s ease-out, left 0.3s ease-out, opacity 0.2s; /* ✨ Transições suaves */
+    }
+    #tour-bot-image {
+        width: 80px; /* 📏 Tamanho da imagem do robô */
+        height: auto;
+        margin-bottom: 10px;
+        display: block; /* Para centralizar com margin auto se necessário */
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #tour-bot-dialog {
+        text-align: center; /* Centraliza o texto e botões dentro do diálogo */
+    }
+    #tour-bot-text {
+        margin-bottom: 15px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    #tour-bot-dialog button {
+        background-color: #654321;
+        color: #f0e6d2;
+        border: 1px solid #4d3319;
+        border-radius: 3px;
+        padding: 8px 12px;
+        margin: 0 5px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: background-color 0.2s;
+    }
+    #tour-bot-dialog button:hover {
+        background-color: #7b5833;
+    }
+    #start-tour-button { /* Estilo para o botão que inicia o tour */
+        position: fixed;
+        bottom: 20px; /* Ajustar conforme necessário */
+        left: 20px;  /* Ajustar conforme necessário */
+        z-index: 5000;
+        padding: 10px 15px;
+        background-color: #DEB887;
+        color: #654321;
+        border: 1px solid #654321;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    #start-tour-button:hover {
+        background-color: #ffe7b8;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- 🔗 Link para outros projetos do autor (se for usar) -->
+  <!-- <a id="cinder-link" href="https://websim.ai/@Cinder" target="_blank" rel="noopener noreferrer">
+    Click here for more fun projects by me
+  </a> -->
+
+  <!-- ⚠️ Mensagem de aviso sobre volume alto com distorção -->
+  <div id="warning-message">
+    <span>⚠️ Warning: High distortion levels can produce loud sounds! Adjust volume accordingly.</span>
+    <button id="warning-understood-button">Understood</button>
+  </div>
+
+  <!-- 🎸 Contêiner para o visual do braço da guitarra -->
+  <div id="guitar-neck">
+    <svg id="neck-svg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="woodGrain" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#A0522D; stop-opacity:1" />
+          <stop offset="50%" style="stop-color:#8B4513; stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#A0522D; stop-opacity:1" />
+        </linearGradient>
+        <linearGradient id="fretShine" x1="0%" y1="0%" x2="0%" y2="100%">
+           <stop offset="0%" stop-color="#E0E0E0" />
+           <stop offset="50%" stop-color="#B0B0B0" />
+           <stop offset="100%" stop-color="#E0E0E0" />
+        </linearGradient>
+        <pattern id="woodPattern" patternUnits="userSpaceOnUse" width="20" height="500" patternTransform="rotate(5)">
+          <image href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSI1MDAiPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWluIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjUwMCI+CiAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzgzMzkxOCIvPgogIDxzdG9wIG9mZnNldD0iNTAlIiBzdG9wLWNvbG9yPSIjYTM2MjI3Ii8+CiAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjODMzOTE4Ii8+CjwvbGluZWFyR3JhZGllbnQ+CjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSI1MDAiIGZpbGw9InVybCgjZ3JhaW4pIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjUwMCIgeD0iNSIgZmlsbD0icmdiYSgwLDAsMCwwLjA4KSIvPgo8cmVjdCB3aWR0aD0iMSIgaGVpZ2h0PSI1MDAiIHg9IjEzIiBmaWxsPSJyZ2JhKDAsMCwwLDAuMDUpIi8+Cjwvc3ZnPgo=" x="0" y="0" width="20" height="500" />
+       </pattern>
+      </defs>
+      <rect id="neck-rect" width="100%" height="100%" fill="url(#woodPattern)" />
+      <g id="frets"></g>
+      <g id="fret-markers"></g>
+    </svg>
+  </div>
+
+  <!-- 🎨 Canvas onde as cordas são desenhadas e interagem com o usuário -->
+  <canvas id="strings"></canvas>
+
+  <!-- ↔️ Botão para colapsar/expandir o painel de controles lateral -->
+  <button id="collapse-side-btn" class="collapse-btn collapse-btn-side" aria-label="Minimize Settings">&lt;</button>
+
+  <!-- ⚙️ Contêiner para os controles de afinação, upload de som e atalhos -->
+  <div class="controls-container" id="controls-container">
+    <div class="upload-controls">
+      <button id="clear-sounds-button" type="button" class="upload-button">Clear Custom Sounds</button>
+      <label for="global-audio-upload" class="upload-button">Upload Default Sound</label>
+      <input type="file" id="global-audio-upload" accept="audio/*" style="display: none;">
+      <div id="custom-sound-mode-toggle" class="custom-sound-toggle">
+        <label>
+          <input type="checkbox" id="customSoundLayeringCheckbox" checked>
+          <span id="customSoundLayeringLabel">Layer custom sound over algorithm</span>
+        </label>
+      </div>
+    </div>
+    <button id="keybindings-button" type="button" class="upload-button">Key Bindings</button>
+  </div>
+
+  <!-- ↕️ Botão para colapsar/expandir o painel de controles inferior (efeitos) -->
+  <button id="collapse-bottom-btn" class="collapse-btn collapse-btn-bottom" aria-label="Minimize Effects">&#94;</button>
+
+  <!-- 🎛️ Contêiner para os controles de efeitos de áudio (pedais) -->
+  <div id="bottom-controls-container" class="bottom-controls">
+     <div class="distortion-control control-group">
+       <label for="distortion-dial">Distortion</label>
+       <div class="control-dial" id="distortion-dial" data-min="0" data-max="100" data-step="1" data-value="0">
+         <div class="dial-indicator"></div>
+       </div>
+       <input type="number" id="distortion-value-input" class="control-value-input" min="0" max="100" value="0" step="1">
+     </div>
+     <div class="overdrive-control control-group">
+       <label for="overdrive-dial">Overdrive</label>
+       <div class="control-dial" id="overdrive-dial" data-min="0" data-max="100" data-step="1" data-value="0">
+         <div class="dial-indicator"></div>
+       </div>
+       <input type="number" id="overdrive-value-input" class="control-value-input" min="0" max="100" value="0" step="1">
+     </div>
+     <div class="boost-control control-group">
+       <label for="boost-dial">Boost</label>
+       <div class="control-dial" id="boost-dial" data-min="0" data-max="200" data-step="1" data-value="100">
+         <div class="dial-indicator"></div>
+       </div>
+       <input type="number" id="boost-value-input" class="control-value-input" min="0" max="200" value="100" step="1">
+     </div>
+     <div class="treble-control control-group">
+       <label for="treble-dial">Treble</label>
+       <div class="control-dial" id="treble-dial" data-min="-40" data-max="40" data-step="1" data-value="0">
+         <div class="dial-indicator"></div>
+       </div>
+       <input type="number" id="treble-value-input" class="control-value-input" min="-40" max="40" value="0" step="1"> dB
+     </div>
+     <div class="bass-control control-group">
+       <label for="bass-dial">Bass</label>
+       <div class="control-dial" id="bass-dial" data-min="-40" data-max="40" data-step="1" data-value="0">
+         <div class="dial-indicator"></div>
+       </div>
+       <input type="number" id="bass-value-input" class="control-value-input" min="-40" max="40" value="0" step="1"> dB
+     </div>
+     <div class="volume-control control-group">
+       <label for="volume-dial">Volume</label>
+       <div class="control-dial" id="volume-dial" data-min="0" data-max="100" data-step="1" data-value="50">
+         <div class="dial-indicator"></div>
+       </div>
+       <input type="number" id="volume-value-input" class="control-value-input" min="0" max="100" value="50" step="1">%
+     </div>
+     <div class="limiter-control control-group">
+       <label for="limiter-dial">Limiter Thresh.</label>
+       <div class="control-dial" id="limiter-dial" data-min="-40" data-max="0" data-step="1" data-value="-10">
+         <div class="dial-indicator"></div>
+       </div>
+       <input type="number" id="limiter-value-input" class="control-value-input" min="-40" max="0" value="-10" step="1"> dB
+     </div>
+     <div class="gain-control control-group">
+       <label for="gain-dial">Input Gain</label>
+       <div class="control-dial" id="gain-dial" data-min="0" data-max="200" data-step="1" data-value="50">
+         <div class="dial-indicator"></div>
+       </div>
+       <input type="number" id="gain-value-input" class="control-value-input" min="0" max="200" value="50" step="1">%
+     </div>
+     <div class="mid-control control-group">
+       <label for="mid-dial">Mid</label>
+       <div class="control-dial" id="mid-dial" data-min="-40" data-max="40" data-step="1" data-value="0">
+         <div class="dial-indicator"></div>
+       </div>
+       <input type="number" id="mid-value-input" class="control-value-input" min="-40" max="40" value="0" step="1"> dB
+     </div>
+     <div class="reverb-control control-group">
+       <label for="reverb-dial">Reverb Mix</label>
+       <div class="control-dial" id="reverb-dial" data-min="0" data-max="100" data-step="1" data-value="0">
+         <div class="dial-indicator"></div>
+       </div>
+       <input type="number" id="reverb-value-input" class="control-value-input" min="0" max="100" value="0" step="1">%
+     </div>
+     <div class="chorus-control control-group">
+       <label for="chorus-dial">Chorus Mix</label>
+       <div class="control-dial" id="chorus-dial" data-min="0" data-max="100" data-step="1" data-value="0">
+         <div class="dial-indicator"></div>
+       </div>
+       <input type="number" id="chorus-value-input" class="control-value-input" min="0" max="100" value="0" step="1">%
+     </div>
+     <div class="delay-control control-group">
+       <label for="delay-dial">Delay Mix</label>
+       <div class="control-dial" id="delay-dial" data-min="0" data-max="100" data-step="1" data-value="0">
+         <div class="dial-indicator"></div>
+       </div>
+       <input type="number" id="delay-value-input" class="control-value-input" min="0" max="100" value="0" step="1">%
+     </div>
+  </div>
+
+  <!-- ⌨️ Overlay (modal) para configurar os atalhos de teclado -->
+  <div id="keybinding-overlay" class="hidden">
+    <div class="overlay-content">
+      <h2>Key Bindings</h2>
+      <div id="keybinding-instructions"></div>
+      <ul id="keybindings-list"></ul>
+      <button id="close-keybindings-button" type="button" class="upload-button">Close</button>
+    </div>
+  </div>
+
+  <!-- 🤖 Contêiner do Robô Guia e Diálogo -->
+  <div id="tour-bot-container">
+    <img id="tour-bot-image" src="" alt="Guia Robô">
+    <div id="tour-bot-dialog">
+        <p id="tour-bot-text"></p>
+        <button id="tour-btn-prev">Voltar</button>
+        <button id="tour-btn-next">Próximo</button>
+        <button id="tour-btn-end" style="display:none;">Finalizar Tour</button>
+    </div>
+  </div>
+
+  <!-- 🤖 Botão para iniciar o tour manualmente -->
+  <button id="start-tour-button">🤖 Tour Guiado!</button>
+
+
+  <script>
+    // --- CÓDIGO DO SIMULADOR DE GUITARRA (EXISTENTE) ---
+    // ... (todo o seu script de simulação de guitarra vai aqui, exatamente como antes) ...
+    // ... (desde `const numStrings = 6;` até a chamada `start();` no final) ...
+    // --- INÍCIO DO CÓDIGO DO SIMULADOR (COLE O SEU AQUI) ---
+    const numStrings = 6;
+    const samples = 200;
+    const waveSpeed = 1.0;
+    const damping = 0.98;
+    const numFrets = 20;
+    const effectiveFretboardRatio = 1.0;
+    const maxPitchMultiplier = 2.0;
+    const stringThickness = Array(numStrings).fill(2);
+    let keyBindings = {};
+    let lastPointerX = window.innerWidth / 2;
+
+    function loadKeyBindings() { /* ... seu código ... */
+      const stored = localStorage.getItem('keyBindings');
+      if (stored) {
+        try { keyBindings = JSON.parse(stored); }
+        catch { keyBindings = { KeyQ:0, KeyW:1, KeyE:2, KeyR:3, KeyT:4, KeyY:5 }; }
+      } else {
+        keyBindings = { KeyQ:0, KeyW:1, KeyE:2, KeyR:3, KeyT:4, KeyY:5 };
+      }
+    }
+    function saveKeyBindings() { /* ... seu código ... */
+        localStorage.setItem('keyBindings', JSON.stringify(keyBindings));
+    }
+
+    const displacements = [];
+    const velocities = [];
+    let baselines = [];
+    const tuningAdjustments = Array(numStrings).fill(1.0);
+    const tuningControlElements = [];
+    const stringAudioBuffers = Array(numStrings).fill(null);
+    let globalAudioBuffer = null;
+    const activeDrags = {};
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let stringBuffer = null;
+    let inputGainNode = null;
+    let distortionNode = null;
+    let distortionAmount = 0;
+    let bassFilter = null;
+    let midFilter = null;
+    let trebleFilter = null;
+    let reverbNode = null;
+    let reverbDryGain = null;
+    let reverbWetGain = null;
+    let volumeNode = null;
+    let limiterNode = null;
+    let chorusDelayNode, chorusWetGainNode, delayNode, delayWetGainNode;
+    let overdriveNode, boostNode;
+    let overdriveAmount = 0;
+    let boostAmount = 100;
+    const MAX_FILTER_GAIN = 40;
+
+    function makeDistortionCurve(amount) { /* ... seu código ... */
+        const k = typeof amount === 'number' ? amount : 0;
+        const n_samples = 44100;
+        const curve = new Float32Array(n_samples);
+        const deg = Math.PI / 180;
+        let i = 0;
+        let x;
+        for ( ; i < n_samples; ++i ) {
+            x = i * 2 / n_samples - 1;
+            curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+        }
+        if (k > 0) {
+            curve[0] = curve[0] * (1 + k/100);
+            curve[n_samples-1] = curve[n_samples-1] * (1 + k/100);
+        }
+        return curve;
+    }
+    function makeOverdriveCurve(amount) { /* ... seu código ... */
+        const n = audioCtx.sampleRate;
+        const curve = new Float32Array(n);
+        const drive = 1 + amount / 20;
+        for (let i = 0; i < n; i++) {
+            const x = (i * 2) / n - 1;
+            curve[i] = Math.tanh(x * drive);
+        }
+        return curve;
+    }
+    function setupAudioNodes() { /* ... seu código ... */
+        inputGainNode = audioCtx.createGain();
+        const initialInputGainPercent = parseFloat(document.getElementById('gain-value-input').value);
+        inputGainNode.gain.value = initialInputGainPercent / 100;
+        overdriveNode = audioCtx.createWaveShaper();
+        overdriveAmount = parseFloat(document.getElementById('overdrive-value-input').value);
+        overdriveNode.curve = makeOverdriveCurve(overdriveAmount);
+        overdriveNode.oversample = '4x';
+        distortionNode = audioCtx.createWaveShaper();
+        distortionAmount = parseFloat(document.getElementById('distortion-value-input').value);
+        distortionNode.curve = makeDistortionCurve(distortionAmount);
+        distortionNode.oversample = '4x';
+        boostNode = audioCtx.createGain();
+        boostAmount = parseFloat(document.getElementById('boost-value-input').value);
+        boostNode.gain.value = boostAmount / 100;
+        bassFilter = audioCtx.createBiquadFilter();
+        bassFilter.type = 'lowshelf';
+        bassFilter.frequency.value = 250;
+        bassFilter.gain.value = parseFloat(document.getElementById('bass-value-input').value);
+        midFilter = audioCtx.createBiquadFilter();
+        midFilter.type = 'peaking';
+        midFilter.frequency.value = 1000;
+        midFilter.Q.value = 1;
+        midFilter.gain.value = parseFloat(document.getElementById('mid-value-input').value);
+        trebleFilter = audioCtx.createBiquadFilter();
+        trebleFilter.type = 'highshelf';
+        trebleFilter.frequency.value = 4000;
+        trebleFilter.gain.value = parseFloat(document.getElementById('treble-value-input').value);
+        reverbNode = audioCtx.createConvolver();
+        reverbDryGain = audioCtx.createGain();
+        reverbWetGain = audioCtx.createGain();
+        const initialReverbPercent = parseFloat(document.getElementById('reverb-value-input').value);
+        const initialReverbMix = initialReverbPercent / 100;
+        reverbDryGain.gain.value = Math.cos(initialReverbMix * 0.5 * Math.PI);
+        reverbWetGain.gain.value = Math.sin(initialReverbMix * 0.5 * Math.PI);
+        volumeNode = audioCtx.createGain();
+        const initialVolumePercent = parseFloat(document.getElementById('volume-value-input').value);
+        volumeNode.gain.value = initialVolumePercent / 100;
+        limiterNode = audioCtx.createDynamicsCompressor();
+        limiterNode.threshold.value = parseFloat(document.getElementById('limiter-value-input').value);
+        limiterNode.knee.value = 0;
+        limiterNode.ratio.value = 20;
+        limiterNode.attack.value = 0.003;
+        limiterNode.release.value = 0.05;
+        inputGainNode.connect(overdriveNode);
+        overdriveNode.connect(distortionNode);
+        distortionNode.connect(boostNode);
+        boostNode.connect(bassFilter);
+        bassFilter.connect(midFilter);
+        midFilter.connect(trebleFilter);
+        trebleFilter.connect(reverbDryGain);
+        trebleFilter.connect(reverbWetGain);
+        reverbWetGain.connect(reverbNode);
+        reverbDryGain.connect(volumeNode);
+        reverbNode.connect(volumeNode);
+        volumeNode.connect(limiterNode);
+        limiterNode.connect(audioCtx.destination);
+        chorusDelayNode = audioCtx.createDelay(0.05);
+        chorusDelayNode.delayTime.value = 0.03;
+        const chorusLFO = audioCtx.createOscillator();
+        const chorusLFOGain = audioCtx.createGain();
+        chorusLFO.frequency.value = 1.5;
+        chorusLFOGain.gain.value = 0.015;
+        chorusLFO.connect(chorusLFOGain);
+        chorusLFOGain.connect(chorusDelayNode.delayTime);
+        chorusLFO.start();
+        chorusWetGainNode = audioCtx.createGain();
+        chorusWetGainNode.gain.value = parseFloat(document.getElementById('chorus-value-input').value) / 100;
+        limiterNode.connect(chorusDelayNode);
+        chorusDelayNode.connect(chorusWetGainNode);
+        chorusWetGainNode.connect(audioCtx.destination);
+        delayNode = audioCtx.createDelay(5.0);
+        delayNode.delayTime.value = 0.25;
+        delayWetGainNode = audioCtx.createGain();
+        delayWetGainNode.gain.value = parseFloat(document.getElementById('delay-value-input').value) / 100;
+        limiterNode.connect(delayNode);
+        delayNode.connect(delayWetGainNode);
+        delayWetGainNode.connect(audioCtx.destination);
+        setupDialInteraction(document.getElementById('distortion-dial'), document.getElementById('distortion-value-input'), updateDistortion);
+        setupDialInteraction(document.getElementById('treble-dial'), document.getElementById('treble-value-input'), updateTreble);
+        setupDialInteraction(document.getElementById('bass-dial'), document.getElementById('bass-value-input'), updateBass);
+        setupDialInteraction(document.getElementById('volume-dial'), document.getElementById('volume-value-input'), updateVolume);
+        setupDialInteraction(document.getElementById('limiter-dial'), document.getElementById('limiter-value-input'), updateLimiter);
+        setupDialInteraction(document.getElementById('gain-dial'), document.getElementById('gain-value-input'), updateGain);
+        setupDialInteraction(document.getElementById('mid-dial'), document.getElementById('mid-value-input'), updateMid);
+        setupDialInteraction(document.getElementById('reverb-dial'), document.getElementById('reverb-value-input'), updateReverb);
+        setupDialInteraction(document.getElementById('chorus-dial'), document.getElementById('chorus-value-input'), updateChorus);
+        setupDialInteraction(document.getElementById('delay-dial'), document.getElementById('delay-value-input'), updateDelay);
+        setupDialInteraction(document.getElementById('overdrive-dial'), document.getElementById('overdrive-value-input'), updateOverdrive);
+        setupDialInteraction(document.getElementById('boost-dial'), document.getElementById('boost-value-input'), updateBoost);
+    }
+    function updateDistortion(value) { /* ... seu código ... */
+        distortionAmount = value;
+        if (distortionNode) distortionNode.curve = makeDistortionCurve(distortionAmount);
+    }
+    function updateTreble(value) { /* ... seu código ... */
+        if (trebleFilter) trebleFilter.gain.value = value;
+    }
+    function updateBass(value) { /* ... seu código ... */
+        if (bassFilter) bassFilter.gain.value = value;
+    }
+    function updateVolume(value) { /* ... seu código ... */
+        if (volumeNode) volumeNode.gain.value = value / 100;
+    }
+    function updateLimiter(value) { /* ... seu código ... */
+        if (limiterNode) limiterNode.threshold.value = value;
+    }
+    function updateGain(value) { /* ... seu código ... */
+        if (inputGainNode) inputGainNode.gain.value = value / 100;
+    }
+    function updateMid(value) { /* ... seu código ... */
+        if (midFilter) midFilter.gain.value = value;
+    }
+    function updateReverb(value) { /* ... seu código ... */
+        if (reverbDryGain && reverbWetGain) {
+            const mixValue = value / 100;
+            reverbDryGain.gain.value = Math.cos(mixValue * 0.5 * Math.PI);
+            reverbWetGain.gain.value = Math.sin(mixValue * 0.5 * Math.PI);
+        }
+    }
+    function updateChorus(value) { /* ... seu código ... */
+        if (chorusWetGainNode) chorusWetGainNode.gain.value = value / 100;
+    }
+    function updateDelay(value) { /* ... seu código ... */
+        if (delayWetGainNode) delayWetGainNode.gain.value = value / 100;
+    }
+    function updateOverdrive(value) { /* ... seu código ... */
+        overdriveAmount = value;
+        if (overdriveNode) overdriveNode.curve = makeOverdriveCurve(overdriveAmount);
+    }
+    function updateBoost(value) { /* ... seu código ... */
+        boostAmount = value;
+        if (boostNode) boostNode.gain.value = boostAmount / 100;
+    }
+    function generateKSBuffer(frequency, duration = 2.5, decay = 0.996) { /* ... seu código ... */
+        const sampleRate = audioCtx.sampleRate;
+        const length = Math.floor(sampleRate * duration);
+        const buffer = audioCtx.createBuffer(1, length, sampleRate);
+        const data = buffer.getChannelData(0);
+        const N = Math.floor(sampleRate / frequency);
+        const ring = new Float32Array(N);
+        for (let i = 0; i < N; i++) ring[i] = Math.random() * 2 - 1;
+        let ptr = 0;
+        for (let i = 0; i < length; i++) {
+            data[i] = ring[ptr];
+            const next = (ptr + 1) % N;
+            ring[ptr] = decay * 0.5 * (ring[ptr] + ring[next]);
+            ptr = next;
+        }
+        return buffer;
+    }
+    function setupArrays() { /* ... seu código ... */
+        displacements.length = velocities.length = 0;
+        for (let s = 0; s < numStrings; s++) {
+            displacements[s] = new Float32Array(samples);
+            velocities[s] = new Float32Array(samples);
+        }
+    }
+    function drawFrets(neckWidth, neckHeight) { /* ... seu código ... */
+        const fretsGroup = document.getElementById('frets');
+        const fretMarkersGroup = document.getElementById('fret-markers');
+        fretsGroup.innerHTML = '';
+        fretMarkersGroup.innerHTML = '';
+        const fretboardLengthRatio = 1.0;
+        const nutWidth = neckWidth * 0.015;
+        const fretWidth = neckWidth * 0.005;
+        const fretColor = 'url(#fretShine)';
+        const markerRadius = neckHeight * 0.05;
+        const markerFill = 'rgba(200, 200, 200, 0.5)';
+        const nut = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        nut.setAttribute('x', 0); nut.setAttribute('y', 0); nut.setAttribute('width', nutWidth);
+        nut.setAttribute('height', neckHeight); nut.setAttribute('fill', '#DDDDDD');
+        nut.setAttribute('stroke', '#888'); nut.setAttribute('stroke-width', '0.5');
+        fretsGroup.appendChild(nut);
+        const usableNeckWidth = neckWidth * fretboardLengthRatio - nutWidth;
+        const fretSpacing = usableNeckWidth / (numFrets + 1);
+        const standardMarkerFrets = [3, 5, 7, 9]; // 💡 Adicionar 12 (duplo), 15, 17, 19, 21.
+        for (let i = 1; i <= numFrets; i++) {
+            const fretPosition = nutWidth + (i * fretSpacing) - (fretWidth / 2);
+            if (fretPosition + fretWidth < neckWidth) {
+                const fret = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                fret.setAttribute('x', fretPosition); fret.setAttribute('y', 0);
+                fret.setAttribute('width', fretWidth); fret.setAttribute('height', neckHeight);
+                fret.setAttribute('fill', fretColor);
+                fretsGroup.appendChild(fret);
+                if (standardMarkerFrets.includes(i)) {
+                    const marker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    // Posição do marcador ajustada para o centro DO TRASTE
+                    marker.setAttribute('cx', fretPosition + fretWidth/2 ); // Ajustado para centro do traste
+                    marker.setAttribute('cy', neckHeight / 2);
+                    marker.setAttribute('r', markerRadius);
+                    marker.setAttribute('fill', markerFill);
+                    fretMarkersGroup.appendChild(marker);
+                }
+            }
+        }
+    }
+    function positionTuningControls() { /* ... seu código ... */
+        const controlsContainer = document.getElementById('controls-container');
+        const uploadControlsDiv = controlsContainer.querySelector('.upload-controls');
+        const canvas = document.getElementById('strings');
+        const guitarNeckDiv = document.getElementById('guitar-neck');
+        const neckSvg = document.getElementById('neck-svg');
+        const sideBtn = document.getElementById('collapse-side-btn');
+        const isSideCollapsed = controlsContainer.classList.contains('collapsed');
+        const controlWidth = isSideCollapsed ? 5 : 150;
+        controlsContainer.style.width = `${controlWidth}px`;
+        let canvasWidth = window.innerWidth;
+        canvasWidth = isSideCollapsed ? window.innerWidth : window.innerWidth - 150;
+        canvas.width = Math.max(100, canvasWidth);
+        canvas.style.width = `${canvas.width}px`;
+        const availableHeightForSim = window.innerHeight;
+        canvas.height = Math.max(100, availableHeightForSim);
+        canvas.style.height = `${canvas.height}px`;
+        let neckTopY = 0;
+        let neckHeight = 0;
+        const neckPadding = canvas.height * 0.05;
+        baselines = [];
+        const spacing = canvas.height * 0.04;
+        const verticalMargin = canvas.height * 0.15;
+        const usableHeight = canvas.height - 2 * verticalMargin;
+        const startY = verticalMargin;
+        if (numStrings > 1) {
+            const totalSpacing = (numStrings - 1) * spacing;
+            const scaleFactor = Math.min(1, usableHeight / totalSpacing);
+            const scaledSpacing = spacing * scaleFactor;
+            const totalHeight = (numStrings - 1) * scaledSpacing;
+            const adjustedStartY = startY + (usableHeight - totalHeight) / 2;
+            for (let s = 0; s < numStrings; s++) baselines[s] = adjustedStartY + s * scaledSpacing;
+        } else if (numStrings === 1) {
+            baselines[0] = canvas.height / 2;
+        } else {
+            baselines = [];
+        }
+        if (numStrings > 0 && baselines.length > 0) {
+            const topStringY = baselines[0];
+            const bottomStringY = baselines[numStrings - 1];
+            neckTopY = Math.max(0, topStringY - neckPadding);
+            const neckBottomY = Math.min(canvas.height, bottomStringY + neckPadding);
+            neckHeight = Math.max(20, neckBottomY - neckTopY);
+        } else {
+            neckTopY = canvas.height * 0.4;
+            neckHeight = canvas.height * 0.2;
+        }
+        guitarNeckDiv.style.top = `${neckTopY}px`;
+        guitarNeckDiv.style.height = `${neckHeight}px`;
+        guitarNeckDiv.style.width = `${canvas.width}px`;
+        neckSvg.setAttribute('viewBox', `0 0 ${canvas.width} ${neckHeight}`);
+        neckSvg.setAttribute('width', canvas.width);
+        neckSvg.setAttribute('height', neckHeight);
+        const neckRect = document.getElementById('neck-rect');
+        if (neckRect) {
+            neckRect.setAttribute('width', canvas.width);
+            neckRect.setAttribute('height', neckHeight);
+            neckRect.setAttribute('y', 0);
+        }
+        drawFrets(canvas.width, neckHeight);
+        tuningControlElements.forEach((control, s) => {
+            if (control?.div && baselines.length > s) {
+                const controlsRect = controlsContainer.getBoundingClientRect();
+                const baselineScreenY = canvas.getBoundingClientRect().top + baselines[s];
+                const controlTopRelative = baselineScreenY - controlsRect.top;
+                control.div.style.top = `${controlTopRelative}px`;
+                control.div.style.left = `10px`;
+                control.div.style.right = `10px`;
+                control.div.style.width = `calc(100% - 20px)`;
+            }
+        });
+        controlsContainer.style.right = '0px';
+        controlsContainer.style.top = '0px';
+        controlsContainer.style.height = `${canvas.height}px`;
+        if (uploadControlsDiv && tuningControlElements.length > 0 && tuningControlElements[0]?.div) {
+            const firstControlRect = tuningControlElements[0].div.getBoundingClientRect();
+            const controlsRect = controlsContainer.getBoundingClientRect();
+            const firstControlTopRelative = firstControlRect.top - controlsRect.top;
+            uploadControlsDiv.style.position = 'absolute';
+            uploadControlsDiv.style.left = '10px';
+            uploadControlsDiv.style.right = '10px';
+            const uploadH = uploadControlsDiv.getBoundingClientRect().height;
+            const margin = 15;
+            const topPos = Math.max(0, firstControlTopRelative - uploadH - margin);
+            uploadControlsDiv.style.top = `${topPos}px`;
+        } else if (uploadControlsDiv) {
+            uploadControlsDiv.style.position = 'absolute';
+            uploadControlsDiv.style.top = '10px';
+            uploadControlsDiv.style.left = '10px';
+            uploadControlsDiv.style.right = '10px';
+        }
+        if (sideBtn) {
+            sideBtn.style.right = isSideCollapsed ? '0px' : '150px';
+            sideBtn.style.top = '20px';
+        }
+    }
+    function resize() { /* ... seu código ... */
+        positionTuningControls();
+        const bottomControls = document.getElementById('bottom-controls-container');
+        const warningMessage = document.getElementById('warning-message');
+        const bottomBtn = document.getElementById('collapse-bottom-btn');
+        const cinderLink = document.getElementById('cinder-link');
+        if (bottomControls && warningMessage && bottomBtn) {
+            const isBottomCollapsed = bottomControls.classList.contains('collapsed');
+            const effectiveBottomHeight = isBottomCollapsed ? 15 : bottomControls.offsetHeight;
+            warningMessage.style.bottom = `${effectiveBottomHeight}px`;
+            bottomBtn.style.bottom = `${effectiveBottomHeight}px`;
+            const warningIsVisible = warningMessage.style.display !== 'none';
+            if (warningIsVisible && cinderLink) {
+                const warningRect = warningMessage.getBoundingClientRect();
+                const linkRect = cinderLink.getBoundingClientRect();
+                if (linkRect.bottom > warningRect.top - 5 && linkRect.left < warningRect.right) {
+                    cinderLink.style.top = `${Math.max(5, warningRect.top - linkRect.height - 5)}px`;
+                } else {
+                    cinderLink.style.top = '5px';
+                }
+            } else if (cinderLink) {
+                cinderLink.style.top = '5px';
+            }
+        }
+    }
+    document.getElementById('strings').addEventListener('pointermove', e => { lastPointerX = e.clientX; });
+    function strumString(s) { /* ... seu código ... */
+        if (s < 0 || s >= numStrings || baselines.length <= s) return;
+        const canvasRect = document.getElementById('strings').getBoundingClientRect();
+        const pointerX = lastPointerX;
+        const fretModifier = calculateFretModifier(pointerX);
+        const maxDisp = document.getElementById('strings').height * 0.05;
+        const pointerY = canvasRect.top + baselines[s] + maxDisp;
+        applyDisplacement(s, pointerX, pointerY);
+        playStringSound(s, fretModifier);
+    }
+    function strumAll() { /* ... seu código ... */
+        for (let s = 0; s < numStrings; s++) {
+            setTimeout(() => strumString(s), s * 70);
+        }
+    }
+    document.addEventListener('keydown', e => { /* ... seu código ... */
+        const keybindingOverlay = document.getElementById('keybinding-overlay');
+        if (keybindingOverlay && !keybindingOverlay.classList.contains('hidden')) {
+            e.preventDefault(); return;
+        }
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+        if (e.code === 'Space') { e.preventDefault(); strumAll(); }
+        else if (keyBindings.hasOwnProperty(e.code)) { e.preventDefault(); strumString(keyBindings[e.code]); }
+    });
+    document.addEventListener('DOMContentLoaded', () => { /* ... seu código (sem a definição do tourSteps) ... */
+        const keybindingsButton = document.getElementById('keybindings-button');
+        const keybindingOverlay = document.getElementById('keybinding-overlay');
+        const keybindingInstructions = document.getElementById('keybinding-instructions');
+        const keybindingsList = document.getElementById('keybindings-list');
+        const closeKeybindingsButton = document.getElementById('close-keybindings-button');
+        let currentKeyListener = null;
+        function populateKeybindingsList() { /* ... */
+            keybindingsList.innerHTML = '';
+            for (let s = 0; s < numStrings; s++) {
+                const li = document.createElement('li');
+                const label = document.createElement('span');
+                label.textContent = `String ${s+1}:`;
+                const keySpan = document.createElement('span');
+                keySpan.className = 'key-name';
+                let foundCode = null;
+                for (const code in keyBindings) if (keyBindings[code] === s) { foundCode = code; break; }
+                keySpan.textContent = foundCode ? foundCode.replace('Key','') : '-';
+                const changeBtn = document.createElement('button');
+                changeBtn.textContent = 'Change'; changeBtn.type = 'button';
+                changeBtn.addEventListener('click', () => {
+                    keybindingInstructions.textContent = `Press a key for String ${s+1}`;
+                    if (currentKeyListener) document.removeEventListener('keydown', currentKeyListener);
+                    function onKeyListener(e) {
+                        if (e.code) {
+                            for (const k in keyBindings) if (keyBindings[k] === s || k === e.code) delete keyBindings[k];
+                            keyBindings[e.code] = s;
+                            saveKeyBindings(); populateKeybindingsList(); keybindingInstructions.textContent = '';
+                            document.removeEventListener('keydown', onKeyListener); currentKeyListener = null;
+                            e.preventDefault(); return false;
+                        }
+                    }
+                    currentKeyListener = onKeyListener; document.addEventListener('keydown', onKeyListener);
+                });
+                li.appendChild(label); li.appendChild(keySpan); li.appendChild(changeBtn);
+                keybindingsList.appendChild(li);
+            }
+        }
+        if (keybindingsButton) {
+            keybindingsButton.addEventListener('click', (e) => {
+                e.preventDefault(); populateKeybindingsList(); keybindingInstructions.textContent = '';
+                keybindingOverlay.classList.remove('hidden');
+            });
+        }
+        if (closeKeybindingsButton) {
+            closeKeybindingsButton.addEventListener('click', (e) => {
+                e.preventDefault(); keybindingOverlay.classList.add('hidden'); keybindingInstructions.textContent = '';
+                if (currentKeyListener) { document.removeEventListener('keydown', currentKeyListener); currentKeyListener = null; }
+            });
+        }
+        const layeringCheckbox = document.getElementById('customSoundLayeringCheckbox');
+        const layeringLabel = document.getElementById('customSoundLayeringLabel');
+        if (layeringCheckbox && layeringLabel) {
+            function updateLayeringLabel() {
+                layeringLabel.textContent = layeringCheckbox.checked ? "Layer custom sound over algorithm" : "Replace algorithm with custom sound";
+            }
+            layeringCheckbox.addEventListener('change', updateLayeringLabel); updateLayeringLabel();
+        }
+        setupMenuCollapseButtons();
+        // A lógica do bot guia será inicializada aqui também, após o DOMContentLoaded
+        initializeTourBot(); // Chamada da nova função do bot guia
+    });
+    document.getElementById('strings').addEventListener('pointerdown', e => { /* ... seu código ... */
+        if (e.target !== document.getElementById('strings')) return;
+        audioCtx.resume();
+        if (e.pointerId in activeDrags) return;
+        document.getElementById('strings').setPointerCapture(e.pointerId);
+        const s = findNearestString(e.clientY);
+        activeDrags[e.pointerId] = { currentString: s, lastString: -1 };
+        applyDisplacement(s, e.clientX, e.clientY);
+    });
+    function calculateFretModifier(pointerX) { /* ... seu código ... */
+        const canvasRect = document.getElementById('strings').getBoundingClientRect();
+        let fretModifier = 1.0;
+        if (pointerX >= canvasRect.left && pointerX <= canvasRect.right) {
+            const relativeX = pointerX - canvasRect.left;
+            const normalizedX = Math.max(0, Math.min(1.0, relativeX / document.getElementById('strings').width));
+            if (normalizedX < effectiveFretboardRatio) {
+                const positionInFretArea = normalizedX / effectiveFretboardRatio;
+                fretModifier = 1.0 + (1.0 - positionInFretArea) * (maxPitchMultiplier - 1.0);
+            }
+        }
+        return fretModifier;
+    }
+    document.getElementById('strings').addEventListener('pointermove', e => { /* ... seu código ... */
+        const pointerId = e.pointerId;
+        if (!(pointerId in activeDrags)) return;
+        e.preventDefault();
+        const dragInfo = activeDrags[pointerId];
+        const previousString = dragInfo.currentString;
+        const x = e.clientX; const y = e.clientY;
+        const currentClosestString = findNearestString(y);
+        const canvasRect = document.getElementById('strings').getBoundingClientRect();
+        const currentBaseline = (previousString >= 0 && previousString < baselines.length) ? baselines[previousString] : y - canvasRect.top;
+        const currentRawDisp = y - (canvasRect.top + currentBaseline);
+        const maxDisp = document.getElementById('strings').height * 0.05;
+        if (x > canvasRect.right) {
+            const fretModifier = calculateFretModifier(x); playStringSound(previousString, fretModifier);
+            document.getElementById('strings').releasePointerCapture(pointerId); delete activeDrags[pointerId]; return;
+        }
+        if (previousString >= 0 && Math.abs(currentRawDisp) > maxDisp * 1.5) {
+            const fretModifier = calculateFretModifier(x); playStringSound(previousString, fretModifier);
+            document.getElementById('strings').releasePointerCapture(pointerId); delete activeDrags[pointerId]; return;
+        }
+        if (currentClosestString !== previousString && previousString !== -1) {
+            const fretModifier = calculateFretModifier(x); playStringSound(previousString, fretModifier);
+            dragInfo.lastString = previousString; dragInfo.currentString = currentClosestString;
+            applyDisplacement(currentClosestString, x, y);
+        } else if (currentClosestString !== -1) {
+            applyDisplacement(currentClosestString, x, y);
+        }
+        activeDrags[pointerId] = dragInfo;
+    });
+    function handlePointerEnd(e) { /* ... seu código ... */
+        const pointerId = e.pointerId;
+        if (pointerId in activeDrags) {
+            const dragInfo = activeDrags[pointerId];
+            const finalString = dragInfo.currentString;
+            const pointerX = e.clientX;
+            const fretModifier = calculateFretModifier(pointerX);
+            if (finalString !== -1) playStringSound(finalString, fretModifier);
+            delete activeDrags[pointerId];
+            if (document.getElementById('strings').hasPointerCapture(pointerId)) {
+                document.getElementById('strings').releasePointerCapture(pointerId);
+            }
+        }
+    }
+    document.getElementById('strings').addEventListener('pointerup', handlePointerEnd);
+    document.getElementById('strings').addEventListener('pointercancel', handlePointerEnd);
+    document.getElementById('strings').addEventListener('pointerleave', handlePointerEnd);
+    window.addEventListener('resize', resize);
+    function findNearestString(y) { /* ... seu código ... */
+        let nearestString = -1; let minDist = Infinity;
+        const tolerance = document.getElementById('strings').height * 0.04;
+        const canvasRect = document.getElementById('strings').getBoundingClientRect();
+        const relativeY = y - canvasRect.top;
+        for (let i = 0; i < numStrings; i++) {
+            if (baselines.length <= i) continue;
+            const d = Math.abs(relativeY - baselines[i]);
+            if (d < minDist && d < tolerance) { minDist = d; nearestString = i; }
+        }
+        if (nearestString === -1 && numStrings > 0 && baselines.length === numStrings) {
+            minDist = Infinity;
+            for (let i = 0; i < numStrings; i++) {
+                const d = Math.abs(relativeY - baselines[i]);
+                if (d < minDist) { minDist = d; nearestString = i; }
+            }
+        }
+        return nearestString;
+    }
+    function applyDisplacement(stringIndex, pointerX, pointerY) { /* ... seu código ... */
+        const s = stringIndex; const x = pointerX; const y = pointerY;
+        if (s < 0 || s >= numStrings || baselines.length <= s) return;
+        const canvasRect = document.getElementById('strings').getBoundingClientRect();
+        const relativeX = x - canvasRect.left; const relativeY = y - canvasRect.top;
+        const i = Math.max(0, Math.min(samples - 1, Math.round((relativeX / document.getElementById('strings').width) * (samples - 1))));
+        let disp = relativeY - baselines[s];
+        const maxDisp = document.getElementById('strings').height * 0.05;
+        const clampedVisualDisp = Math.max(-maxDisp, Math.min(maxDisp, disp));
+        if (relativeX >= 0 && relativeX <= document.getElementById('strings').width) {
+            displacements[s][i] = clampedVisualDisp; velocities[s][i] = 0;
+            if (i > 0) { displacements[s][i - 1] = clampedVisualDisp * 0.8; velocities[s][i-1] = 0; }
+            if (i < samples - 1) { displacements[s][i + 1] = clampedVisualDisp * 0.8; velocities[s][i+1] = 0; }
+            if (i > 1) velocities[s][i-2] = 0; if (i < samples - 2) velocities[s][i+2] = 0;
+        }
+    }
+    function simulate() { /* ... seu código ... */
+        const draggingStrings = new Set();
+        for (const pointerId in activeDrags) {
+            if (activeDrags.hasOwnProperty(pointerId)) {
+                const stringIndex = activeDrags[pointerId].currentString;
+                if (stringIndex >= 0 && stringIndex < numStrings) draggingStrings.add(stringIndex);
+            }
+        }
+        for (let s = 0; s < numStrings; s++) {
+            if (!draggingStrings.has(s)) {
+                const u = displacements[s]; const v = velocities[s];
+                if (!u || u.length !== samples) continue;
+                for (let i = 1; i < samples - 1; i++) {
+                    const accel = waveSpeed * (u[i - 1] + u[i + 1] - 2 * u[i]);
+                    v[i] = (v[i] + accel) * damping;
+                }
+                for (let i = 1; i < samples - 1; i++) { u[i] += v[i]; u[i] *= (1 - Math.abs(u[i]) * 0.002); }
+                u[0] = u[samples - 1] = 0; v[0] = v[samples - 1] = 0;
+                for (let i = 1; i < samples - 1; i++) { v[i] *= 0.999; u[i] *= 0.9999; }
+            } else {
+                const v = velocities[s];
+                if(v) for (let i = 0; i < samples; i++) if (Math.abs(v[i]) > 0.01) v[i] *= 0.5;
+            }
+        }
+    }
+    function playStringSound(s, fretModifier = 1.0) { /* ... seu código ... */
+        if (s < 0 || s >= numStrings) { console.warn(`⚠️ Tentativa de tocar corda inválida: ${s}`); return; }
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        if (!inputGainNode) setupAudioNodes();
+        const freq = baseFrequencies[s] * tuningAdjustments[s] * fretModifier;
+        const ksBuffer = generateKSBuffer(freq);
+        const ksSource = audioCtx.createBufferSource(); ksSource.buffer = ksBuffer;
+        const customBuffer = stringAudioBuffers[s] || globalAudioBuffer;
+        if (customBuffer) {
+            const customSource = audioCtx.createBufferSource(); customSource.buffer = customBuffer;
+            const origFreq = baseFrequencies[s] * tuningAdjustments[s];
+            customSource.playbackRate.value = freq / origFreq;
+            if (document.getElementById('customSoundLayeringCheckbox')?.checked) {
+                const ksGain = audioCtx.createGain(); const customGain = audioCtx.createGain();
+                ksGain.gain.value = 0.7; customGain.gain.value = 0.7;
+                ksSource.connect(ksGain); customSource.connect(customGain);
+                const merger = audioCtx.createGain();
+                ksGain.connect(merger); customGain.connect(merger);
+                merger.connect(inputGainNode);
+                ksSource.start(); customSource.start();
+            } else {
+                customSource.connect(inputGainNode); customSource.start();
+            }
+            return;
+        }
+        ksSource.connect(inputGainNode); ksSource.start();
+    }
+    function draw() { /* ... seu código ... */
+        const canvasEl = document.getElementById('strings');
+        if (!canvasEl) return; // ⚠️ Adicionar verificação
+        const ctx = canvasEl.getContext('2d');
+        ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+        for (let s = 0; s < numStrings; s++) {
+            const u = displacements[s];
+            if (baselines.length <= s) continue;
+            const y0 = baselines[s];
+            if (!u || u.length !== samples) continue;
+            ctx.beginPath(); ctx.lineWidth = stringThickness[s]; ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; ctx.shadowBlur = 3; ctx.shadowOffsetY = 1;
+            ctx.moveTo(0, y0 + u[0]);
+            for (let i = 1; i < samples; i++) {
+                const x = (i / (samples - 1)) * canvasEl.width;
+                ctx.lineTo(x, y0 + u[i]);
+            }
+            ctx.stroke();
+            ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+        }
+    }
+    function loop() { /* ... seu código ... */
+        simulate(); draw(); requestAnimationFrame(loop);
+    }
+    function start() { /* ... seu código ... */
+        loadKeyBindings(); setupAudioNodes(); setupArrays(); setupTuningControls(); resize(); requestAnimationFrame(loop);
+    }
+    document.getElementById('clear-sounds-button').addEventListener('click', () => { /* ... seu código ... */
+        globalAudioBuffer = null; stringAudioBuffers.fill(null);
+        tuningControlElements.forEach((ctrl, idx) => {
+            if (ctrl?.uploadLabel) { ctrl.uploadLabel.textContent = `S${idx+1} Snd`; ctrl.uploadLabel.classList.remove('sound-loaded'); }
+        });
+        const globalUploadButton = document.querySelector('label[for="global-audio-upload"]');
+        if (globalUploadButton) { globalUploadButton.textContent = 'Upload Default Sound'; globalUploadButton.classList.remove('sound-loaded');}
+    });
+    const baseFrequencies = [329.63, 246.94, 196.00, 146.83, 110.00, 82.41];
+    function setupDialInteraction(dialElement, valueInput, onChange) { /* ... seu código ... */
+        function updateDialVisual(value) {
+            const min = parseFloat(dialElement.dataset.min); const max = parseFloat(dialElement.dataset.max);
+            const angleRange = 270; const startAngle = 135;
+            value = Math.max(min, Math.min(max, value)); dialElement.dataset.value = value;
+            const norm = (value - min) / (max - min); const angle = startAngle - (angleRange * norm);
+            const dialIndicator = dialElement.querySelector('.dial-indicator');
+            if (dialIndicator) dialIndicator.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+        }
+        let value = typeof dialElement.dataset.value !== "undefined" ? parseFloat(dialElement.dataset.value) : 0;
+        updateDialVisual(value);
+        if (valueInput) valueInput.value = value;
+        let isDragging = false; let dragStartY = 0; let dragStartValue = 0;
+        function onPointerDown(e) {
+            isDragging = true; dragStartY = e.type.startsWith("touch") ? e.touches[0].clientY : e.clientY;
+            dragStartValue = parseFloat(dialElement.dataset.value);
+            document.addEventListener('pointermove', onPointerMove); document.addEventListener('pointerup', onPointerUp);
+            document.body.style.userSelect = "none";
+        }
+        function onPointerMove(e) {
+            if (!isDragging) return;
+            const clientY = e.type.startsWith("touch") ? e.touches[0].clientY : e.clientY;
+            const deltaY = dragStartY - clientY;
+            const min = parseFloat(dialElement.dataset.min); const max = parseFloat(dialElement.dataset.max);
+            const step = parseFloat(dialElement.dataset.step);
+            let range = max - min; let sensitivity = 0.5 * range;
+            let newValue = dragStartValue + (deltaY / 120) * sensitivity;
+            newValue = Math.round(newValue / step) * step; newValue = Math.max(min, Math.min(max, newValue));
+            dialElement.dataset.value = newValue; updateDialVisual(newValue);
+            if (valueInput) valueInput.value = newValue; if (onChange) onChange(newValue);
+        }
+        function onPointerUp() {
+            isDragging = false; document.removeEventListener('pointermove', onPointerMove);
+            document.removeEventListener('pointerup', onPointerUp); document.body.style.userSelect = "";
+        }
+        dialElement.addEventListener('pointerdown', onPointerDown);
+        if (valueInput) {
+            valueInput.addEventListener('input', function() {
+                let v = parseFloat(this.value);
+                const min = parseFloat(dialElement.dataset.min); const max = parseFloat(dialElement.dataset.max);
+                const step = parseFloat(dialElement.dataset.step);
+                if (isNaN(v)) v = min; v = Math.max(min, Math.min(max, v)); v = Math.round(v / step) * step;
+                dialElement.dataset.value = v; updateDialVisual(v); this.value = v; if (onChange) onChange(v);
+            });
+        }
+    }
+    function setupMenuCollapseButtons() { /* ... seu código ... */
+        const controlsContainer = document.getElementById('controls-container');
+        const bottomControls = document.getElementById('bottom-controls-container');
+        const sideBtn = document.getElementById('collapse-side-btn');
+        const bottomBtn = document.getElementById('collapse-bottom-btn');
+        let sideCollapsed = controlsContainer.classList.contains('collapsed');
+        let bottomCollapsed = bottomControls.classList.contains('collapsed');
+        controlsContainer.classList.toggle('collapsed', sideCollapsed);
+        sideBtn.classList.toggle('collapsed', sideCollapsed);
+        sideBtn.innerHTML = sideCollapsed ? '&gt;' : '&lt;';
+        bottomControls.classList.toggle('collapsed', bottomCollapsed);
+        bottomBtn.classList.toggle('collapsed', bottomCollapsed);
+        bottomBtn.innerHTML = bottomCollapsed ? '&#8964;' : '&#94;';
+        sideBtn.addEventListener('click', () => {
+            sideCollapsed = !sideCollapsed; controlsContainer.classList.toggle('collapsed', sideCollapsed);
+            sideBtn.classList.toggle('collapsed', sideCollapsed); sideBtn.innerHTML = sideCollapsed ? '&gt;' : '&lt;';
+            resize();
+        });
+        bottomBtn.addEventListener('click', () => {
+            bottomCollapsed = !bottomCollapsed; bottomControls.classList.toggle('collapsed', bottomCollapsed);
+            bottomBtn.classList.toggle('collapsed', bottomCollapsed); bottomBtn.innerHTML = bottomCollapsed ? '&#8964;' : '&#94;';
+            resize();
+        });
+    }
+    function setupTuningControls() { /* ... seu código ... */
+        tuningControlElements.forEach(el => el?.div?.remove()); tuningControlElements.length = 0;
+        const minTune = 0.75; const maxTune = 1.25; const stepTune = 0.005;
+        const minVal = minTune.toFixed(3); const maxVal = maxTune.toFixed(3); const stepVal = stepTune.toFixed(3);
+        for (let s = 0; s < numStrings; s++) {
+            const controlDiv = document.createElement('div'); controlDiv.className = 'tuning-control';
+            const label = document.createElement('label'); label.textContent = `S${s + 1} Tuning`;
+            label.htmlFor = `tuning-slider-${s}`; label.title = `String ${s + 1} Tuning Adjustment`;
+            const uploadLabel = document.createElement('label'); uploadLabel.htmlFor = `string-audio-upload-${s}`;
+            uploadLabel.textContent = `S${s + 1} Snd`; uploadLabel.className = 'upload-button string-upload-button';
+            uploadLabel.title = `Upload Sound for String ${s + 1}`;
+            if (stringAudioBuffers[s]) { uploadLabel.textContent = `S${s+1} ✓`; uploadLabel.classList.add('sound-loaded');}
+            const stringInput = document.createElement('input'); stringInput.type = 'file';
+            stringInput.id = `string-audio-upload-${s}`; stringInput.accept = 'audio/*';
+            stringInput.style.display = 'none'; stringInput.dataset.stringIndex = s;
+            const slider = document.createElement('input'); slider.type = 'range'; slider.id = `tuning-slider-${s}`;
+            slider.min = minVal; slider.max = maxVal; slider.step = stepVal; slider.value = tuningAdjustments[s];
+            const numberInput = document.createElement('input'); numberInput.type = 'number';
+            numberInput.id = `tuning-input-${s}`; numberInput.className = 'control-value-input tuning-value-input';
+            numberInput.min = minVal; numberInput.max = maxVal; numberInput.step = stepVal;
+            numberInput.value = tuningAdjustments[s].toFixed(3);
+            slider.addEventListener('input', (e) => {
+                const newTuneValue = parseFloat(e.target.value); tuningAdjustments[s] = newTuneValue;
+                numberInput.value = newTuneValue.toFixed(3);
+            });
+            numberInput.addEventListener('change', (e) => {
+                let newTuneValue = parseFloat(e.target.value);
+                newTuneValue = Math.max(minTune, Math.min(maxTune, newTuneValue));
+                e.target.value = newTuneValue.toFixed(3); tuningAdjustments[s] = newTuneValue; slider.value = newTuneValue;
+            });
+            stringInput.addEventListener('change', handleStringAudioUpload);
+            controlDiv.appendChild(label); controlDiv.appendChild(uploadLabel); controlDiv.appendChild(stringInput);
+            controlDiv.appendChild(slider); controlDiv.appendChild(numberInput);
+            document.getElementById('controls-container').appendChild(controlDiv);
+            tuningControlElements[s] = { div: controlDiv, slider: slider, input: numberInput, uploadLabel: uploadLabel, fileInput: stringInput };
+        }
+    }
+    function handleStringAudioUpload(event) { /* ... seu código ... */
+        const file = event.target.files[0]; const stringIndex = parseInt(event.target.dataset.stringIndex, 10);
+        if (!file || isNaN(stringIndex)) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const arrayBuffer = e.target.result;
+            audioCtx.decodeAudioData(arrayBuffer).then(buffer => {
+                stringAudioBuffers[stringIndex] = buffer;
+                const uploadLabel = tuningControlElements[stringIndex]?.uploadLabel;
+                if (uploadLabel) { uploadLabel.textContent = `S${stringIndex+1} ✓`; uploadLabel.classList.add('sound-loaded');}
+            }).catch(err => { console.error("Audio decode error:", err); alert(`Error decoding audio for string ${stringIndex+1}.`); });
+        };
+        reader.onerror = (e) => { console.error("FileReader error:", e); alert(`Error reading the audio file for string ${stringIndex + 1}.`); };
+        reader.readAsArrayBuffer(file); event.target.value = null;
+    }
+    document.getElementById('global-audio-upload').addEventListener('change', (event) => { /* ... seu código ... */
+        const file = event.target.files[0]; if (!file) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const arrayBuffer = e.target.result;
+            audioCtx.decodeAudioData(arrayBuffer).then(buffer => {
+                globalAudioBuffer = buffer;
+                const globalUploadButton = document.querySelector('label[for="global-audio-upload"]');
+                if (globalUploadButton) { globalUploadButton.textContent = 'Default Sound ✓'; globalUploadButton.classList.add('sound-loaded'); }
+            }).catch(err => { console.error("Audio decode error:", err); alert("Error decoding default audio file."); });
+        };
+        reader.onerror = (e) => { console.error("FileReader error:", e); alert("Error reading the default audio file."); };
+        reader.readAsArrayBuffer(file); event.target.value = null;
+    });
+    document.getElementById('warning-understood-button').addEventListener('click', () => { /* ... seu código ... */
+        document.getElementById('warning-message').style.display = 'none'; resize();
+    });
+
+    start(); // Inicia o simulador de guitarra
+    // --- FIM DO CÓDIGO DO SIMULADOR ---
+
+
+    // --- CÓDIGO DO ROBÔ GUIA ---
+    // 🤖 Lógica para o bot guia interativo.
+    function initializeTourBot() {
+        console.log("🤖 Robô Guia Inicializado"); // 💬 Log para verificar inicialização
+        const botContainer = document.getElementById('tour-bot-container');
+        const botImage = document.getElementById('tour-bot-image');
+        const botText = document.getElementById('tour-bot-text');
+        const btnPrev = document.getElementById('tour-btn-prev');
+        const btnNext = document.getElementById('tour-btn-next');
+        const btnEnd = document.getElementById('tour-btn-end');
+        const startTourBtnManual = document.getElementById('start-tour-button'); // Botão para iniciar manualmente
+
+        let currentStepId = null;
+        let tourSteps = {}; // 💬 A árvore de diálogo será carregada aqui
+        let lastHighlightedElements = []; // 🎯 Armazena múltiplos elementos destacados
+        let lastHighlightStyles = []; // E seus estilos originais
+
+        // ♻️ Função para limpar destaques anteriores
+        function clearAllHighlights() {
+            lastHighlightedElements.forEach((el, index) => {
+                if (el) el.style.cssText = lastHighlightStyles[index];
+            });
+            lastHighlightedElements = [];
+            lastHighlightStyles = [];
+        }
+
+        // ♻️ Função para aplicar destaque
+        function applyHighlight(stepConfig) {
+            clearAllHighlights();
+            let firstTargetElementForPositioning = null; // Usado para posicionar o robô
+
+            if (stepConfig.targetElementId) { // Se um ID principal for fornecido
+                const mainTarget = document.getElementById(stepConfig.targetElementId);
+                if (mainTarget) {
+                     // Se houver um seletor específico para destaque DENTRO do targetElementId
+                    if (stepConfig.highlightSelector) {
+                        mainTarget.querySelectorAll(stepConfig.highlightSelector).forEach(el => {
+                            lastHighlightedElements.push(el);
+                            lastHighlightStyles.push(el.style.cssText);
+                            el.style.cssText += stepConfig.highlightStyle;
+                            if (!firstTargetElementForPositioning) firstTargetElementForPositioning = el;
+                        });
+                    } else { // Destaca o próprio targetElementId
+                        lastHighlightedElements.push(mainTarget);
+                        lastHighlightStyles.push(mainTarget.style.cssText);
+                        mainTarget.style.cssText += stepConfig.highlightStyle;
+                        firstTargetElementForPositioning = mainTarget;
+                    }
+                } else {
+                    console.warn("⚠️ Elemento alvo não encontrado para highlight:", stepConfig.targetElementId);
+                }
+            } else if (stepConfig.highlightSelector) { // Se apenas um seletor CSS geral for fornecido
+                 document.querySelectorAll(stepConfig.highlightSelector).forEach(el => {
+                    lastHighlightedElements.push(el);
+                    lastHighlightStyles.push(el.style.cssText);
+                    el.style.cssText += stepConfig.highlightStyle;
+                    if (!firstTargetElementForPositioning) firstTargetElementForPositioning = el;
+                });
+            }
+            return firstTargetElementForPositioning; // Retorna o primeiro elemento que pode ser usado para posicionamento
+        }
+
+
+        // ♻️ Função para posicionar o robô e o diálogo
+        function positionBot(stepConfig, targetElementForPositioning) {
+            // Posições padrão (canto inferior direito)
+            botContainer.style.bottom = '20px';
+            botContainer.style.right = '20px';
+            botContainer.style.top = 'auto';
+            botContainer.style.left = 'auto';
+            botContainer.style.transform = 'none'; // Reseta transformações
+
+            if (stepConfig.robotPosition === 'center-screen') {
+                botContainer.style.top = '50%';
+                botContainer.style.left = '50%';
+                botContainer.style.transform = 'translate(-50%, -50%)';
+            } else if (targetElementForPositioning && stepConfig.robotPosition) {
+                const rect = targetElementForPositioning.getBoundingClientRect();
+                const botRect = botContainer.getBoundingClientRect(); // Pega dimensões atuais do bot
+
+                let topPos, leftPos;
+
+                switch (stepConfig.robotPosition) {
+                    case 'above-element':
+                        topPos = rect.top - botRect.height - 15; // 15px de margem
+                        leftPos = rect.left + (rect.width / 2) - (botRect.width / 2);
+                        break;
+                    case 'bottom-of-element':
+                        topPos = rect.bottom + 15;
+                        leftPos = rect.left + (rect.width / 2) - (botRect.width / 2);
+                        break;
+                    case 'left-of-element':
+                        topPos = rect.top + (rect.height / 2) - (botRect.height / 2);
+                        leftPos = rect.left - botRect.width - 15;
+                        break;
+                    case 'right-of-element':
+                        topPos = rect.top + (rect.height / 2) - (botRect.height / 2);
+                        leftPos = rect.right + 15;
+                        break;
+                    case 'center-left-of-element': // Mais para o centro vertical do elemento
+                        topPos = rect.top + (rect.height / 2) - (botRect.height / 2);
+                        leftPos = rect.left + 20; // Um pouco dentro do elemento
+                        break;
+                    case 'center-above-element':
+                        topPos = rect.top + 20; // Um pouco dentro do elemento
+                        leftPos = rect.left + (rect.width / 2) - (botRect.width / 2);
+                        break;
+                    default: // Volta para o padrão se a posição não for reconhecida
+                        positionBot({robotPosition: null}, null); // Chama recursivamente com posição padrão
+                        return;
+                }
+
+                // 💡 Verificação básica para não sair da tela. Pode ser mais robusta.
+                topPos = Math.max(5, Math.min(topPos, window.innerHeight - botRect.height - 5));
+                leftPos = Math.max(5, Math.min(leftPos, window.innerWidth - botRect.width - 5));
+
+                botContainer.style.top = `${topPos}px`;
+                botContainer.style.left = `${leftPos}px`;
+                botContainer.style.bottom = 'auto'; // Reseta bottom/right se top/left foram setados
+                botContainer.style.right = 'auto';
+            }
+        }
+
+        // ♻️ Mostra um passo específico do tour
+        function showStep(stepId) {
+            if (!tourSteps || Object.keys(tourSteps).length === 0) { // ⚠️ Verifica se tourSteps está carregado
+                console.warn("⚠️ Árvore de diálogo (tourSteps) não carregada ou vazia.");
+                alert("🤖 Ops! Não consegui carregar o guia. Tente recarregar a página ou clicar no botão do tour novamente.");
+                endTour();
+                return;
+            }
+            if (!tourSteps[stepId]) {
+                console.warn("⚠️ Passo do tour não encontrado:", stepId);
+                endTour();
+                return;
+            }
+
+            const step = tourSteps[stepId];
+            currentStepId = stepId;
+
+            botText.innerHTML = step.text; // Permite HTML básico no texto
+            botImage.src = step.robotImage;
+
+            // Aplica destaque e pega o elemento principal para posicionamento
+            const firstTargetElement = applyHighlight(step);
+
+            if (typeof step.onEnter === 'function') {
+                step.onEnter(firstTargetElement); // Passa o elemento alvo principal
+            }
+
+            // Posiciona o robô (idealmente após scroll ou manipulação do DOM em onEnter)
+            // Pequeno delay para garantir que o DOM foi atualizado e as dimensões são corretas
+            setTimeout(() => positionBot(step, firstTargetElement), 50);
+
+
+            botContainer.style.opacity = '0'; // Para fade-in
+            botContainer.style.display = 'block';
+            setTimeout(() => botContainer.style.opacity = '1', 10); // Inicia fade-in
+
+            btnPrev.style.display = step.prevStepId ? 'inline-block' : 'none';
+            btnNext.style.display = step.nextStepId ? 'inline-block' : 'none';
+            btnEnd.textContent = step.nextStepId ? 'Pular Tour' : 'Finalizar Tour'; // Muda o texto do botão
+            btnEnd.style.display = 'inline-block'; // Sempre mostra o botão de finalizar/pular
+
+            console.log(`🤖 Exibindo passo: ${stepId}`);
+        }
+
+        // 👆 Função para o botão "Próximo"
+        function next() {
+            if (currentStepId && tourSteps[currentStepId] && tourSteps[currentStepId].nextStepId) {
+                if (typeof tourSteps[currentStepId].onExit === 'function') {
+                    tourSteps[currentStepId].onExit();
+                }
+                showStep(tourSteps[currentStepId].nextStepId);
+            } else {
+                endTour(); // Se não há próximo, finaliza
+            }
+        }
+
+        // 👆 Função para o botão "Voltar"
+        function prev() {
+            if (currentStepId && tourSteps[currentStepId] && tourSteps[currentStepId].prevStepId) {
+                 if (typeof tourSteps[currentStepId].onExit === 'function') {
+                    tourSteps[currentStepId].onExit();
+                }
+                showStep(tourSteps[currentStepId].prevStepId);
+            }
+        }
+
+        // 🚪 Função para finalizar o tour
+        function endTour() {
+            clearAllHighlights();
+            botContainer.style.opacity = '0';
+            setTimeout(() => botContainer.style.display = 'none', 200); // Espera o fade-out
+            currentStepId = null;
+            console.log("🤖 Tour finalizado.");
+            // 💡 Salvar no localStorage que o tour foi concluído para não mostrar novamente?
+            // localStorage.setItem('guitarTourCompleted_v1', 'true');
+        }
+
+        btnNext.addEventListener('click', next);
+        btnPrev.addEventListener('click', prev);
+        btnEnd.addEventListener('click', endTour); // Botão "End" agora pode pular ou finalizar
+
+        // 📥♻️ Função para carregar os passos do tour do arquivo externo
+        async function loadAndStartTour() {
+            // 💡 Opcional: Verificar se o tour já foi concluído antes de carregar
+            // if (localStorage.getItem('guitarTourCompleted_v1') === 'true' && !forceStart) {
+            //     console.log("🤖 Tour já concluído anteriormente.");
+            //     return;
+            // }
+
+            if (Object.keys(tourSteps).length > 0 && currentStepId !== null) {
+                console.log("🤖 Tour já em andamento ou carregado. Reiniciando...");
+                endTour(); // Finaliza qualquer tour anterior antes de recarregar
+                // Espera um pouco para garantir que o DOM foi limpo
+                await new Promise(resolve => setTimeout(resolve, 250));
+            }
+            
+            botText.textContent = "Carregando o guia... 🤖";
+            botImage.src = 'https://bastardadoll.github.io/bot-thinking.png'; // Imagem de carregamento
+            botContainer.style.display = 'block';
+            botContainer.style.opacity = '1';
+            positionBot({robotPosition: 'center-screen'}, null);
+            btnPrev.style.display = 'none';
+            btnNext.style.display = 'none';
+            btnEnd.style.display = 'none';
+
+
+            try {
+                // 🔍 Busca o arquivo bot-loc.html
+                const response = await fetch('bot-loc.html'); // Assume que está na mesma pasta
+                if (!response.ok) {
+                    throw new Error(`⚠️ HTTP error! status: ${response.status} ao buscar bot-loc.html`);
+                }
+                const htmlText = await response.text();
+
+                // 🧠 Analisa o HTML para encontrar o script com os dados do tour
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+                const tourDataScript = doc.getElementById('tour-data-script');
+
+                if (tourDataScript && tourDataScript.textContent) {
+                    // 🤖 Executa o script para obter o objeto tourStepsDefinition.
+                    // Isso é um pouco 'hacky', mas funciona para este caso.
+                    // A variável 'tourStepsDefinition' definida em bot-loc.html se tornará global temporariamente.
+                    // Uma abordagem mais robusta seria o script em bot-loc.html retornar o objeto ou atribuí-lo a uma propriedade global.
+                    const scriptElement = document.createElement('script');
+                    scriptElement.textContent = tourDataScript.textContent;
+                    document.head.appendChild(scriptElement); // Executa o script
+
+                    // Agora 'tourStepsDefinition' deve estar disponível globalmente
+                    if (typeof tourStepsDefinition !== 'undefined') {
+                        tourSteps = tourStepsDefinition; // Atribui ao nosso 'tourSteps' local
+                        console.log("🗺️ Árvore de diálogo carregada com sucesso!");
+                        showStep('step_0_welcome'); // Inicia o tour com o primeiro passo
+                    } else {
+                        throw new Error("⚠️ 'tourStepsDefinition' não foi definido após carregar o script de bot-loc.html.");
+                    }
+                    document.head.removeChild(scriptElement); // Limpa o script adicionado
+                } else {
+                    throw new Error("⚠️ Script com ID 'tour-data-script' ou seu conteúdo não encontrado em bot-loc.html.");
+                }
+            } catch (error) {
+                console.error("🚫 Erro ao carregar ou processar o tour:", error);
+                botText.textContent = "🚫 Desculpe, não consegui carregar o guia. Tente mais tarde.";
+                botImage.src = 'https://bastardadoll.github.io/bot-alert.png';
+                btnEnd.style.display = 'inline-block';
+                btnEnd.textContent = 'Fechar';
+                // Não chama endTour() aqui para manter a mensagem de erro visível
+            }
+        }
+
+        // 👆 Event listener para o botão que inicia o tour manualmente
+        if (startTourBtnManual) {
+            startTourBtnManual.addEventListener('click', () => loadAndStartTour(true)); // true para forçar o início
+        }
+
+        // 💡 Opcional: Iniciar o tour automaticamente na primeira visita
+        // if (!localStorage.getItem('guitarTourCompleted_v1')) {
+        //    loadAndStartTour();
+        // }
+    } // Fim de initializeTourBot
+
+    // A chamada para initializeTourBot() foi movida para dentro do DOMContentLoaded do simulador.
+    // Se você separou os scripts, certifique-se que initializeTourBot() é chamado após o DOM estar pronto.
+
+  </script>
+</body>
+</html>

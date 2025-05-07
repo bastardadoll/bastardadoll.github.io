@@ -1,405 +1,316 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Marketing Digital com IA</title>
-    <style>
-        /* ♻️ Estilos Globais e Reset Básico */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #1a1a2e;
-            color: #e0e0e0;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Marketing Digital com IA</title>
+  <style>
+    /* ♻️ Reset básico para ocupar 100% da tela e remover margens padrão */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
 
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #2a2a3e;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 900px; /* 💡 Considerar aumentar se o PDF precisar de mais largura */
-        }
+    /* ♻️ Container principal: flex vertical para ocupar toda a altura */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative; /* para posicionar bot e controles */
+    }
 
-        /* 🤖 Estilos para a Área do Robô */
-        .bot-area {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-            background-color: #3a3a4e;
-            padding: 15px;
-            border-radius: 10px;
-            width: 100%;
-            box-sizing: border-box;
-        }
+    /* 📥 Área de apresentação: PDF como fundo */
+    .presentation-area {
+      flex: 1;
+      position: relative;
+      overflow: hidden; /* esconde barras de rolagem do iframe */
+    }
 
-        #botImage {
-            width: 100px;
-            height: auto;
-            margin-right: 20px;
-            border: 2px solid #7f5af0;
-            border-radius: 50%;
-            transition: transform 0.3s ease-in-out;
-        }
+    /* 🖼️ Iframe de PDF ocupa 100% da área */
+    #pdfBackground {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      pointer-events: none; /* 🔍 deixa apenas o conteúdo injetado interativo */
+    }
 
-        #botImage:hover {
-            transform: scale(1.1);
-        }
+    /* 📥 Conteúdo dos slides fica acima do PDF */
+    .slide {
+      position: relative;
+      z-index: -1;
+      padding: 2rem;
+      height: 100%;
+      overflow-y: auto; /* permite rolar texto se necessário */
+      box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.8); /* leve fundo branco semitransparente */
+    }
 
-        #botCaption {
-            font-size: 1.1em;
-            font-style: italic;
-            color: #c0c0e0;
-        }
+    /* 🤖 Área do robô: posicionamento absoluto para poder arrastar */
+    .bot-area {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      width: 120px;
+      cursor: move; /* indica que pode arrastar */
+      z-index: 2;
+      user-select: none; /* evita seleção de texto enquanto arrasta */
+    }
 
-        /* 📥 Estilos para a Área de Apresentação com PDF de fundo */
-        .presentation-area {
-            width: 100%;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            min-height: 600px; /* 💡 Altura mínima para dar espaço ao PDF. Ajuste conforme necessário. */
-            box-sizing: border-box;
-            border: 1px solid #4a4a5e;
-            position: relative; /* ⚠️ Crucial para posicionar elementos filhos absolutamente */
-            overflow: hidden; /* Para cortar o iframe caso ele exceda as bordas */
-        }
+    /* 🤖 Imagem do robô com borda suave */
+    .bot-area img {
+      width: 100%;
+      border-radius: 50%; /* 🤖 robô em círculo */
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
 
-        /* 🖼️ Estilo para o Iframe que carrega o PDF */
-        #pdfBackground {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none; /* Remove a borda do iframe */
-            z-index: 1; /* 🔍 Coloca o PDF atrás do conteúdo do slide */
-        }
+    /* 🤖 Legenda do robô */
+    .bot-area p {
+      margin: 0.5rem 0 0;
+      font-size: 0.9rem;
+      text-align: center;
+      background: rgba(255,255,255,0.9);
+      padding: 0.3rem;
+      border-radius: 0.5rem;
+    }
 
-        /* Conteúdo do slide que fica SOBRE o PDF */
-        #slideContent {
-            position: relative; /* Mantém no fluxo, mas permite z-index */
-            z-index: 2; /* 🔍 Garante que o conteúdo do slide fique sobre o PDF */
-            background-color: rgba(30, 30, 48, 0.92); /* Cor #1e1e30 com 92% de opacidade. Ajuste para legibilidade! */
-            padding: 25px;
-            width: 100%;
-            height: 100%; /* Ocupa toda a altura do .presentation-area */
-            box-sizing: border-box;
-            overflow-y: auto; /* Adiciona scroll se o conteúdo do slide for maior que a área */
-            color: #e0e0e0; /* Cor do texto principal nos slides */
-        }
+    /* ♻️ Controles de navegação: fixos no canto inferior direito */
+    .navigation-controls {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      z-index: 2;
+      display: flex;
+      gap: 0.5rem;
+    }
 
-        /* Estilos para os elementos DENTRO de #slideContent */
-        #slideContent h2 {
-            color: #7f5af0;
-            margin-top: 0;
-            border-bottom: 2px solid #7f5af0;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
+    /* 📥 Botões estilizados */
+    .navigation-controls button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: background 0.2s;
+    }
 
-        #slideContent p,
-        #slideContent ul {
-            font-size: 1em;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
+    .navigation-controls button:disabled {
+      opacity: 0.5; /* ⚠️ indica botão desativado */
+      cursor: not-allowed;
+    }
 
-        #slideContent ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
+    .navigation-controls button:not(:disabled):hover {
+      background: #eee;
+    }
 
-        #slideContent ul li {
-            background-color: rgba(47, 47, 65, 0.85); /* Cor #2f2f41 (um pouco mais clara) com opacidade */
-            margin-bottom: 8px;
-            padding: 10px;
-            border-radius: 5px;
-            border-left: 3px solid #7f5af0;
-        }
+    /* 🔍 Scrollbar customizado para slide (opcional) */
+    .slide::-webkit-scrollbar {
+      width: 8px;
+    }
+    .slide::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.2);
+      border-radius: 4px;
+    }
 
-        #slideContent strong {
-            color: #9f7ff0;
-        }
-        
-        /* Classe para transição de slides - opcional */
-        .slide-transition {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0.3; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-
-        /* ♻️ Estilos para os Controles de Navegação */
-        .navigation-controls button {
-            background-color: #7f5af0;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1em;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 0 10px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .navigation-controls button:hover:not(:disabled) {
-            background-color: #6a48d0;
-            transform: translateY(-2px);
-        }
-
-        .navigation-controls button:disabled {
-            background-color: #4a4a5e;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        /* 💡 Media queries para responsividade básica */
-        @media (max-width: 768px) {
-            .app-container {
-                padding: 15px;
-            }
-            .bot-area {
-                flex-direction: column;
-                text-align: center;
-            }
-            #botImage {
-                margin-right: 0;
-                margin-bottom: 15px;
-            }
-            .presentation-area {
-                min-height: 450px; /* Ajustar altura para mobile */
-            }
-            #slideContent {
-                padding: 15px;
-            }
-            .navigation-controls button {
-                padding: 10px 15px;
-                font-size: 0.9em;
-            }
-        }
-    </style>
+    /* 💡 Ideia futura: tema claro/escuro automático via prefers-color-scheme */
+  </style>
 </head>
 <body>
-    <!-- ♻️ Container principal da aplicação -->
-    <div class="app-container">
-        <!-- 🤖 Área onde a imagem do robô será exibida -->
-        <div class="bot-area">
-            <img id="botImage" src="https://bastardadoll.github.io/bot-idle.png" alt="Assistente Robô">
-            <p id="botCaption">Olá! Vamos explorar como construir um sistema de marketing digital operado por IA!</p>
-        </div>
-
-        <!-- 📥 Área onde o conteúdo da "apresentação" será exibido, com PDF de fundo -->
-        <div class="presentation-area">
-            <!-- 🖼️ Iframe para exibir o PDF como fundo -->
-            <!-- Adicionamos parâmetros para tentar ocultar a barra de ferramentas e ajustar a visualização -->
-            <iframe 
-                id="pdfBackground" 
-                src="https://bastardadoll.github.io/Construindo-um-Sistema-de-Marketing-Digital-Operado-por-IA.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
-                frameborder="0"
-                allowfullscreen>
-            </iframe>
-            
-            <!-- Div onde o conteúdo textual dos slides será injetado pelo JavaScript -->
-            <div id="slideContent" class="slide">
-                <!-- O conteúdo do slide será inserido aqui pelo JavaScript -->
-            </div>
-        </div>
-
-        <!-- ♻️ Controles de navegação -->
-        <div class="navigation-controls">
-            <button id="prevButton" disabled>Anterior</button>
-            <button id="nextButton">Próximo</button>
-        </div>
+  <!-- ♻️ Container principal da aplicação -->
+  <div class="app-container">
+    <!-- 🤖 Área onde a imagem do robô será exibida -->
+    <div class="bot-area" id="botArea">
+      <img id="botImage" src="https://bastardadoll.github.io/bot-idle.png" alt="Assistente Robô">
+      <p id="botCaption">Olá! Vamos explorar como construir um sistema de marketing digital operado por IA!</p>
     </div>
 
-    <!-- 💡 Scripts no final para garantir que o DOM esteja carregado -->
-    <script>
-        // ♻️ Espera o DOM carregar completamente antes de executar o script
-document.addEventListener('DOMContentLoaded', () => {
-    // 📥 URLs das imagens do robô
-    const botImages = {
+    <!-- 📥 Área onde o conteúdo da "apresentação" será exibido, com PDF de fundo -->
+    <div class="presentation-area">
+      <!-- 🖼️ Iframe para exibir o PDF como fundo -->
+      <iframe 
+        id="pdfBackground" 
+        src="https://bastardadoll.github.io/Construindo-um-Sistema-de-Marketing-Digital-Operado-por-IA.pdf"
+        allowfullscreen>
+      </iframe>
+      
+      <!-- Div onde o conteúdo textual dos slides será injetado pelo JavaScript -->
+      <div id="slideContent" class="slide">
+        <!-- O conteúdo do slide será inserido aqui pelo JavaScript -->
+      </div>
+    </div>
+
+    <!-- ♻️ Controles de navegação -->
+    <div class="navigation-controls">
+      <button id="prevButton" disabled>Anterior</button>
+      <button id="nextButton">Próximo</button>
+    </div>
+  </div>
+
+  <!-- 💡 Scripts no final para garantir que o DOM esteja carregado -->
+  <script>
+    // ♻️ Habilita arrastar da área do robô
+    (function() {
+      const botArea = document.getElementById('botArea');
+      let offsetX, offsetY, isDragging = false;
+      botArea.addEventListener('mousedown', e => {
+        isDragging = true;
+        offsetX = e.clientX - botArea.offsetLeft;
+        offsetY = e.clientY - botArea.offsetTop;
+      });
+      document.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        botArea.style.left = (e.clientX - offsetX) + 'px';
+        botArea.style.top = (e.clientY - offsetY) + 'px';
+      });
+      document.addEventListener('mouseup', () => isDragging = false);
+    })();
+
+    // ♻️ Código de slides (mesmo do original)
+    document.addEventListener('DOMContentLoaded', () => {
+      const botImages = {
         idle: 'https://bastardadoll.github.io/bot-idle.png',
         thinking: 'https://bastardadoll.github.io/bot-thinking.png',
         happy: 'https://bastardadoll.github.io/bot-happy.png',
         celebrate: 'https://bastardadoll.github.io/bot-celebrate.png',
         alert: 'https://bastardadoll.github.io/bot-alert.png'
-    };
-
-    // 📥 Conteúdo dos slides da apresentação
-    // 💡 Cada objeto representa um slide e pode ter um título, conteúdo HTML,
-    //    a imagem do robô e uma legenda específica para o robô.
-    const slides = [
-        {
-            title: "Bem-vindo!",
-            content: `<h2>Construindo um Sistema de Marketing Digital Operado por IA 🚀</h2>
-                      <p>Vamos explorar um objetivo de vanguarda: um sistema de marketing digital quase que totalmente operado por IA, com briefings via árvores de diálogo. Embora o "100% de execução" pela IA ainda seja um desafio em certas nuances, podemos delinear uma arquitetura e um processo que se aproximam muito disso.</p>`,
-            botImage: botImages.happy,
-            botCaption: "Olá! Pronto para mergulhar no futuro do marketing? 😉"
-        },
-        {
-            title: "Conceito Central",
-            content: `<h2>O "Cérebro" de Marketing IA 🧠</h2>
-                      <p>Imagine um sistema central (o "Cérebro") que recebe seus briefings (árvores de diálogo), interpreta-os, e coordena uma série de módulos de IA especializados para executar cada etapa do ciclo de marketing.</p>
-                      <p>Este cérebro é o maestro da nossa orquestra de automação!</p>`,
-            botImage: botImages.thinking,
-            botCaption: "Este é o coração do nosso sistema inteligente! Pense nele como o QG. 🤔"
-        },
-        {
-            title: "Entrada do Usuário",
-            content: `<h2>Briefing via Árvore de Diálogo 🗣️</h2>
-                      <p>Você interage com uma interface (chatbot avançado ou formulário dinâmico) que simula uma árvore de diálogo.</p>
-                      <ul>
-                        <li><strong>Nó raiz exemplo:</strong> "Qual o objetivo principal desta campanha?" (Lançar produto, gerar leads, etc.)</li>
-                        <li><strong>Nós subsequentes:</strong> Detalhes do produto, público-alvo, diferenciais, orçamento, KPIs.</li>
-                      </ul>
-                      <p>Essa árvore captura todas as informações cruciais que a IA precisa para iniciar o ciclo. 📥</p>`,
-            botImage: botImages.idle,
-            botCaption: "É aqui que você me diz o que precisa! Quanto mais detalhes, melhor! 📝"
-        },
-        {
-            title: "Ciclos de Marketing",
-            content: `<h2>Ciclos de Marketing Automatizado 🔄</h2>
-                      <p>O sistema opera em ciclos contínuos de Ações, Tarefas e Análises:</p>
-                      <ul>
-                        <li><strong>Ciclo 1: Pesquisa e Estratégia 🗺️</strong><br>IA interpreta briefing, pesquisa mercado, analisa concorrência, define personas e refina a oferta.</li>
-                        <li><strong>Ciclo 2: Criação e Configuração 🎨</strong><br>Módulos de LLM geram copy, ferramentas de IA criam visuais, e o sistema configura campanhas, segmentação e orçamento.</li>
-                        <li><strong>Ciclo 3: Execução e Monitoramento 🚀</strong><br>IA publica anúncios, posts, e-mails, monitora KPIs em tempo real e detecta anomalias.</li>
-                        <li><strong>Ciclo 4: Análise e Otimização 📊</strong><br>IA processa dados, analisa funil, testa hipóteses e implementa otimizações (ajustes de lance, realocação de orçamento).</li>
-                      </ul>`,
-            botImage: botImages.thinking,
-            botCaption: "Este é o motor! Pesquisar, criar, executar e otimizar, tudo de forma cíclica! ⚙️"
-        },
-        {
-            title: "Tecnologias Envolvidas",
-            content: `<h2>Tecnologias Envolvidas 💻</h2>
-                      <ul>
-                        <li><strong>Cérebro IA / Orquestração:</strong> Frameworks (TensorFlow, PyTorch), orquestradores (Airflow, Kubeflow).</li>
-                        <li><strong>PLN / LLMs:</strong> GPT-4 (OpenAI), Claude (Anthropic), Gemini (Google AI).</li>
-                        <li><strong>Geração de Imagem/Vídeo:</strong> DALL-E, Midjourney, Stable Diffusion, RunwayML.</li>
-                        <li><strong>Análise de Dados e Integrações:</strong> Python (Pandas, Scikit-learn), APIs de anúncios (Google, Meta), Google Analytics, Bancos de Dados SQL/NoSQL.</li>
-                      </ul>
-                      <p>⚠️ A combinação dessas tecnologias é poderosa, mas exige uma arquitetura robusta!</p>`,
-            botImage: botImages.idle,
-            botCaption: "Usamos um arsenal de tecnologias de ponta para fazer a mágica acontecer! 🛠️"
-        },
-        {
-            title: "Escalabilidade",
-            content: `<h2>Escalabilidade do Sistema 📈</h2>
-                      <ul>
-                        <li><strong>Arquitetura em Microsserviços:</strong> Módulos independentes que escalam conforme a necessidade.</li>
-                        <li><strong>Nativo da Nuvem:</strong> Uso de AWS, GCP, Azure para processamento e armazenamento.</li>
-                        <li><strong>Pipelines de Dados Automatizados:</strong> Para ingestão e processamento de grandes volumes.</li>
-                        <li><strong>Paralelização:</strong> Gerenciamento de múltiplas campanhas/clientes simultaneamente.</li>
-                      </ul>
-                      <p>💡 A escalabilidade é chave para atender demandas crescentes sem perder performance.</p>`,
-            botImage: botImages.celebrate,
-            botCaption: "Precisamos crescer! E o sistema está preparado para isso! 🎉"
-        },
-        {
-            title: "Papel Humano",
-            content: `<h2>O Papel Humano Residual (mas Crucial!) 🧑‍💻</h2>
-                      <p>Mesmo com alta automação, seu papel é vital:</p>
-                      <ul>
-                        <li><strong>Definir Estratégia de Alto Nível:</strong> Objetivos de negócio.</li>
-                        <li><strong>Criar os Briefings (Árvores de Diálogo):</strong> Direção inicial.</li>
-                        <li><strong>Validação Estratégica e Criativa:</strong> Especialmente para nuances culturais e éticas.</li>
-                        <li><strong>Gerenciar Exceções:</strong> Situações imprevistas.</li>
-                        <li><strong>Treinamento e Feedback Contínuo:</strong> Ensinar e refinar a IA.</li>
-                        <li><strong>Questões Éticas e de Conformidade:</strong> LGPD, etc.</li>
-                      </ul>`,
-            botImage: botImages.thinking,
-            botCaption: "Você ainda é o capitão do navio! Sua visão estratégica é insubstituível.🧐"
-        },
-        {
-            title: "Desafios e Conclusão",
-            content: `<h2>Desafios e Considerações Finais 🏁</h2>
-                      <p>Alguns desafios incluem:</p>
-                      <ul>
-                        <li>Complexidade de Integração.</li>
-                        <li>Qualidade e Originalidade Criativa da IA.</li>
-                        <li>Interpretação de Nuances e Contextos.</li>
-                        <li>Custo de APIs e Infraestrutura.</li>
-                        <li>Manutenção e Evolução Constantes.</li>
-                        <li>Risco de "Overfitting" a dados passados.</li>
-                      </ul>
-                      <p>⚠️ Este é um projeto de P&D de longo prazo, mas os blocos de construção já existem. A chave está na orquestração inteligente e no ciclo de feedback eficaz. Seria um avanço incrível na automação do marketing digital!</p>`,
-            botImage: botImages.alert,
-            botCaption: "Temos desafios, claro! Mas a jornada para um marketing mais inteligente vale a pena! 🚧"
-        },
-        { // 💡 Slide final
-            title: "Fim da Apresentação",
-            content: `<h2>Obrigado! 😊</h2>
-                      <p>Espero que esta visão geral tenha sido inspiradora! O futuro do marketing digital com IA é promissor e cheio de possibilidades.</p>
-                      <p>Podemos discutir como começar a prototipar partes deste sistema!</p>`,
-            botImage: botImages.celebrate,
-            botCaption: "Chegamos ao fim! Que tal construirmos isso juntos? 🥳"
-        }
-    ];
-
-    // 🤖 Elementos do DOM
-    const botImageElement = document.getElementById('botImage');
-    const botCaptionElement = document.getElementById('botCaption');
-    const slideContentElement = document.getElementById('slideContent');
-    const prevButton = document.getElementById('prevButton');
-    const nextButton = document.getElementById('nextButton');
-
-    let currentSlideIndex = 0; // ♻️ Controla o slide atual
-
-    // ♻️ Função para renderizar o slide atual
-    function renderSlide() {
-        // ⚠️ Validação para evitar erros de índice
-        if (currentSlideIndex < 0 || currentSlideIndex >= slides.length) {
-            console.error("Índice de slide inválido:", currentSlideIndex);
-            return;
-        }
-
+      };
+      const slides = [
+    {
+        title: "Bem-vindo!",
+        content: `<h2>Construindo um Sistema de Marketing Digital Operado por IA 🚀</h2>
+                  <p>Vamos explorar um objetivo de vanguarda: um sistema de marketing digital quase que totalmente operado por IA, com briefings via árvores de diálogo. Embora o "100% de execução" pela IA ainda seja um desafio em certas nuances, podemos delinear uma arquitetura e um processo que se aproximam muito disso.</p>`,
+        botImage: botImages.happy,
+        botCaption: "Olá! Pronto para mergulhar no futuro do marketing? 😉"
+    },
+    {
+        title: "Conceito Central",
+        content: `<h2>O "Cérebro" de Marketing IA 🧠</h2>
+                  <p>Imagine um sistema central (o "Cérebro") que recebe seus briefings (árvores de diálogo), interpreta-os, e coordena uma série de módulos de IA especializados para executar cada etapa do ciclo de marketing.</p>
+                  <p>Este cérebro é o maestro da nossa orquestra de automação!</p>`,
+        botImage: botImages.thinking,
+        botCaption: "Este é o coração do nosso sistema inteligente! Pense nele como o QG. 🤔"
+    },
+    {
+        title: "Entrada do Usuário",
+        content: `<h2>Briefing via Árvore de Diálogo 🗣️</h2>
+                  <p>Você interage com uma interface (chatbot avançado ou formulário dinâmico) que simula uma árvore de diálogo.</p>
+                  <ul>
+                    <li><strong>Nó raiz exemplo:</strong> "Qual o objetivo principal desta campanha?" (Lançar produto, gerar leads, etc.)</li>
+                    <li><strong>Nós subsequentes:</strong> Detalhes do produto, público-alvo, diferenciais, orçamento, KPIs.</li>
+                  </ul>
+                  <p>Essa árvore captura todas as informações cruciais que a IA precisa para iniciar o ciclo. 📥</p>`,
+        botImage: botImages.idle,
+        botCaption: "É aqui que você me diz o que precisa! Quanto mais detalhes, melhor! 📝"
+    },
+    {
+        title: "Ciclos de Marketing",
+        content: `<h2>Ciclos de Marketing Automatizado 🔄</h2>
+                  <p>O sistema opera em ciclos contínuos de Ações, Tarefas e Análises:</p>
+                  <ul>
+                    <li><strong>Ciclo 1: Pesquisa e Estratégia 🗺️</strong><br>IA interpreta briefing, pesquisa mercado, analisa concorrência, define personas e refina a oferta.</li>
+                    <li><strong>Ciclo 2: Criação e Configuração 🎨</strong><br>Módulos de LLM geram copy, ferramentas de IA criam visuais, e o sistema configura campanhas, segmentação e orçamento.</li>
+                    <li><strong>Ciclo 3: Execução e Monitoramento 🚀</strong><br>IA publica anúncios, posts, e-mails, monitora KPIs em tempo real e detecta anomalias.</li>
+                    <li><strong>Ciclo 4: Análise e Otimização 📊</strong><br>IA processa dados, analisa funil, testa hipóteses e implementa otimizações (ajustes de lance, realocação de orçamento).</li>
+                  </ul>`,
+        botImage: botImages.thinking,
+        botCaption: "Este é o motor! Pesquisar, criar, executar e otimizar, tudo de forma cíclica! ⚙️"
+    },
+    {
+        title: "Tecnologias Envolvidas",
+        content: `<h2>Tecnologias Envolvidas 💻</h2>
+                  <ul>
+                    <li><strong>Cérebro IA / Orquestração:</strong> Frameworks (TensorFlow, PyTorch), orquestradores (Airflow, Kubeflow).</li>
+                    <li><strong>PLN / LLMs:</strong> GPT-4 (OpenAI), Claude (Anthropic), Gemini (Google AI).</li>
+                    <li><strong>Geração de Imagem/Vídeo:</strong> DALL-E, Midjourney, Stable Diffusion, RunwayML.</li>
+                    <li><strong>Análise de Dados e Integrações:</strong> Python (Pandas, Scikit-learn), APIs de anúncios (Google, Meta), Google Analytics, Bancos de Dados SQL/NoSQL.</li>
+                  </ul>
+                  <p>⚠️ A combinação dessas tecnologias é poderosa, mas exige uma arquitetura robusta!</p>`,
+        botImage: botImages.idle,
+        botCaption: "Usamos um arsenal de tecnologias de ponta para fazer a mágica acontecer! 🛠️"
+    },
+    {
+        title: "Escalabilidade",
+        content: `<h2>Escalabilidade do Sistema 📈</h2>
+                  <ul>
+                    <li><strong>Arquitetura em Microsserviços:</strong> Módulos independentes que escalam conforme a necessidade.</li>
+                    <li><strong>Nativo da Nuvem:</strong> Uso de AWS, GCP, Azure para processamento e armazenamento.</li>
+                    <li><strong>Pipelines de Dados Automatizados:</strong> Para ingestão e processamento de grandes volumes.</li>
+                    <li><strong>Paralelização:</strong> Gerenciamento de múltiplas campanhas/clientes simultaneamente.</li>
+                  </ul>
+                  <p>💡 A escalabilidade é chave para atender demandas crescentes sem perder performance.</p>`,
+        botImage: botImages.celebrate,
+        botCaption: "Precisamos crescer! E o sistema está preparado para isso! 🎉"
+    },
+    {
+        title: "Papel Humano",
+        content: `<h2>O Papel Humano Residual (mas Crucial!) 🧑‍💻</h2>
+                  <p>Mesmo com alta automação, seu papel é vital:</p>
+                  <ul>
+                    <li><strong>Definir Estratégia de Alto Nível:</strong> Objetivos de negócio.</li>
+                    <li><strong>Criar os Briefings (Árvores de Diálogo):</strong> Direção inicial.</li>
+                    <li><strong>Validação Estratégica e Criativa:</strong> Especialmente para nuances culturais e éticas.</li>
+                    <li><strong>Gerenciar Exceções:</strong> Situações imprevistas.</li>
+                    <li><strong>Treinamento e Feedback Contínuo:</strong> Ensinar e refinar a IA.</li>
+                    <li><strong>Questões Éticas e de Conformidade:</strong> LGPD, etc.</li>
+                  </ul>`,
+        botImage: botImages.thinking,
+        botCaption: "Você ainda é o capitão do navio! Sua visão estratégica é insubstituível.🧐"
+    },
+    {
+        title: "Desafios e Conclusão",
+        content: `<h2>Desafios e Considerações Finais 🏁</h2>
+                  <p>Alguns desafios incluem:</p>
+                  <ul>
+                    <li>Complexidade de Integração.</li>
+                    <li>Qualidade e Originalidade Criativa da IA.</li>
+                    <li>Interpretação de Nuances e Contextos.</li>
+                    <li>Custo de APIs e Infraestrutura.</li>
+                    <li>Manutenção e Evolução Constantes.</li>
+                    <li>Risco de "Overfitting" a dados passados.</li>
+                  </ul>
+                  <p>⚠️ Este é um projeto de P&D de longo prazo, mas os blocos de construção já existem. A chave está na orquestração inteligente e no ciclo de feedback eficaz. Seria um avanço incrível na automação do marketing digital!</p>`,
+        botImage: botImages.alert,
+        botCaption: "Temos desafios, claro! Mas a jornada para um marketing mais inteligente vale a pena! 🚧"
+    },
+    { // 💡 Slide final
+        title: "Fim da Apresentação",
+        content: `<h2>Obrigado! 😊</h2>
+                  <p>Espero que esta visão geral tenha sido inspiradora! O futuro do marketing digital com IA é promissor e cheio de possibilidades.</p>
+                  <p>Podemos discutir como começar a prototipar partes deste sistema!</p>`,
+        botImage: botImages.celebrate,
+        botCaption: "Chegamos ao fim! Que tal construirmos isso juntos? 🥳"
+    }
+];
+      const botImageElement = document.getElementById('botImage');
+      const botCaptionElement = document.getElementById('botCaption');
+      const slideContentElement = document.getElementById('slideContent');
+      const prevButton = document.getElementById('prevButton');
+      const nextButton = document.getElementById('nextButton');
+      let currentSlideIndex = 0;
+      function renderSlide() {
+        if (currentSlideIndex < 0 || currentSlideIndex >= slides.length) return;
         const slide = slides[currentSlideIndex];
-        slideContentElement.innerHTML = slide.content; // 📥 Insere o conteúdo HTML do slide
-        botImageElement.src = slide.botImage;         // 🤖 Atualiza a imagem do robô
-        botCaptionElement.textContent = slide.botCaption; // 🤖 Atualiza a legenda do robô
-
-        // ♻️ Habilita/desabilita botões de navegação
+        slideContentElement.innerHTML = slide.content;
+        botImageElement.src = slide.botImage;
+        botCaptionElement.textContent = slide.botCaption;
         prevButton.disabled = currentSlideIndex === 0;
         nextButton.disabled = currentSlideIndex === slides.length - 1;
-
-        // 💡 Adiciona uma classe para animação (opcional)
         slideContentElement.classList.remove('slide-transition');
-        void slideContentElement.offsetWidth; // Truque para reiniciar a animação CSS se houver
+        void slideContentElement.offsetWidth;
         slideContentElement.classList.add('slide-transition');
-    }
-
-    // ♻️ Event listener para o botão "Próximo"
-    nextButton.addEventListener('click', () => {
-        if (currentSlideIndex < slides.length - 1) {
-            currentSlideIndex++;
-            renderSlide();
-        }
+      }
+      nextButton.addEventListener('click', () => {
+        if (currentSlideIndex < slides.length - 1) { currentSlideIndex++; renderSlide(); }
+      });
+      prevButton.addEventListener('click', () => {
+        if (currentSlideIndex > 0) { currentSlideIndex--; renderSlide(); }
+      });
+      renderSlide();
     });
-
-    // ♻️ Event listener para o botão "Anterior"
-    prevButton.addEventListener('click', () => {
-        if (currentSlideIndex > 0) {
-            currentSlideIndex--;
-            renderSlide();
-        }
-    });
-
-    // ♻️ Renderiza o primeiro slide ao carregar a página
-    renderSlide();
-});
-    </script>
+  </script>
 </body>
 </html>

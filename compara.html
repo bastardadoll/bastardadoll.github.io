@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- 📥 Meta tags básicos para SEO e configuração da página -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Briefing interativo de Luanny Ravatche e Larissa Gonçalves de Oliveira Lima, detalhando suas trajetórias, projetos e filosofias.">
+    <meta name="keywords" content="Luanny Ravatche, Larissa Gonçalves, briefing, perfil, projetos, filosofia, trans, intersexo, tecnologia, inclusão, Reprograma-T, PopVibre">
+    <meta name="author" content="Assistente de IA">
+    <title>Briefings Interativos: Luanny & Larissa</title>
+
+    <style>
+        /* ♻️ CSS Reset e Estilos Globais */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centraliza o conteúdo principal */
+        }
+
+        .container {
+            /* 💡 Container principal para limitar a largura e centralizar */
+            width: 100%;
+            max-width: 900px; /* Largura máxima para melhor legibilidade em telas grandes */
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        /* 🎨 Estilos para os Títulos */
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-bottom: 0.75em;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 1em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5em;
+        }
+        h2 {
+            font-size: 1.8em;
+            color: #3498db;
+            margin-top: 1.5em;
+        }
+        h3 {
+            font-size: 1.4em;
+            color: #2980b9;
+        }
+        h4 {
+            font-size: 1.2em;
+            color: #16a085;
+        }
+
+        /* 📜 Estilos para Parágrafos e Listas */
+        p, ul {
+            margin-bottom: 1em;
+        }
+        ul {
+            list-style-position: inside;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 0.5em;
+        }
+        strong {
+            color: #2c3e50;
+        }
+
+        /* 🎨 Estilos para os botões de navegação (abas) */
+        .tab-navigation {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab-button {
+            /* 💡 Botões para alternar entre os briefings */
+            background-color: #e9ecef;
+            color: #495057;
+            border: none;
+            padding: 12px 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin: 0 5px;
+            border-radius: 5px 5px 0 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .tab-button:hover {
+            background-color: #ced4da;
+        }
+
+        .tab-button.active {
+            /* 💡 Estilo para o botão da aba ativa */
+            background-color: #3498db;
+            color: white;
+        }
+
+        /* 📄 Conteúdo das abas (briefings) */
+        .tab-content {
+            /* ♻️ Esconde o conteúdo por padrão, será mostrado via JS */
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            background-color: #fdfdfd;
+        }
+
+        .tab-content.active {
+            /* ♻️ Mostra o conteúdo da aba ativa */
+            display: block;
+        }
+
+        /* ✨ Emojis nos comentários já estão no HTML, aqui apenas um exemplo de como poderiam ser usados para destacar elementos */
+        .emoji-highlight {
+            margin-right: 8px;
+        }
+
+        /* 📱 Media Queries para Responsividade */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            .tab-navigation {
+                flex-direction: column; /* Empilha os botões em telas menores */
+            }
+            .tab-button {
+                width: 100%;
+                margin: 5px 0;
+                border-radius: 5px; /* Ajusta o radius para botões empilhados */
+            }
+            .tab-content {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.6em;
+            }
+            h2 {
+                font-size: 1.3em;
+            }
+            h3 {
+                font-size: 1.1em;
+            }
+            ul {
+                padding-left: 10px; /* Menor padding para listas em telas pequenas */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ♻️ Container principal da página -->
+    <div class="container">
+        <h1><span class="emoji-highlight">📑</span>Briefings Interativos</h1>
+
+        <!-- 🧭 Navegação por Abas -->
+        <div class="tab-navigation">
+            <!-- 💡 Botão para mostrar o briefing da Luanny -->
+            <button class="tab-button active" onclick="showBriefing('luanny')">Luanny Ravatche</button>
+            <!-- 💡 Botão para mostrar o briefing da Larissa -->
+            <button class="tab-button" onclick="showBriefing('larissa')">Larissa G. O. Lima</button>
+        </div>
+
+        <!-- 📄 Conteúdo do Briefing da Luanny Ravatche -->
+        <div id="luanny" class="tab-content active">
+            <!-- 📥 Dados de entrada: Informações básicas -->
+            <h2><span class="emoji-highlight">👤</span>Briefing: Luanny Ravatche</h2>
+
+            <p><strong>Nome completo:</strong> Luanny Ravatche</p>
+            <p><strong>Data de nascimento:</strong> 04 de novembro de 1990</p>
+            <p><strong>Naturalidade:</strong> Mato Grosso do Sul</p>
+            <p><strong>Residência atual:</strong> São José dos Campos (SP), bairro Vila São Pedro</p>
+
+            <hr>
+
+            <!-- ♻️ Fluxo geral: Trajetória pessoal e identidade -->
+            <h3><span class="emoji-highlight">👣</span>Identidade e trajetória pessoal</h3>
+            <p>Luanny Ravatche é uma mulher trans brasileira cuja vida foi marcada por desafios familiares, sociais e existenciais desde a infância. Cresceu entre a roça e a cidade, com períodos vividos com avós e tios, e posteriormente com a mãe e o padrasto em Campo Grande. Sua trajetória é marcada pela busca de compreensão de sua identidade, muitas vezes de forma solitária e intuitiva. Desde cedo, demonstrou resiliência diante de ausências afetivas e conflitos familiares, buscando se tornar uma mulher diferente da figura materna que teve: mais presente, amorosa e consciente.</p>
+
+            <hr>
+
+            <!-- 🤖 Relacionado ao robozinho: Conhecimentos técnicos e criativos -->
+            <h3><span class="emoji-highlight">🎓</span>Formação e conhecimentos</h3>
+            <p>Luanny é autodidata e aprendiz em diversas áreas criativas e técnicas. Estuda e pratica:</p>
+            <ul>
+                <li><strong>Programação:</strong> HTML, CSS, JavaScript, PHP, MySQL, Python</li>
+                <li><strong>Tecnologia:</strong> Criação de aplicativos, banco de dados e hospedagem gratuita (infinityfreeapp.com)</li>
+                <li><strong>Design gráfico e audiovisual:</strong> Edição de imagens e vídeos</li>
+                <li><strong>Comunicação e conteúdo:</strong> Copywriting, escrita, storytelling e blogs</li>
+                <li><strong>Ferramentas de produtividade:</strong> Excel, organização de projetos e automações simples</li>
+            </ul>
+
+            <hr>
+
+            <!-- 💡 Ideias e melhorias futuras: Projetos em desenvolvimento -->
+            <h3><span class="emoji-highlight">🚀</span>Projetos principais</h3>
+
+            <h4>1. <strong>Orby Chat</strong></h4>
+            <p>Um projeto de chat inclusivo, com foco em diversidade e acessibilidade. Inclui:</p>
+            <ul>
+                <li>Chat em grupo e privado</li>
+                <li>Perfis personalizados</li>
+                <li>Sistema de amizade</li>
+                <li>Eventos e interações seguras</li>
+                <li>Layout minimalista, visual limpo e foco em representatividade</li>
+            </ul>
+            <!-- 💡 Melhoria futura: Integrar com outras plataformas ou adicionar gamificação. -->
+
+            <h4>2. <strong>Plataforma de Conteúdo Adulto Autoral</strong></h4>
+            <p>Projeto pessoal envolvendo roteiros, produção e performance com temática BDSM, realizado com parcerias e voltado a público adulto, com cuidado estético, narrativa e empoderamento.</p>
+            <!-- ⚠️ Alerta: Garantir conformidade legal e segurança dos usuários. -->
+
+            <h4>3. <strong>Blog e Página Pessoal</strong></h4>
+            <p>Espaço onde Luanny compartilha sua história, visão de mundo, conhecimentos em tecnologia e produtos/serviços, inclusive com links de afiliados.</p>
+            <!-- 🔍 Busca de dados: O blog serve como fonte de informação sobre Luanny. -->
+
+            <hr>
+
+            <!-- ♻️ Fluxo geral: Princípios e valores -->
+            <h3><span class="emoji-highlight">💭</span>Filosofia de vida e pensamento</h3>
+            <p>Luanny valoriza:</p>
+            <ul>
+                <li><strong>Autenticidade e verdade:</strong> Não teme mudar de ideia, reconhece erros e aprende com o passado.</li>
+                <li><strong>Liberdade consciente:</strong> Acredita na liberdade com responsabilidade, especialmente no campo sexual, afetivo e de expressão.</li>
+                <li><strong>Resiliência como virtude:</strong> Enxerga o sofrimento como um processo de aprendizado e transformação.</li>
+                <li><strong>Apoio à diferença:</strong> Apoia minorias e promove a inclusão, sem necessarily buscar protagonismo político.</li>
+                <li><strong>Reflexão pessoal:</strong> Cuida da saúde mental escrevendo e refletindo sobre suas experiências e emoções.</li>
+            </ul>
+
+            <hr>
+
+            <!-- ⚖️ Pensamento político e legal -->
+            <h3><span class="emoji-highlight">🏛️</span>Pensamento político e legal</h3>
+            <p>Luanny é crítica quanto à política institucional. Embora compreenda a importância das causas sociais, é cética quanto à honestidade e ao real interesse dos líderes públicos em resolver os problemas da população. Valoriza os movimentos populares e as organizações de base, como ONGs e coletivos. Acredita que leis e direitos devem servir à dignidade das pessoas, com prioridade para os mais vulneráveis.</p>
+            <ul>
+                <li><strong>Direito:</strong> Defensora dos direitos humanos, da liberdade de gênero, orientação e expressão.</li>
+                <li><strong>Política:</strong> Observadora ativa, mas não partidarista. Desconfia de promessas e estruturas corrompidas.</li>
+                <li><strong>Ativismo:</strong> Apoia causas como a da ONG “Transbordamos” em São José dos Campos, sem buscar cargos ou representações formais.</li>
+            </ul>
+            <!-- ⚠️ Alerta: Cuidado ao generalizar visões políticas, sempre há nuances. -->
+
+            <hr>
+
+            <!-- 🌟 Estilo de vida e aspirações -->
+            <h3><span class="emoji-highlight">💖</span>Estilo de vida e aspirações</h3>
+            <p>Luanny preza por tranquilidade, autenticidade e independência. Busca um equilíbrio entre o digital e o natural — ama caminhar, refletir, criar projetos e imaginar novos mundos possíveis. Gosta de estudar, compartilhar ideias e construir sua autonomia, mesmo que aos poucos.</p>
+        </div>
+
+        <!-- 📄 Conteúdo do Briefing da Larissa G. O. Lima -->
+        <div id="larissa" class="tab-content">
+            <h2><span class="emoji-highlight">👩‍🔬</span>BRIEFING – LARISSA GONÇALVES DE OLIVEIRA LIMA</h2>
+
+            <!-- 📥 Dados de entrada: Informações básicas e perfil -->
+            <h3><span class="emoji-highlight">🆔</span>Identidade e Perfil Pessoal</h3>
+            <p>Larissa Gonçalves de Oliveira Lima é uma mulher trans intersexo, cientista, desenvolvedora e designer gráfica, com raízes turcas e influência russa em sua ancestralidade. Ruiva, judia e nascida em Minas Gerais, carrega consigo a força da roça, da luta popular e da inteligência visionária. É dona de terras e tem uma ligação afetiva com a zona rural e com a história mineira, em especial com figuras como Tiradentes. Já participou de delegações e movimentos sociais, como a UNI, UJS, o PT e atualmente atua também no Partido Democrata dos EUA.</p>
+
+            <hr>
+
+            <!-- 💡 Ideias e melhorias futuras: Projetos em desenvolvimento -->
+            <h3><span class="emoji-highlight">💡</span>Projeto Principal</h3>
+            <p>Larissa está desenvolvendo a <strong>PopVibre</strong>, uma rede social com foco no público feminino, com design e linguagem acessíveis, um feed semelhante ao TikTok (rolagem contínua) e livre para navegação mesmo sem cadastro.
+            <!-- 🤖 Relacionado ao robozinho: Tecnologias usadas -->
+            Ela utiliza PHP e SQL, com hospedagem planejada na Hostinger. O objetivo da plataforma é oferecer uma alternativa acolhedora e popular, com tom leve, feminino, democrático e culturalmente conectado à juventude periférica e à diversidade brasileira.</p>
+            <p>Além disso, Larissa criou o conceito do aplicativo <strong>Mapa Violeta</strong>, uma plataforma colaborativa de segurança para mulheres trans, com avaliações de locais, botão de denúncia de transfobia e foco na proteção da comunidade.</p>
+            <!-- 💡 Melhoria futura: Integrar Mapa Violeta com PopVibre para maior alcance. -->
+
+            <hr>
+
+            <!-- ♻️ Fluxo geral: Filosofia de vida e do projeto Reprograma-T -->
+            <h3><span class="emoji-highlight">🌍</span>Filosofia de Vida e Pensamento Filosófico (incluindo Reprograma-T)</h3>
+            <p>Larissa tem um pensamento profundamente humanista, ético e espiritual, acredita em um Deus acolhedor e em uma espiritualidade inclusiva. Inspirada por pensadores como Henry David Thoreau, valoriza a vida simples na natureza, a liberdade individual e a resistência ao sistema capitalista predatório.</p>
+            <p>Ela vê o ser humano como parte de um todo interconectado, com uma missão moral e espiritual de proteger os vulneráveis e agir com empatia. Seu sonho com o espírito que lhe deu a missão de proteger crianças e pessoas arco-íris revela um chamado interior que conecta sua espiritualidade à sua ação política e social.</p>
+
+            <h4>Reprograma-T: Um Briefing Filosófico para o Desenvolvimento da Rede Social Inclusiva</h4>
+            <p><strong>O Que É Reprograma-T?</strong></p>
+            <p>Reprograma-T não é meramente uma plataforma digital; é a materialização de uma esperança ativa, um ecossistema de cura e conexão nascido da profunda convicção de que a tecnologia pode – e deve – servir à humanidade em sua mais autêntica e vulnerável expressão. É um refúgio digital e um catalisador para a transformação pessoal e social, concebido a partir das margens, para reimaginar o centro.</p>
+            <!-- 🔍 Busca de dados: Compreender a essência do Reprograma-T. -->
+            <p>É um espaço onde as "pegadas" que desejamos deixar na existência (influenciadas pela sabedoria ancestral e pela urgência contemporânea) se entrelaçam com algoritmos conscientes e interfaces empáticas. É a resposta à pergunta: Como podemos usar a tecnologia para tecer fios de pertencimento onde antes havia isolamento, para cultivar a compreensão onde o julgamento imperava, e para amplificar vozes que foram sistematicamente silenciadas?</p>
+            <p>Em sua essência, Reprograma-T é um santuário digital radicalmente humano, onde a autenticidade não é apenas permitida, mas celebrada; onde a vulnerabilidade é vista como força; e onde cada interação é uma oportunidade para praticar a Comunicação Não Violenta e cultivar a inteligência emocional. É a visão de um futuro onde a tecnologia nos aproxima, não nos aliena; onde a conexão transcende o superficial; e onde cada indivíduo, em sua singularidade, contribui para o florescer coletivo.</p>
+
+            <p><strong>Principais Características para as Atividades de Desenvolvimento (Guiadas pela Filosofia):</strong></p>
+            <ul>
+                <li><strong>Segurança como Fundamento Sagrado:</strong>
+                    <!-- ⚠️ Alerta: A segurança é crítica e não um "feature" adicional. -->
+                    <em>Filosofia:</em> O primeiro dever de um espaço que se propõe à cura e à conexão é garantir a integridade física, emocional e digital de seus membros.
+                    <em>Desenvolvimento:</em> Priorizar mecanismos robustos de moderação (humanizada e apoiada por IA ética), sistemas de denúncia eficazes e transparentes, controles de privacidade granulares e intuitivos.
+                </li>
+                <li><strong>Inclusão Radical e Representatividade Ativa:</strong>
+                    <!-- 🤖 Relacionado ao robozinho: Funcionalidades de inclusão. -->
+                    <em>Filosofia:</em> A diversidade não é uma cota a ser preenchida, mas a própria riqueza da experiência humana.
+                    <em>Desenvolvimento:</em> Criar perfis altamente personalizáveis (pronomes, identidades de gênero, neurotipos). Desenvolver algoritmos de descoberta que combatam ativamente a invisibilização. Garantir acessibilidade universal (WCAG).
+                </li>
+                <li><strong>Conexão Empática e Comunicação Consciente (CNV como DNA):</strong>
+                    <em>Filosofia:</em> A verdadeira conexão nasce da escuta profunda e da expressão honesta.
+                    <em>Desenvolvimento:</em> Integrar princípios de CNV no design das interações. Facilitar "Círculos de Confiança".
+                </li>
+                <li><strong>Autenticidade em Vez de Performance:</strong>
+                    <em>Filosofia:</em> Desafiar a cultura da superficialidade. Valorizar a expressão genuína.
+                    <em>Desenvolvimento:</em> Repensar métricas de "sucesso". Algoritmos devem favorecer conteúdo significativo.
+                </li>
+                <li><strong>Desenvolvimento como Prática de Propósito (Ikigai Coletivo):</strong>
+                    <!-- 💡 Ideia: O desenvolvimento em si é uma manifestação do propósito. -->
+                    <em>Filosofia:</em> O ato de construir Reprograma-T é uma expressão do propósito da equipe.
+                    <em>Desenvolvimento:</em> Fomentar ambiente colaborativo. Desenvolvimento iterativo e responsivo.
+                </li>
+                <li><strong>Legado e Florescimento Contínuo:</strong>
+                    <em>Filosofia:</em> Somos "botões de uma flor", objetivo é florescer e gerar sementes.
+                    <em>Desenvolvimento:</em> Arquitetura modular e escalável. Coleta de "dados que transformam" (anonimizados e éticos).
+                </li>
+            </ul>
+
+            <hr>
+
+            <!-- 🏛️ Pensamento político -->
+            <h3><span class="emoji-highlight">🗣️</span>Pensamento Político</h3>
+            <p>Larissa tem uma visão progressista, democrática e popular, com traços de anarquismo comunitário e socialismo humanizado, mas ao mesmo tempo é pragmática e conciliadora, buscando pontes entre diferentes correntes políticas. Defende:</p>
+            <ul>
+                <li>A democracia direta e a candidatura avulsa como ferramentas de renovação política;</li>
+                <li>A inclusão de trabalhadores reais, como pedreiros e motoboys, no congresso, em vez de políticos elitistas;</li>
+                <li>Um resgate cultural da esquerda com raízes no samba, funk, sertanejo e outras expressões populares;</li>
+                <li>Flexibilidade religiosa na esquerda, evitando o dogmatismo ideológico;</li>
+                <li>Entende o Romeu Zema, mas é crítica de políticos como Nicolas Ferreira;</li>
+                <li>Tem uma visão transnacionalista, acreditando na união entre a esquerda americana e a brasileira.</li>
+            </ul>
+            <!-- ⚠️ Alerta: Posicionamentos políticos podem ser complexos e multifacetados. -->
+
+            <hr>
+
+            <!-- ⚖️ Visão legal e institucional -->
+            <h3><span class="emoji-highlight">📜</span>Visão Legal e Institucional</h3>
+            <p>Larissa respeita profundamente as instituições democráticas. Admira figuras como Alexandre de Moraes, por sua atuação firme na defesa da democracia e combate ao extremismo. Acredita no direito como instrumento de inclusão e proteção das minorias, e defende a criação de marcos legais para igrejas inclusivas, como a IPECC – Igreja Pentecostal Cristo Comandante, da qual é cofundadora com Kelley.</p>
+            <!-- 🔍 Busca de dados: Entender a visão sobre o papel do direito na sociedade. -->
+            <p>Para ela, a lei deve servir à justiça social e à dignidade humana, e não aos interesses do capital ou do conservadorismo opressor.</p>
+
+        </div>
+    </div>
+
+    <script>
+        // ♻️ Função para mostrar o briefing selecionado e atualizar os botões
+        function showBriefing(briefingId) {
+            // 🤖 Seleciona todos os conteúdos das abas
+            const contents = document.querySelectorAll('.tab-content');
+            // 🤖 Seleciona todos os botões das abas
+            const buttons = document.querySelectorAll('.tab-button');
+
+            // 🔍 Esconde todos os conteúdos
+            contents.forEach(content => {
+                content.style.display = 'none'; // Esconde
+                content.classList.remove('active'); // Remove classe de ativo
+            });
+
+            // 🔍 Remove a classe 'active' de todos os botões
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // 💡 Mostra o conteúdo do briefing selecionado
+            const selectedContent = document.getElementById(briefingId);
+            if (selectedContent) {
+                selectedContent.style.display = 'block'; // Mostra
+                selectedContent.classList.add('active'); // Adiciona classe de ativo
+            }
+
+            // 💡 Adiciona a classe 'active' ao botão clicado
+            // Encontra o botão que corresponde ao briefingId (poderia ser mais robusto com data-attributes)
+            buttons.forEach(button => {
+                // ⚠️ Atenção: Essa forma de encontrar o botão é um pouco frágil.
+                // Se o texto do botão mudar, não funcionará.
+                // Uma forma melhor seria usar um atributo data-target nos botões.
+                // Ex: <button data-target="luanny" ...>
+                // E no JS: if (button.getAttribute('onclick').includes(briefingId))
+                // Ou, melhor ainda, passar o próprio elemento botão para a função.
+                if (button.textContent.toLowerCase().includes(briefingId.split('-')[0])) { // Simplificação para achar o botão
+                    button.classList.add('active');
+                }
+            });
+        }
+
+        // 💡 Inicialização: Mostrar o primeiro briefing (Luanny) por padrão
+        // A classe 'active' já está definida no HTML, então essa chamada explícita ao carregar
+        // não é estritamente necessária se o HTML já estiver configurado para o estado inicial.
+        // No entanto, é uma boa prática para garantir o estado inicial via JS se o HTML não o fizesse.
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     showBriefing('luanny'); // Já está ativo por padrão no HTML
+        // });
+    </script>
+
+</body>
+</html>

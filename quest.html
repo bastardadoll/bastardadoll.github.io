@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <base href="https://https://wa.me/5512982572507" />
+  <base href="https://wa.me/5512982572507" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Question&#xe1;rio de Servi&#xe7;os">
-  <meta name="keywords" content="servi&#xe7;os, question&#xe1;rio">
+  <meta name="description" content="Questionário de Serviços">
+  <meta name="keywords" content="serviços, questionário">
   <meta name="author" content="Your Name">
   <meta name="theme-color" content="#4CAF50">
   <link rel="preload" href="https://bastardadoll.github.io/servico1.gif" as="image">
   <link rel="preload" href="https://bastardadoll.github.io/servico2.gif" as="image">
   <link rel="preload" href="https://bastardadoll.github.io/servico3.gif" as="image">
   <link rel="preload" href="https://bastardadoll.github.io/luanny.gif" as="image">
-  <link rel="preload" href="https://example.com/namoradinha.gif" as="image">
-  <link rel="preload" href="https://example.com/completo.gif" as="image">
-  <title>Question&#xe1;rio de Servi&#xe7;os</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>Questionário de Serviços</title>
   <style>
     * {
       box-sizing: border-box;
@@ -39,6 +37,7 @@
       transition: background 0.5s ease;
       perspective: 1000px;
     }
+
     .container {
       width: 100%;
       max-width: 600px;
@@ -341,11 +340,253 @@
       padding-left: 20px;
       margin-top: 5px;
     }
+
+    /* ===== BOT FAQ ===== */
+    .faq-bot {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 2000;
+    }
+
+    .bot-icon {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      border: 3px solid white;
+    }
+
+    .bot-icon i {
+      font-size: 30px;
+      color: white;
+    }
+
+    .bot-icon:hover {
+      transform: scale(1.1) rotate(10deg);
+      box-shadow: 0 15px 40px rgba(255,105,180,0.6);
+    }
+
+    .bot-icon .notification {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #ff4757;
+      color: white;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+      border: 2px solid white;
+      animation: pulse 2s infinite;
+    }
+
+    .chat-window {
+      position: absolute;
+      bottom: 90px;
+      right: 0;
+      width: 350px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      overflow: hidden;
+      display: none;
+      animation: slideIn 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .chat-window.active {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .chat-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid white;
+      object-fit: cover;
+    }
+
+    .chat-header h3 {
+      font-size: 16px;
+      margin: 0;
+    }
+
+    .chat-header p {
+      font-size: 12px;
+      opacity: 0.9;
+      margin: 0;
+    }
+
+    .chat-header i {
+      margin-left: auto;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .chat-messages {
+      height: 300px;
+      overflow-y: auto;
+      padding: 20px;
+      background: #f8f9fa;
+    }
+
+    .message {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .message.bot {
+      justify-content: flex-start;
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .message-content {
+      max-width: 70%;
+      padding: 12px 18px;
+      border-radius: 20px;
+      font-size: 14px;
+      line-height: 1.4;
+      position: relative;
+    }
+
+    .message.bot .message-content {
+      background: white;
+      color: #333;
+      border: 1px solid #e0e0e0;
+      border-top-left-radius: 5px;
+    }
+
+    .message.user .message-content {
+      background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+      color: white;
+      border-top-right-radius: 5px;
+    }
+
+    .message-time {
+      font-size: 10px;
+      color: #999;
+      margin-top: 5px;
+      display: block;
+    }
+
+    .quick-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 15px;
+      background: #f1f3f5;
+      border-top: 1px solid #e9ecef;
+    }
+
+    .quick-option {
+      background: white;
+      border: 1px solid #dee2e6;
+      padding: 8px 15px;
+      border-radius: 30px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: #495057;
+    }
+
+    .quick-option:hover {
+      background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+      color: white;
+      border-color: transparent;
+      transform: translateY(-2px);
+    }
+
+    .chat-input-area {
+      display: flex;
+      padding: 15px;
+      background: white;
+      border-top: 1px solid #e9ecef;
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #dee2e6;
+      border-radius: 25px;
+      outline: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .chat-input-area input:focus {
+      border-color: #ff69b4;
+      box-shadow: 0 0 0 3px rgba(255,105,180,0.1);
+    }
+
+    .chat-input-area button {
+      background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+      color: white;
+      border: none;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      margin-left: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chat-input-area button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(255,105,180,0.4);
+    }
+
+    @media (max-width: 768px) {
+      .chat-window {
+        width: 300px;
+        right: 0;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="container" aria-label="Servi&#xe7;os dispon&#xed;veis">
-    <form id="serviceForm" aria-label="Formul&#xe1;rio de servi&#xe7;os">
+  <div class="container" aria-label="Serviços disponíveis">
+    <form id="serviceForm" aria-label="Formulário de serviços">
       <h1>Agendamento</h1>
       
       <div class="form-group">
@@ -363,8 +604,8 @@
         <input type="date" id="scheduleDate" name="scheduleDate" required aria-label="Data do agendamento">
       </div>
       <div class="form-group schedule">
-        <label for="scheduleTime">Hor&#xe1;rio do Agendamento:</label>
-        <input type="time" id="scheduleTime" name="scheduleTime" required aria-label="Hor&#xe1;rio do agendamento">
+        <label for="scheduleTime">Horário do Agendamento:</label>
+        <input type="time" id="scheduleTime" name="scheduleTime" required aria-label="Horário do agendamento">
       </div>
       
       <div class="carousel-wrapper">
@@ -373,7 +614,7 @@
             <h1 class="title">Boquete (15 Min)</h1>
             <div class="content">
               <div class="gif-box">
-                <img src="https://bastardadoll.github.io/servico1.gif" alt="Servi&#xe7;o 1 GIF" aria-label="Imagem do servi&#xe7;o 1">
+                <img src="https://bastardadoll.github.io/servico1.gif" alt="Serviço 1 GIF" aria-label="Imagem do serviço 1">
               </div>
               <ul class="item-list">
                 <li class="item no">❌ Não pode me chupar</li>
@@ -384,12 +625,12 @@
                 <li class="item yes">✅ Goza na boca</li>
               </ul>
             </div>
-            <input type="radio" id="servico1" name="services" value="servico1" aria-label="Servi&#xe7;o 1">
+            <input type="radio" id="servico1" name="services" value="servico1" aria-label="Serviço 1">
             <label for="servico1">Selecionar esse</label>
             <div class="price-section">
-              <p>De: R&#x24; 80,00</p>
+              <p>De: R$ 80,00</p>
               <p>Por Apenas:</p>
-              <p>R&#x24; 50,00</p>
+              <p>R$ 50,00</p>
             </div>
           </div>
         </div>
@@ -398,7 +639,7 @@
             <h1 class="title">Boquete Duplo (15 Min)</h1>
             <div class="content">
               <div class="gif-box">
-                <img src="https://bastardadoll.github.io/servico2.gif" alt="Servi&#xe7;o 2 GIF" aria-label="Imagem do servi&#xe7;o 2">
+                <img src="https://bastardadoll.github.io/servico2.gif" alt="Serviço 2 GIF" aria-label="Imagem do serviço 2">
               </div>
               <ul class="item-list">
                 <li class="item no">❌ Não pode me chupar</li>
@@ -409,12 +650,12 @@
                 <li class="item yes">✅ Goza na boca</li>
               </ul>
             </div>
-            <input type="radio" id="servico2" name="services" value="servico2" aria-label="Servi&#xe7;o 2">
+            <input type="radio" id="servico2" name="services" value="servico2" aria-label="Serviço 2">
             <label for="servico2">Selecionar esse</label>
             <div class="price-section">
-              <p>De: R&#x24; 150,00</p>
+              <p>De: R$ 150,00</p>
               <p>Por Apenas:</p>
-              <p>R&#x24; 80,00</p>
+              <p>R$ 80,00</p>
             </div>
           </div>
         </div>
@@ -423,23 +664,23 @@
             <h1 class="title">Passiva (15 Min)</h1>
             <div class="content">
               <div class="gif-box">
-                <img src="https://bastardadoll.github.io/servico3.gif" alt="Servi&#xe7;o 3 GIF" aria-label="Imagem do servi&#xe7;o 3">
+                <img src="https://bastardadoll.github.io/servico3.gif" alt="Serviço 3 GIF" aria-label="Imagem do serviço 3">
               </div>
               <ul class="item-list">
                 <li class="item no">❌  Não sou ativa</li>
                 <li class="item no">❌  Sem beijos na boca</li>
-                <li class="item no">❌  Não faço nada no seu &#xe2;nus</li>
+                <li class="item no">❌  Não faço nada no seu ânus</li>
                 <li class="item yes">✅ Sem camisinha</li>
-                <li class="item yes">✅ Tapas e pux&#xe3;o de cabelo (de leve)</li>
+                <li class="item yes">✅ Tapas e puxão de cabelo (de leve)</li>
                 <li class="item yes">✅ Goza onde quiser</li>
               </ul>
             </div>
-            <input type="radio" id="servico3" name="services" value="servico3" aria-label="Servi&#xe7;o 3">
+            <input type="radio" id="servico3" name="services" value="servico3" aria-label="Serviço 3">
             <label for="servico3">Selecionar esse</label>
             <div class="price-section">
-              <p>De: R&#x24; 150,00</p>
+              <p>De: R$ 150,00</p>
               <p>Por Apenas:</p>
-              <p>R&#x24; 100,00</p>
+              <p>R$ 100,00</p>
             </div>
           </div>
         </div>
@@ -448,23 +689,23 @@
             <h1 class="title">Ativa (15 Min)</h1>
             <div class="content">
               <div class="gif-box">
-                <img src="https://bastardadoll.github.io/luanny.gif" alt="Servi&#xe7;o 4 GIF" aria-label="Imagem do servi&#xe7;o 4">
+                <img src="https://bastardadoll.github.io/luanny.gif" alt="Serviço 4 GIF" aria-label="Imagem do serviço 4">
               </div>
               <ul class="item-list">
-                <li class="item no"> Agendamento apenas com sinal(R&#x24; 50,00)</li>
+                <li class="item no"> Agendamento apenas com sinal(R$ 50,00)</li>
                 <li class="item no">❌  Sem beijos na boca</li>
-                <li class="item no">❌  NãO faço cunete</li>
+                <li class="item no">❌  Não faço cunete</li>
                 <li class="item yes">✅ Sem camisinha</li>
-                <li class="item yes">✅ Com carrinho/com for&#xe7;a</li>
-                <li class="item yes">✅ Posso Goza onde voc&#xea; quiser</li>
+                <li class="item yes">✅ Com carinho/com força</li>
+                <li class="item yes">✅ Posso gozar onde você quiser</li>
               </ul>
             </div>
-            <input type="radio" id="servico4" name="services" value="servico4" aria-label="Servi&#xe7;o 4">
+            <input type="radio" id="servico4" name="services" value="servico4" aria-label="Serviço 4">
             <label for="servico4">Selecionar esse</label>
             <div class="price-section">
-              <p>De: R&#x24; 200,00</p>
+              <p>De: R$ 200,00</p>
               <p>Por Apenas:</p>
-              <p>R&#x24; 150,00</p>
+              <p>R$ 150,00</p>
             </div>
           </div>
         </div>
@@ -472,7 +713,7 @@
       
       <div class="carousel-controls">
         <button class="carousel-btn carousel-btn-prev" type="button">Anterior</button>
-        <button class="carousel-btn carousel-btn-next" type="button">Pr&#xf3;ximo</button>
+        <button class="carousel-btn carousel-btn-next" type="button">Próximo</button>
       </div>
       
       <button type="submit" class="submit-btn">Enviar</button>
@@ -482,113 +723,313 @@
         <i class="fas fa-house"></i>
       </div>
       <div class="location-details">
-        <h3>Informa&#xe7;&#xf5;es do Local</h3>
-        <p><strong>Localiza&#xe7;&#xe3;o:</strong> S&#xe3;o Jos&#xe9; dos Campos - SP</p>
-        <p><strong>Endere&#xe7;o:</strong> Rua: Rio Grande do Sul, Vila S&#xe3;o Pedro</p>
+        <h3>Informações do Local</h3>
+        <p><strong>Localização:</strong> São José dos Campos - SP</p>
+        <p><strong>Endereço:</strong> Rua: Rio Grande do Sul, Vila São Pedro</p>
         
-        <h4>Pr&#xf3;ximo a:</h4>
+        <h4>Próximo a:</h4>
         <ul>
-          <li>Batalh&#xe3;o de Pol&#xed;cia</li>
+          <li>Batalhão de Polícia</li>
           <li>Em frente a Dutra Km 146 sentido Rio de Janeiro</li>
         </ul>
         
         <h4>Sobre o Local:</h4>
         <ul>
-          <li>N&#xe3;o possui garagem</li>
-          <li>Rua tranquila, pode estacionar no posto Shell na esquina de casa e vir a p&#xe9;</li>
+          <li>Não possui garagem</li>
+          <li>Rua tranquila, pode estacionar no posto Shell na esquina de casa e vir a pé</li>
           <li>Atendo sozinha em meu local de atendimento</li>
-          <li>Dispon&#xed;vel: filme, ducha, toalhas</li>
+          <li>Disponível: filme, ducha, toalhas</li>
         </ul>
       </div>
     </div>
   </div>
-  <script>document.addEventListener('DOMContentLoaded', () => {
-  let currentIndex = 0;
-  const carouselWrapper = document.querySelector('.carousel-wrapper');
-  const serviceItems = document.querySelectorAll('.service-item');
-  const prevBtn = document.querySelector('.carousel-btn-prev');
-  const nextBtn = document.querySelector('.carousel-btn-next');
-  function updateCarousel() {
-    carouselWrapper.scrollTo({
-      left: currentIndex * carouselWrapper.offsetWidth,
-      behavior: 'smooth'
+
+  <!-- BOT FAQ -->
+  <div class="faq-bot">
+    <div class="bot-icon" id="botIcon">
+      <i class="fas fa-robot"></i>
+      <span class="notification">1</span>
+    </div>
+    
+    <div class="chat-window" id="chatWindow">
+      <div class="chat-header">
+        <img src="https://bastardadoll.github.io/luanny.gif" alt="Bot">
+        <div>
+          <h3>Assistente Virtual</h3>
+          <p>Online • Resposta rápida</p>
+        </div>
+        <i class="fas fa-times" id="closeChat"></i>
+      </div>
+      
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot">
+          <div class="message-content">
+            👋 Olá! Sou o assistente virtual. Como posso ajudar?
+            <span class="message-time">Agora</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="quick-options">
+        <button class="quick-option" onclick="sendQuickQuestion('preco')">💰 Preços</button>
+        <button class="quick-option" onclick="sendQuickQuestion('local')">📍 Localização</button>
+        <button class="quick-option" onclick="sendQuickQuestion('servicos')">📋 Serviços</button>
+        <button class="quick-option" onclick="sendQuickQuestion('pagamento')">💳 Pagamento</button>
+        <button class="quick-option" onclick="sendQuickQuestion('horario')">⏰ Horários</button>
+        <button class="quick-option" onclick="sendQuickQuestion('contato')">📞 Contato</button>
+      </div>
+      
+      <div class="chat-input-area">
+        <input type="text" id="userInput" placeholder="Digite sua pergunta..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Carousel functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      let currentIndex = 0;
+      const carouselWrapper = document.querySelector('.carousel-wrapper');
+      const serviceItems = document.querySelectorAll('.service-item');
+      const prevBtn = document.querySelector('.carousel-btn-prev');
+      const nextBtn = document.querySelector('.carousel-btn-next');
+      
+      function updateCarousel() {
+        carouselWrapper.scrollTo({
+          left: currentIndex * carouselWrapper.offsetWidth,
+          behavior: 'smooth'
+        });
+        prevBtn.disabled = false;
+        nextBtn.disabled = false;
+        serviceItems.forEach((item, index) => {
+          item.style.opacity = index === currentIndex ? '1' : '0.7';
+        });
+      }
+      
+      prevBtn.addEventListener('click', e => {
+        e.preventDefault();
+        currentIndex = currentIndex === 0 ? serviceItems.length - 1 : currentIndex - 1;
+        updateCarousel();
+      });
+      
+      nextBtn.addEventListener('click', e => {
+        e.preventDefault();
+        currentIndex = currentIndex === serviceItems.length - 1 ? 0 : currentIndex + 1;
+        updateCarousel();
+      });
+      
+      updateCarousel();
     });
-    prevBtn.disabled = false;
-    nextBtn.disabled = false;
-    serviceItems.forEach((item, index) => {
-      item.style.opacity = index === currentIndex ? '1' : '0.7';
-    });
-  }
-  prevBtn.addEventListener('click', e => {
-    e.preventDefault();
-    currentIndex = currentIndex === 0 ? serviceItems.length - 1 : currentIndex - 1;
-    updateCarousel();
-  });
-  nextBtn.addEventListener('click', e => {
-    e.preventDefault();
-    currentIndex = currentIndex === serviceItems.length - 1 ? 0 : currentIndex + 1;
-    updateCarousel();
-  });
-  updateCarousel();
-});
-const form = document.getElementById('serviceForm');
-form.addEventListener('submit', e => {
-  e.preventDefault();
-  const nick = document.getElementById('nick').value;
-  const age = document.getElementById('age').value;
-  const scheduleDate = document.getElementById('scheduleDate').value;
-  const scheduleTime = document.getElementById('scheduleTime').value;
-  const selectedService = document.querySelector('input[type="radio"]:checked');
-  if (nick === '' || age === '') {
-    alert('Por favor, preencha todos os campos!');
-    return;
-  }
-  if (!selectedService) {
-    alert('Por favor, selecione um serviço!');
-    return;
-  }
-  if (scheduleDate === '' || scheduleTime === '') {
-    alert('Por favor, preencha a data e o horário do agendamento!');
-    return;
-  }
-  const serviceItem = selectedService.closest('.service-item');
-  const title = serviceItem.querySelector('.title').textContent;
-  const serviceDetails = Array.from(serviceItem.querySelectorAll('.item-list .item')).map(item => item.textContent).join('\n-');
-  const price = serviceItem.querySelector('.price-section').innerText;
-  const whatsappMessage = `Olá, meu nick é *${nick}* 
+
+    // Form submission
+    const form = document.getElementById('serviceForm');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const nick = document.getElementById('nick').value;
+      const age = document.getElementById('age').value;
+      const scheduleDate = document.getElementById('scheduleDate').value;
+      const scheduleTime = document.getElementById('scheduleTime').value;
+      const selectedService = document.querySelector('input[type="radio"]:checked');
+      
+      if (nick === '' || age === '') {
+        alert('Por favor, preencha todos os campos!');
+        return;
+      }
+      if (!selectedService) {
+        alert('Por favor, selecione um serviço!');
+        return;
+      }
+      if (scheduleDate === '' || scheduleTime === '') {
+        alert('Por favor, preencha a data e o horário do agendamento!');
+        return;
+      }
+      
+      const serviceItem = selectedService.closest('.service-item');
+      const title = serviceItem.querySelector('.title').textContent;
+      const serviceDetails = Array.from(serviceItem.querySelectorAll('.item-list .item')).map(item => item.textContent).join('\n- ');
+      const price = serviceItem.querySelector('.price-section').innerText;
+      
+      const whatsappMessage = `Olá, meu nick é *${nick}* 
 Idade: *${age} anos*
 
 *Desejo Contratar:*
 *${title}*
 - ${serviceDetails}
 __________________
-${price.replace('~De:~', '~De:~').replace('*Por Apenas:*', '*Por Apenas:*')}
+${price}
 __________________
 *Detalhes do Agendamento:*
 *Data:* ${scheduleDate}
 *Horário:* ${scheduleTime}
 
 > Por favor, entre em contato para confirmar o agendamento.`;
-  const whatsappUrl = `https://wa.me/5512982572507?text=${encodeURIComponent(whatsappMessage)}`;
-  window.open(whatsappUrl, '_blank');
-});
-function getServicePrice(service) {
-  const prices = {
-    servico1: 50,
-    servico2: 80,
-    servico3: 100,
-    servico4: 150
-  };
-  return prices[service] || 0;
-}
-window.addEventListener('error', e => {
-  console.error('Erro:', e);
-});
-document.querySelector('.location-icon').addEventListener('click', function () {
-  const details = this.nextElementSibling;
-  if (details) {
-    details.style.display = details.style.display === 'none' || details.style.display === '' ? 'block' : 'none';
-  }
-});</script>
+      
+      const whatsappUrl = `https://wa.me/5512982572507?text=${encodeURIComponent(whatsappMessage)}`;
+      window.open(whatsappUrl, '_blank');
+    });
+
+    // Location info
+    document.querySelector('.location-icon').addEventListener('click', function () {
+      const details = this.nextElementSibling;
+      if (details) {
+        details.style.display = details.style.display === 'none' || details.style.display === '' ? 'block' : 'none';
+      }
+    });
+
+    // ===== BOT FAQ functionality =====
+    const botIcon = document.getElementById('botIcon');
+    const chatWindow = document.getElementById('chatWindow');
+    const closeChat = document.getElementById('closeChat');
+    const chatMessages = document.getElementById('chatMessages');
+    const userInput = document.getElementById('userInput');
+
+    // FAQ Database
+    const faqs = {
+      'preco': '💰 Nossos serviços:\n• Boquete: R$ 50,00\n• Boquete Duplo: R$ 80,00\n• Passiva: R$ 100,00\n• Ativa: R$ 150,00\nTodos com duração de 15 minutos.',
+      'local': '📍 Estou em São José dos Campos - SP\nRua: Rio Grande do Sul, Vila São Pedro\nPróximo ao Batalhão de Polícia e Dutra Km 146.',
+      'servicos': '📋 Ofereço 4 serviços:\n• Boquete\n• Boquete Duplo\n• Passiva\n• Ativa\nTodos com duração de 15 minutos. Selecione no carrossel acima!',
+      'pagamento': '💳 Aceito pagamento em dinheiro ou PIX. Para serviço Ativa é necessário sinal de R$ 50,00 para agendamento.',
+      'horario': '⏰ Funcionamento:\nSegunda a Domingo\nDas 10h às 22h\nAgende com antecedência!',
+      'contato': '📞 Agendamentos pelo WhatsApp:\n(12) 98257-2507\nou preencha o formulário acima!',
+      'localizacao': '📍 Estou em São José dos Campos - SP\nRua: Rio Grande do Sul, Vila São Pedro\nPróximo ao Batalhão de Polícia.',
+      'endereco': '📍 Rua: Rio Grande do Sul, Vila São Pedro\nSão José dos Campos - SP',
+      'duvida': 'Posso ajudar com informações sobre preços, serviços, localização, horários e pagamento. Qual sua dúvida?'
+    };
+
+    botIcon.addEventListener('click', () => {
+      chatWindow.classList.toggle('active');
+      if (chatWindow.classList.contains('active')) {
+        document.querySelector('.notification').style.display = 'none';
+      }
+    });
+
+    closeChat.addEventListener('click', () => {
+      chatWindow.classList.remove('active');
+    });
+
+    function handleKeyPress(e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    }
+
+    function sendMessage() {
+      const message = userInput.value.trim();
+      if (message === '') return;
+
+      addMessage(message, 'user');
+      userInput.value = '';
+
+      showTypingIndicator();
+
+      setTimeout(() => {
+        removeTypingIndicator();
+        const response = getBotResponse(message);
+        addMessage(response, 'bot');
+      }, 1500);
+    }
+
+    function sendQuickQuestion(questionKey) {
+      const questionMap = {
+        'preco': 'Quais os preços?',
+        'local': 'Onde é a localização?',
+        'servicos': 'Quais serviços oferece?',
+        'pagamento': 'Como posso pagar?',
+        'horario': 'Qual horário de funcionamento?',
+        'contato': 'Como entro em contato?'
+      };
+
+      const userQuestion = questionMap[questionKey] || questionKey;
+      addMessage(userQuestion, 'user');
+
+      showTypingIndicator();
+
+      setTimeout(() => {
+        removeTypingIndicator();
+        const response = faqs[questionKey] || faqs['duvida'];
+        addMessage(response, 'bot');
+      }, 1000);
+    }
+
+    function addMessage(text, sender) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}`;
+      
+      const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      
+      messageDiv.innerHTML = `
+        <div class="message-content">
+          ${text.replace(/\n/g, '<br>')}
+          <span class="message-time">${time}</span>
+        </div>
+      `;
+      
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'message bot';
+      typingDiv.id = 'typingIndicator';
+      typingDiv.innerHTML = `
+        <div class="message-content">
+          <i class="fas fa-ellipsis-h"></i> digitando...
+        </div>
+      `;
+      chatMessages.appendChild(typingDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+      const typingIndicator = document.getElementById('typingIndicator');
+      if (typingIndicator) {
+        typingIndicator.remove();
+      }
+    }
+
+    function getBotResponse(message) {
+      message = message.toLowerCase();
+      
+      // Check for keywords
+      for (let [key, response] of Object.entries(faqs)) {
+        if (message.includes(key)) {
+          return response;
+        }
+      }
+      
+      // Check for specific phrases
+      if (message.includes('oi') || message.includes('olá') || message.includes('hello')) {
+        return '👋 Olá! Como posso ajudar você hoje?';
+      }
+      
+      if (message.includes('obrigado') || message.includes('valeu')) {
+        return '😊 Por nada! Estou aqui para ajudar. Precisa de mais alguma informação?';
+      }
+      
+      if (message.includes('quero marcar') || message.includes('agendar')) {
+        return '📅 Para agendar, preencha o formulário acima com seus dados e selecione o serviço desejado!';
+      }
+      
+      if (message.includes('quanto') || message.includes('custa')) {
+        return faqs['preco'];
+      }
+      
+      if (message.includes('onde') || message.includes('fica')) {
+        return faqs['local'];
+      }
+      
+      // Default response
+      return '🤖 Desculpe, não entendi. Posso ajudar com informações sobre:\n💰 Preços\n📍 Localização\n📋 Serviços\n💳 Pagamento\n⏰ Horários\n📞 Contato';
+    }
+
+    // Close chat when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.faq-bot') && !e.target.closest('.chat-window')) {
+        chatWindow.classList.remove('active');
+      }
+    });
+  </script>
 </body>
 </html>
